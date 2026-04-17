@@ -63,7 +63,7 @@ export default function ContactForm() {
 
       setSubmitted(true);
       setFormData({ name: '', phone: '', email: '', query: '' });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
@@ -94,7 +94,7 @@ export default function ContactForm() {
         {/* Form Container */}
         <div className="relative">
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-accent-500/5 to-transparent rounded-2xl border border-surface-border/40" />
+          <div className="absolute inset-0 bg-primary-500/5 rounded-sm border border-surface-border/40" />
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="relative z-10 p-8 space-y-6">
@@ -104,7 +104,7 @@ export default function ContactForm() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold"
+                className="p-4 rounded-sm bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold"
               >
                 ✓ Thank you! We've received your message and will get back to you soon.
               </motion.div>
@@ -116,7 +116,7 @@ export default function ContactForm() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold"
+                className="p-4 rounded-sm bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold"
               >
                 ✗ {error}
               </motion.div>
@@ -135,7 +135,7 @@ export default function ContactForm() {
                 onChange={handleInputChange}
                 placeholder="John Doe"
                 disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-lg bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
               />
             </div>
 
@@ -152,7 +152,7 @@ export default function ContactForm() {
                 onChange={handleInputChange}
                 placeholder="john@example.com"
                 disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-lg bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
               />
             </div>
 
@@ -169,7 +169,7 @@ export default function ContactForm() {
                 onChange={handleInputChange}
                 placeholder="Your phone number"
                 disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-lg bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
               />
             </div>
 
@@ -186,7 +186,7 @@ export default function ContactForm() {
                 placeholder="Tell us what's on your mind..."
                 disabled={loading || submitted}
                 rows="5"
-                className="w-full px-4 py-3 rounded-lg bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all resize-none disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all resize-none disabled:opacity-50"
               />
             </div>
 
@@ -196,9 +196,9 @@ export default function ContactForm() {
               disabled={loading || submitted}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-primary-500 to-accent-500 text-white font-bold relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full px-6 py-3 rounded-sm bg-primary-500 text-[var(--app-cta-contrast)] font-bold relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-accent-500 to-primary-500 opacity-0 hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-primary-600 opacity-0 hover:opacity-100 transition-opacity" />
               <span className="relative z-10">
                 {loading ? 'Sending...' : submitted ? 'Message Sent!' : 'Send Message'}
               </span>

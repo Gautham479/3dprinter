@@ -1,15 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Chivo, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const chivo = Chivo({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["400", "700", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata = {
@@ -24,9 +26,9 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${chivo.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col font-body bg-surface-bg text-fg">
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInit}
         </Script>

@@ -74,21 +74,20 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { id: 'features', label: 'Features' },
+    { id: 'features', label: 'Materials' },
     { id: 'how-it-works', label: 'How It Works' },
     { id: 'faq', label: 'FAQ' },
   ];
 
   return (
     <nav
-      className={`w-full sticky top-0 z-50 transition-all duration-500 ${
-        scrolled
+      className={`w-full sticky top-0 z-50 transition-all duration-500 ${scrolled
           ? 'bg-surface-bg/85 backdrop-blur-xl border-b border-surface-border/60 shadow-sm'
           : 'bg-transparent border-b border-transparent'
-      }`}
+        }`}
     >
       {/* Top accent line */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-primary-500/40 to-transparent" />
+      <div className="h-[1px] w-full bg-primary-500/20" />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -101,13 +100,28 @@ export default function Navbar() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <div className="relative w-9 h-9 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-xl bg-primary-500/15 group-hover:bg-primary-500/25 transition-colors" />
-                <div className="absolute inset-0 rounded-xl border border-primary-500/30 group-hover:border-primary-500/50 transition-colors" />
-                <span className="text-xl relative z-10">🖨️</span>
+              <div className="relative flex items-center justify-center p-1">
+                {/* Custom 3D Printer Logo */}
+                <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9 text-primary-500">
+                  {/* Bed Plate */}
+                  <rect x="48" y="416" width="416" height="48" rx="24" />
+                  
+                  {/* Letter 3 */}
+                  <path d="M120 200 A 50 50 0 0 1 160 260 A 50 50 0 0 1 120 320" />
+                  <path d="M100 200 H160" />
+                  
+                  {/* Letter D */}
+                  <path d="M256 200 v120" />
+                  <path d="M256 200 C360 200 360 320 256 320" />
+                  
+                  {/* Printer Rail and Extruder */}
+                  <path d="M80 80 h350" />
+                  <rect x="200" y="48" width="112" height="64" rx="12" />
+                  <path d="M256 112 v40 L 256 200" strokeDasharray="16 16" />
+                </svg>
               </div>
               <span className="font-black text-xl tracking-tight text-fg">
-                Mahashri<span className="gradient-text">Lab</span>
+                Mahashri<span className="text-primary-500">Lab</span>
               </span>
             </motion.div>
 
@@ -117,16 +131,15 @@ export default function Navbar() {
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className={`relative px-4 py-2 rounded-lg transition-all duration-200 ${
-                    activeSection === link.id
+                  className={`relative px-4 py-2 rounded-sm transition-all duration-200 ${activeSection === link.id
                       ? 'text-primary-500'
                       : 'text-fg-muted hover:text-fg hover:bg-surface-muted/50'
-                  }`}
+                    }`}
                 >
                   {activeSection === link.id && (
                     <motion.div
                       layoutId="navActive"
-                      className="absolute inset-0 rounded-lg bg-primary-500/10 border border-primary-500/20"
+                      className="absolute inset-0 rounded-sm bg-primary-500/10 border border-primary-500/20"
                       initial={false}
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
@@ -141,14 +154,14 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => router.push('/admin/login')}
-              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-surface-border bg-surface-card/50 text-fg-muted hover:text-primary-500 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-sm border border-surface-border bg-surface-card/50 text-fg-muted hover:text-primary-500 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
             >
               <Lock className="w-3.5 h-3.5" />
               Admin Login
             </button>
 
             {/* Search */}
-            <div className="hidden md:flex items-center gap-2 bg-surface-card/60 border border-surface-border rounded-full px-3 py-2 w-64 hover:border-primary-500/40 focus-within:border-primary-500/60 focus-within:bg-surface-card transition-all">
+            <div className="hidden md:flex items-center gap-2 bg-surface-card/60 border border-surface-border rounded-sm px-3 py-2 w-64 hover:border-primary-500/40 focus-within:border-primary-500/60 focus-within:bg-surface-card transition-all">
               <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
               <input
                 type="text"
@@ -164,7 +177,7 @@ export default function Navbar() {
 
             {/* Cart */}
             <motion.button
-              className="relative p-2 rounded-xl border border-surface-border/60 bg-surface-card/50 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
+              className="relative p-2 rounded-sm border border-surface-border/60 bg-surface-card/50 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
               onClick={openCart}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -177,23 +190,12 @@ export default function Navbar() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    className="absolute -top-1.5 -right-1.5 bg-primary-500 text-white text-[10px] font-black w-4.5 h-4.5 min-w-[18px] min-h-[18px] rounded-full flex items-center justify-center shadow-md"
+                    className="absolute -top-1.5 -right-1.5 bg-primary-500 text-[var(--app-cta-contrast)] text-[10px] font-black w-4.5 h-4.5 min-w-[18px] min-h-[18px] rounded-sm flex items-center justify-center shadow-md"
                   >
                     {cart.length}
                   </motion.span>
                 )}
               </AnimatePresence>
-            </motion.button>
-
-            {/* CTA */}
-            <motion.button
-              onClick={() => scrollTo('quote')}
-              className="btn-glow bg-primary-500 hover:bg-primary-600 text-white font-bold px-5 py-2 rounded-full flex items-center gap-2 text-sm transition-all"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Rocket className="w-4 h-4" />
-              Get Quote
             </motion.button>
           </div>
         </div>

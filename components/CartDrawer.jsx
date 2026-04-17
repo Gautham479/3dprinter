@@ -38,17 +38,17 @@ export default function CartDrawer() {
           >
             {/* Background */}
             <div className="absolute inset-0 bg-surface-bg/95 backdrop-blur-2xl border-l border-surface-border/60" />
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/60 via-accent-500/60 to-primary-500/60" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/60" />
 
             {/* Header */}
             <div className="relative flex items-center justify-between p-6 border-b border-surface-border/50">
               <div className="flex items-center gap-3 text-fg font-black text-xl">
-                <div className="w-9 h-9 rounded-xl bg-primary-500/15 border border-primary-500/30 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-sm bg-primary-500/15 border border-primary-500/30 flex items-center justify-center">
                   <ShoppingCart className="w-4 h-4 text-primary-500" />
                 </div>
                 Your Cart
                 {cart.length > 0 && (
-                  <span className="text-sm font-bold text-primary-500 bg-primary-500/10 border border-primary-500/20 px-2 py-0.5 rounded-full">
+                  <span className="text-sm font-bold text-primary-500 bg-primary-500/10 border border-primary-500/20 px-2 py-0.5 rounded-sm">
                     {cart.length} item{cart.length !== 1 ? 's' : ''}
                   </span>
                 )}
@@ -57,7 +57,7 @@ export default function CartDrawer() {
                 onClick={closeCart}
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 hover:bg-surface-muted rounded-xl transition-colors text-fg-muted hover:text-fg border border-surface-border/50"
+                className="p-2 hover:bg-surface-muted rounded-sm transition-colors text-fg-muted hover:text-fg border border-surface-border/50"
               >
                 <X size={18} />
               </motion.button>
@@ -71,7 +71,7 @@ export default function CartDrawer() {
                   animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-center justify-center h-full gap-4 text-center"
                 >
-                  <div className="w-20 h-20 rounded-2xl bg-surface-muted/60 border border-surface-border flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-sm bg-surface-muted/60 border border-surface-border flex items-center justify-center">
                     <Package className="w-10 h-10 text-fg-subtle" />
                   </div>
                   <p className="text-fg-muted font-semibold text-lg">Your Cart is empty</p>
@@ -87,10 +87,10 @@ export default function CartDrawer() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20, height: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="relative rounded-xl border border-surface-border/60 bg-surface-card/80 p-4 overflow-hidden group"
+                        className="relative rounded-sm border border-surface-border/60 bg-surface-card/80 p-4 overflow-hidden group"
                       >
                         {/* Left accent */}
-                        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary-500 to-accent-500 rounded-l-xl" />
+                        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary-500 rounded--sm" />
 
                         <div className="flex justify-between items-start mb-2 pr-8 pl-2">
                           <p className="text-fg font-black truncate max-w-[220px] text-sm">{item.fileName}</p>
@@ -109,7 +109,7 @@ export default function CartDrawer() {
                           onClick={() => removeFromCart(item.id)}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="absolute top-3 right-3 p-1.5 rounded-lg text-fg-subtle hover:text-red-400 hover:bg-red-400/10 transition-all"
+                          className="absolute top-3 right-3 p-1.5 rounded-sm text-fg-subtle hover:text-red-400 hover:bg-red-400/10 transition-all"
                         >
                           <Trash2 size={14} />
                         </motion.button>
@@ -136,14 +136,14 @@ export default function CartDrawer() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-fg-muted font-semibold">Total Cost</span>
-                    <span className="text-3xl font-black gradient-text">₹{totalCost}</span>
+                    <span className="text-3xl font-black text-primary-500">₹{totalCost}</span>
                   </div>
 
                   <motion.button
                     onClick={() => { closeCart(); router.push('/checkout'); }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full btn-glow bg-primary-500 hover:bg-primary-600 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all"
+                    className="w-full btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black py-4 rounded-sm flex items-center justify-center gap-2 transition-all"
                   >
                     <Rocket className="w-5 h-5" />
                     Proceed to secure checkout

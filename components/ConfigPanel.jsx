@@ -25,15 +25,15 @@ export default function ConfigPanel() {
   const { config, setConfig, selectedFile, mockPrice, addToCart } = useStore();
 
   return (
-    <div className="relative rounded-2xl border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
+    <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8 relative">
-        <div className="w-9 h-9 rounded-xl bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-sm bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
           <Zap className="w-4 h-4 text-primary-500" />
         </div>
         <h3 className="text-lg font-black text-fg">Configure Your Print</h3>
         <motion.div
-          className="ml-auto w-2 h-2 rounded-full bg-accent-500"
+          className="ml-auto w-2 h-2 rounded-sm bg-accent-500"
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />
@@ -48,7 +48,7 @@ export default function ConfigPanel() {
           <select
             value={config.material}
             onChange={(e) => setConfig({ material: e.target.value })}
-            className="w-full bg-surface-muted/60 border border-surface-border rounded-xl px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
+            className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
             style={selectStyle}
           >
             <option value="PLA">PLA</option>
@@ -69,11 +69,10 @@ export default function ConfigPanel() {
               <button
                 key={mode}
                 onClick={() => setConfig({ colorMode: mode, color: mode === 'Multicolor' ? 'Multicolor' : config.color })}
-                className={`py-2.5 px-3 rounded-xl text-sm font-bold border transition-all ${
-                  config.colorMode === mode
+                className={`py-2.5 px-3 rounded-sm text-sm font-bold border transition-all ${config.colorMode === mode
                     ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
                     : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
-                }`}
+                  }`}
               >
                 {mode}
               </button>
@@ -92,11 +91,10 @@ export default function ConfigPanel() {
                     key={color.name}
                     title={color.name}
                     onClick={() => setConfig({ color: color.name })}
-                    className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
-                      config.color === color.name
+                    className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${config.color === color.name
                         ? 'border-primary-500 scale-110 shadow-md'
                         : 'border-surface-border hover:border-primary-500/50'
-                    }`}
+                      }`}
                     style={{ backgroundColor: color.hex }}
                   />
                 ))}
@@ -114,7 +112,7 @@ export default function ConfigPanel() {
           <select
             value={config.quality}
             onChange={(e) => setConfig({ quality: e.target.value })}
-            className="w-full bg-surface-muted/60 border border-surface-border rounded-xl px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
+            className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
             style={selectStyle}
           >
             <option value="Draft (0.3mm)">Draft (0.3mm)</option>
@@ -139,7 +137,7 @@ export default function ConfigPanel() {
               step={5}
               value={config.strength}
               onChange={(e) => setConfig({ strength: Number(e.target.value) })}
-              className="w-full h-2 rounded-full appearance-none cursor-pointer"
+              className="w-full h-2 rounded-sm appearance-none cursor-pointer"
               style={{
                 background: `linear-gradient(to right, var(--app-primary-500) 0%, var(--app-accent-500) ${config.strength}%, var(--app-surface-border) ${config.strength}%)`,
               }}
@@ -153,11 +151,10 @@ export default function ConfigPanel() {
         </div>
 
         {/* Price display */}
-        <div className={`rounded-xl border p-5 text-center transition-all ${
-          selectedFile
+        <div className={`rounded-sm border p-5 text-center transition-all ${selectedFile
             ? 'border-primary-500/30 bg-primary-500/10'
             : 'border-surface-border bg-surface-muted/30'
-        }`}>
+          }`}>
           {selectedFile ? (
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -165,10 +162,10 @@ export default function ConfigPanel() {
               className="space-y-1"
             >
               <p className="text-xs text-fg-subtle uppercase tracking-widest font-bold">Estimated Price</p>
-              <p className="text-5xl font-black gradient-text">₹{mockPrice}</p>
+              <p className="text-5xl font-black text-primary-500">₹{mockPrice}</p>
               <p className="text-xs text-fg-muted flex items-center justify-center gap-1 mt-1">
                 <motion.span
-                  className="w-1.5 h-1.5 rounded-full bg-accent-500"
+                  className="w-1.5 h-1.5 rounded-sm bg-accent-500"
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
@@ -190,11 +187,10 @@ export default function ConfigPanel() {
           onClick={addToCart}
           whileHover={selectedFile ? { scale: 1.02 } : {}}
           whileTap={selectedFile ? { scale: 0.98 } : {}}
-          className={`w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-2 transition-all ${
-            selectedFile
-              ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-white'
+          className={`w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 transition-all ${selectedFile
+              ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
               : 'bg-surface-muted border border-surface-border text-fg-subtle cursor-not-allowed'
-          }`}
+            }`}
         >
           <ShoppingCart className="w-5 h-5" />
           Add to Cart

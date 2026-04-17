@@ -20,7 +20,7 @@ export default function MainContentTabs() {
       {/* Tab switcher */}
       <div
         id="content"
-        className="relative bg-surface-card/80 border border-surface-border p-1.5 rounded-2xl flex items-center mb-12 mx-auto sticky top-[72px] z-40 shadow-md overflow-hidden"
+        className="relative bg-surface-card/80 border border-surface-border p-1.5 rounded-sm flex items-center mb-12 mx-auto sticky top-[72px] z-40 shadow-md overflow-hidden"
       >
         {[
           { id: 'products', label: 'Products Gallery', icon: <PackageSearch className="w-4 h-4" /> },
@@ -29,14 +29,13 @@ export default function MainContentTabs() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`relative px-6 py-2.5 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2 min-w-[160px] z-10 ${
-              visibleTab === tab.id ? 'text-white' : 'text-fg-muted hover:text-fg'
-            }`}
+            className={`relative px-6 py-2.5 rounded-sm text-sm font-bold transition-colors flex items-center justify-center gap-2 min-w-[160px] z-10 ${visibleTab === tab.id ? 'text-white' : 'text-fg-muted hover:text-fg'
+              }`}
           >
             {visibleTab === tab.id && (
               <motion.div
                 layoutId="activeTabBg"
-                className="absolute inset-0 rounded-xl bg-primary-500 shadow-md"
+                className="absolute inset-0 rounded-sm bg-primary-500 shadow-md"
                 initial={false}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
@@ -61,7 +60,7 @@ export default function MainContentTabs() {
             >
               <div className="text-center max-w-2xl mx-auto mb-12">
                 <h2 className="text-3xl font-black text-fg mb-3">Print Shop</h2>
-                <div className="h-[2px] w-20 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full mb-4" />
+                <div className="h-[2px] w-20 bg-primary-500 mx-auto rounded-sm mb-4" />
                 <p className="text-fg-muted">
                   Browse our curated selection of high-quality 3D printed products and accessories, ready to ship.
                 </p>
@@ -80,7 +79,7 @@ export default function MainContentTabs() {
             >
               <div className="text-center max-w-2xl mx-auto mb-12">
                 <h2 className="text-3xl font-black text-fg mb-3">Custom Orders</h2>
-                <div className="h-[2px] w-20 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full mb-4" />
+                <div className="h-[2px] w-20 bg-primary-500 mx-auto rounded-sm mb-4" />
                 <p className="text-fg-muted">
                   Upload your own 3D models (STL files), configure your material preferences, and get an instant quote.
                 </p>

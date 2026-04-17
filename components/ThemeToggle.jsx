@@ -24,7 +24,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="relative p-2 rounded-xl border border-surface-border/60 bg-surface-card/50 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all overflow-hidden"
+      className="relative p-2 rounded-sm border border-surface-border/60 bg-surface-card/50 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all overflow-hidden"
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <AnimatePresence mode="wait" initial={false}>

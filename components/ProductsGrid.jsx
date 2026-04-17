@@ -32,7 +32,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
     <div className="flex flex-col h-full group">
       <Link href={`/products/${product.slug}`} className="flex-grow flex flex-col cursor-pointer">
         <motion.div
-          className="relative rounded-2xl border border-surface-border bg-surface-card/80 overflow-hidden flex flex-col h-full transition-all duration-300"
+          className="relative rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden flex flex-col h-full transition-all duration-300"
           whileHover={{ y: -4 }}
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
@@ -41,7 +41,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
           }}
         >
           {/* Hover border */}
-          <div className={`absolute inset-0 rounded-2xl border border-primary-500/0 transition-all duration-300 pointer-events-none ${isHovered ? 'border-primary-500/30' : ''}`} />
+          <div className={`absolute inset-0 rounded-sm border border-primary-500/0 transition-all duration-300 pointer-events-none ${isHovered ? 'border-primary-500/30' : ''}`} />
 
           {/* Image */}
           <div className="w-full aspect-[4/3] relative bg-surface-muted overflow-hidden">
@@ -54,7 +54,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
-              <div className={`w-full h-full bg-gradient-to-br ${product.imageColor} flex items-center justify-center`}>
+              <div className="w-full h-full bg-primary-50 flex items-center justify-center">
                 <span className="text-white/60 font-bold tracking-widest uppercase text-sm">3D Model</span>
               </div>
             )}
@@ -63,7 +63,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {uniqueImages.length > 1 && isHovered && (
               <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
                 {uniqueImages.map((_, i) => (
-                  <div key={i} className={`h-1.5 rounded-full transition-all ${i === currentImageIndex ? 'bg-primary-500 w-4' : 'bg-white/40 w-1.5'}`} />
+                  <div key={i} className={`h-1.5 rounded-sm transition-all ${i === currentImageIndex ? 'bg-primary-500 w-4' : 'bg-white/40 w-1.5'}`} />
                 ))}
               </div>
             )}
@@ -71,7 +71,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {/* Out of stock overlay */}
             {!product.inStock && (
               <div className="absolute inset-0 bg-surface-bg/60 flex items-center justify-center">
-                <span className="px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-wider">
+                <span className="px-3 py-1.5 rounded-sm bg-amber-500/20 border border-amber-500/40 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-wider">
                   Out of Stock
                 </span>
               </div>
@@ -88,10 +88,10 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             <p className="text-fg-muted text-sm mb-4 flex-grow line-clamp-2 leading-relaxed">{product.description}</p>
 
             <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <span className="px-2 py-1 bg-primary-500/10 rounded-lg text-xs text-primary-500 font-bold border border-primary-500/20">
+              <span className="px-2 py-1 bg-primary-500/10 rounded-sm text-xs text-primary-500 font-bold border border-primary-500/20">
                 {product.material}
               </span>
-              <span className="px-2 py-1 bg-surface-muted rounded-lg text-xs text-fg-muted font-bold border border-surface-border">
+              <span className="px-2 py-1 bg-surface-muted rounded-sm text-xs text-fg-muted font-bold border border-surface-border">
                 {product.type}
               </span>
             </div>
@@ -111,11 +111,10 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
                         color: mode === 'Multicolor' ? 'Multicolor' : (productColorOptions[product.id]?.color || AVAILABLE_COLORS[0].name)
                       });
                     }}
-                    className={`text-xs rounded-lg border px-2 py-1.5 font-bold transition-all ${
-                      (productColorOptions[product.id]?.colorMode || 'Single Color') === mode
+                    className={`text-xs rounded-sm border px-2 py-1.5 font-bold transition-all ${(productColorOptions[product.id]?.colorMode || 'Single Color') === mode
                         ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
                         : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30'
-                    }`}
+                      }`}
                   >
                     {mode}
                   </button>
@@ -127,7 +126,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
                   value={productColorOptions[product.id]?.color || AVAILABLE_COLORS[0].name}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
                   onChange={(e) => updateProductColorOption(product.id, { colorMode: 'Single Color', color: e.target.value })}
-                  className="w-full bg-surface-muted/60 border border-surface-border rounded-lg px-2 py-1.5 text-xs text-fg focus:outline-none focus:border-primary-500/50 transition-colors"
+                  className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-2 py-1.5 text-xs text-fg focus:outline-none focus:border-primary-500/50 transition-colors"
                 >
                   {AVAILABLE_COLORS.map((color) => (
                     <option key={color.name} value={color.name}>{color.name}</option>
@@ -145,11 +144,10 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAddToCart(product); }}
         whileHover={product.inStock ? { scale: 1.02 } : {}}
         whileTap={product.inStock ? { scale: 0.98 } : {}}
-        className={`w-full py-2.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm mt-3 ${
-          product.inStock
-            ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-white'
+        className={`w-full py-2.5 rounded-sm font-bold transition-all flex items-center justify-center gap-2 text-sm mt-3 ${product.inStock
+            ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
             : 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
-        }`}
+          }`}
       >
         <ShoppingCart className="w-4 h-4" />
         {product.inStock ? 'Add to Cart' : 'Out of Stock'}
@@ -230,11 +228,10 @@ export default function ProductsGrid() {
               onClick={() => setSelectedType(type)}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className={`px-4 py-2 rounded-full font-bold whitespace-nowrap transition-all text-sm ${
-                activeType === type
+              className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
                   ? 'bg-primary-500 text-white shadow-md'
                   : 'bg-surface-card/80 text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
-              }`}
+                }`}
             >
               {type}
             </motion.button>
@@ -244,13 +241,13 @@ export default function ProductsGrid() {
 
       {/* Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="w-full aspect-[3/4] bg-surface-muted/60 animate-pulse rounded-2xl border border-surface-border/40" />
+            <div key={i} className="w-full aspect-[3/4] bg-surface-muted/60 animate-pulse rounded-sm border border-surface-border/40" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           <AnimatePresence>
             {filteredProducts.map((product, idx) => (
               <motion.div
@@ -272,13 +269,13 @@ export default function ProductsGrid() {
 
           {filteredProducts.length === 0 && !loading && (
             <div className="col-span-full py-16 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-surface-muted/60 border border-surface-border flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-sm bg-surface-muted/60 border border-surface-border flex items-center justify-center mx-auto mb-4">
                 <Layers className="w-8 h-8 text-fg-subtle" />
               </div>
               <p className="text-fg-muted text-lg font-semibold">No products found matching your criteria.</p>
               <button
                 onClick={() => { setSelectedType('All'); useStore.getState().setSearchQuery(''); }}
-                className="mt-4 px-5 py-2 bg-primary-500/10 border border-primary-500/30 rounded-xl text-primary-500 font-bold hover:bg-primary-500/20 transition-colors"
+                className="mt-4 px-5 py-2 bg-primary-500/10 border border-primary-500/30 rounded-sm text-primary-500 font-bold hover:bg-primary-500/20 transition-colors"
               >
                 Clear Filters
               </button>

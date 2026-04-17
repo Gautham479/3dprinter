@@ -170,7 +170,7 @@ export default function CheckoutPage() {
 
   if (cart.length === 0) return null;
 
-  const inputClass = "w-full bg-surface-muted/40 border border-surface-border rounded-xl px-4 py-3.5 text-fg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all placeholder:text-fg-subtle text-sm";
+  const inputClass = "w-full bg-surface-muted/40 border border-surface-border rounded-sm px-4 py-3.5 text-fg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all placeholder:text-fg-subtle text-sm";
   const labelClass = "block text-sm font-bold text-fg-muted mb-2";
 
   return (
@@ -178,8 +178,8 @@ export default function CheckoutPage() {
       {/* Razorpay script is loaded dynamically in handleCheckout for Vercel compatibility */}
 
       {/* Background */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-500/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/8 rounded-sm blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-500/8 rounded-sm blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Back button */}
@@ -195,7 +195,7 @@ export default function CheckoutPage() {
         {/* Title */}
         <div className="mb-8">
           <h1 className="text-3xl font-black text-fg flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-sm bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5 text-primary-500" />
             </div>
             Secure Checkout
@@ -213,7 +213,7 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="px-4 py-3 bg-red-500/10 border border-red-500/30 text-red-500 dark:text-red-400 rounded-xl font-semibold text-sm"
+                  className="px-4 py-3 bg-red-500/10 border border-red-500/30 text-red-500 dark:text-red-400 rounded-sm font-semibold text-sm"
                 >
                   {error}
                 </motion.div>
@@ -221,10 +221,10 @@ export default function CheckoutPage() {
             </AnimatePresence>
 
             {/* Contact */}
-            <div className="rounded-2xl border border-surface-border bg-surface-card/80 p-6 space-y-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/40 to-accent-500/40" />
+            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 space-y-5 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/40" />
               <h2 className="text-base font-black text-fg flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-sm bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
                   <MapPin className="w-3.5 h-3.5 text-primary-500" />
                 </div>
                 Contact Information
@@ -244,10 +244,10 @@ export default function CheckoutPage() {
             </div>
 
             {/* Shipping */}
-            <div className="rounded-2xl border border-surface-border bg-surface-card/80 p-6 space-y-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-500/40 to-primary-500/40" />
+            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 space-y-5 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/40" />
               <h2 className="text-base font-black text-fg flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-accent-500/15 border border-accent-500/25 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-sm bg-accent-500/15 border border-accent-500/25 flex items-center justify-center">
                   <Package className="w-3.5 h-3.5 text-accent-500" />
                 </div>
                 Shipping Address
@@ -277,10 +277,10 @@ export default function CheckoutPage() {
             </div>
 
             {/* Notes */}
-            <div className="rounded-2xl border border-surface-border bg-surface-card/80 p-6 space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/30 to-accent-500/30" />
+            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/30" />
               <h2 className="text-base font-black text-fg flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center">
                   <FileText className="w-3.5 h-3.5 text-primary-500" />
                 </div>
                 Order Notes
@@ -298,8 +298,8 @@ export default function CheckoutPage() {
                 { icon: <Package className="w-5 h-5 text-accent-500" />, title: 'Secure Packaging', sub: 'Safe transit guaranteed' },
                 { icon: <CreditCard className="w-5 h-5 text-primary-600" />, title: 'Secure Payment', sub: '100% encrypted checkout' },
               ].map((badge, i) => (
-                <div key={i} className="rounded-xl border border-surface-border bg-surface-card/60 p-4 flex flex-col items-center text-center gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-surface-muted/60 border border-surface-border flex items-center justify-center">
+                <div key={i} className="rounded-sm border border-surface-border bg-surface-card/60 p-4 flex flex-col items-center text-center gap-2">
+                  <div className="w-10 h-10 rounded-sm bg-surface-muted/60 border border-surface-border flex items-center justify-center">
                     {badge.icon}
                   </div>
                   <p className="text-xs font-black text-fg">{badge.title}</p>
@@ -310,8 +310,8 @@ export default function CheckoutPage() {
           </form>
 
           {/* Order summary */}
-          <div className="rounded-2xl border border-surface-border bg-surface-card/90 sticky top-8 overflow-hidden shadow-lg">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/50 via-accent-500/50 to-primary-500/50" />
+          <div className="rounded-sm border border-surface-border bg-surface-card/90 sticky top-8 overflow-hidden shadow-lg">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
 
             <div className="p-6 md:p-8 space-y-6">
               <h2 className="font-black text-fg text-lg">Order Summary</h2>
@@ -319,14 +319,14 @@ export default function CheckoutPage() {
               {/* Items */}
               <div className="space-y-3 max-h-[250px] overflow-y-auto custom-scrollbar">
                 {cart.map((item, idx) => (
-                  <div key={`${item.id}-${idx}`} className="bg-surface-muted/40 border border-surface-border/60 p-4 rounded-xl">
+                  <div key={`${item.id}-${idx}`} className="bg-surface-muted/40 border border-surface-border/60 p-4 rounded-sm">
                     <div className="flex justify-between items-start mb-2">
                       <p className="font-bold text-sm text-fg truncate pr-4">{item.fileName}</p>
                       <p className="text-primary-500 font-black text-sm whitespace-nowrap">₹{item.price}</p>
                     </div>
                     <div className="flex gap-2 flex-wrap">
                       {[item.config.material, item.config.color, `${item.config.strength}% Infill`].map((tag) => (
-                        <span key={tag} className="text-[10px] uppercase font-black text-fg-subtle bg-surface-muted px-2 py-0.5 rounded-md border border-surface-border">
+                        <span key={tag} className="text-[10px] uppercase font-black text-fg-subtle bg-surface-muted px-2 py-0.5 rounded-sm border border-surface-border">
                           {tag}
                         </span>
                       ))}
@@ -337,8 +337,8 @@ export default function CheckoutPage() {
 
               {/* Discount */}
               <div className="flex gap-2">
-                <input className="flex-1 bg-surface-muted/40 border border-surface-border rounded-xl px-4 py-3 text-sm text-fg focus:outline-none focus:border-primary-500/50 placeholder:text-fg-subtle" placeholder="DISCOUNT CODE" />
-                <button className="px-5 py-3 bg-primary-500/10 hover:bg-primary-500/20 border border-primary-500/30 text-primary-500 font-black text-sm rounded-xl transition-colors">Apply</button>
+                <input className="flex-1 bg-surface-muted/40 border border-surface-border rounded-sm px-4 py-3 text-sm text-fg focus:outline-none focus:border-primary-500/50 placeholder:text-fg-subtle" placeholder="DISCOUNT CODE" />
+                <button className="px-5 py-3 bg-primary-500/10 hover:bg-primary-500/20 border border-primary-500/30 text-primary-500 font-black text-sm rounded-sm transition-colors">Apply</button>
               </div>
 
               {/* Totals */}
@@ -350,7 +350,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between items-center text-fg-muted">
                   <span>Shipping</span>
                   {deliveryFee === 0 ? (
-                    <span className="text-accent-500 font-black text-xs bg-accent-500/10 border border-accent-500/20 px-2 py-0.5 rounded-full">FREE</span>
+                    <span className="text-accent-500 font-black text-xs bg-accent-500/10 border border-accent-500/20 px-2 py-0.5 rounded-sm">FREE</span>
                   ) : (
                     <span className="text-fg font-bold">₹{deliveryFee}</span>
                   )}
@@ -362,7 +362,7 @@ export default function CheckoutPage() {
                   <p className="text-2xl font-black text-fg">Total</p>
                   <p className="text-[10px] text-fg-subtle">Includes all taxes</p>
                 </div>
-                <span className="text-4xl font-black gradient-text">₹{totalAmount}</span>
+                <span className="text-4xl font-black text-primary-500">₹{totalAmount}</span>
               </div>
 
               {/* Place order */}
@@ -372,12 +372,12 @@ export default function CheckoutPage() {
                 disabled={loading || !canCheckout}
                 whileHover={!loading ? { scale: 1.02 } : {}}
                 whileTap={!loading ? { scale: 0.98 } : {}}
-                className="w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-white transition-all disabled:opacity-50 disabled:pointer-events-none"
+                className="w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-white transition-all disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? (
                   <>
                     <motion.div
-                      className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                      className="w-5 h-5 border-2 border-white/30 border-t-white rounded-sm"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                     />

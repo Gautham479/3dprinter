@@ -11,7 +11,7 @@ export default function Features() {
     {
       name: "PLA (Basic & Lightweight)",
       emoji: "🌿",
-      color: "from-primary-500/10 to-primary-600/10",
+      color: "bg-primary-500/10",
       borderColor: "border-primary-500/25",
       accentColor: "text-primary-500",
       points: [
@@ -24,7 +24,7 @@ export default function Features() {
     {
       name: "PETG (All-Rounder Choice)",
       emoji: "🔷",
-      color: "from-accent-500/10 to-accent-600/10",
+      color: "bg-accent-500/10",
       borderColor: "border-accent-500/25",
       accentColor: "text-accent-500",
       points: [
@@ -38,7 +38,7 @@ export default function Features() {
     {
       name: "ABS (High Strength & Heat Resistant)",
       emoji: "🔥",
-      color: "from-amber-600/10 to-orange-600/10",
+      color: "bg-amber-600/10",
       borderColor: "border-amber-600/25",
       accentColor: "text-amber-600",
       points: [
@@ -52,7 +52,7 @@ export default function Features() {
     {
       name: "TPU (Flexible & Shock Absorbing)",
       emoji: "🌀",
-      color: "from-rose-500/10 to-pink-500/10",
+      color: "bg-rose-500/10",
       borderColor: "border-rose-400/25",
       accentColor: "text-rose-500",
       points: [
@@ -88,7 +88,7 @@ export default function Features() {
   return (
     <section id="features" className="w-full py-24 overflow-hidden relative">
       {/* Subtle warm divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-primary-500/20" />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <motion.div
@@ -98,7 +98,7 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary-500/30 bg-primary-500/10 text-sm text-primary-500 font-bold mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-sm border border-primary-500/30 bg-primary-500/10 text-sm text-primary-500 font-bold mb-6">
             <Zap className="w-3.5 h-3.5" />
             Material Science
           </div>
@@ -121,10 +121,10 @@ export default function Features() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               onHoverStart={() => setActiveCard(i)}
               onHoverEnd={() => setActiveCard(null)}
-              className={`relative rounded-2xl border ${material.borderColor} bg-surface-card/80 p-7 cursor-default overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary-500/30`}
+              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-7 cursor-default overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary-500/30`}
             >
               {/* Background gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${material.color} opacity-0 transition-opacity duration-300 ${activeCard === i ? 'opacity-100' : ''}`} />
+              <div className={`absolute inset-0 ${material.color} opacity-0 transition-opacity duration-300 ${activeCard === i ? 'opacity-100' : ''}`} />
 
               <div className="relative">
                 <h3 className="text-xl font-black text-fg mb-5 flex items-center gap-3">
@@ -159,7 +159,7 @@ export default function Features() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative rounded-2xl border border-surface-border bg-surface-card/80 p-8 overflow-hidden"
+          className="relative rounded-sm border border-surface-border bg-surface-card/80 p-8 overflow-hidden"
         >
           <h3 className="text-2xl font-black text-fg mb-6 flex items-center gap-2 relative">
             <span>💡</span>
@@ -175,7 +175,7 @@ export default function Features() {
                 viewport={{ once: false }}
                 transition={{ delay: 0.3 + i * 0.07 }}
                 whileHover={{ scale: 1.05, y: -4 }}
-                className="bg-surface-muted/60 p-4 rounded-xl border border-surface-border hover:border-primary-500/40 transition-all cursor-default group"
+                className="bg-surface-muted/60 p-4 rounded-sm border border-surface-border hover:border-primary-500/40 transition-all cursor-default group"
               >
                 <div className="text-2xl mb-2">{item.icon}</div>
                 <p className="text-sm font-bold text-fg mb-1.5 group-hover:text-primary-500 transition-colors">{item.question}</p>

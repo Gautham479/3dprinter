@@ -99,7 +99,7 @@ export default function ProductPage() {
         <CartDrawer />
         <div className="flex-1 flex items-center justify-center">
           <motion.div
-            className="w-12 h-12 rounded-xl border-2 border-primary-500/30 border-t-primary-500"
+            className="w-12 h-12 rounded-sm border-2 border-primary-500/30 border-t-primary-500"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
@@ -119,7 +119,7 @@ export default function ProductPage() {
   return (
     <div className="flex flex-col min-h-screen bg-surface-bg relative overflow-hidden">
       {/* Background */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/6 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/6 rounded-sm blur-3xl pointer-events-none" />
 
       <Navbar />
       <CartDrawer />
@@ -144,7 +144,7 @@ export default function ProductPage() {
                 onMouseEnter={() => setImageHovered(true)}
                 onMouseLeave={() => { setImageHovered(false); setZoom({ x: 0, y: 0 }); }}
                 onMouseMove={handleImageMouseMove}
-                className="w-full max-w-xl aspect-[4/3] rounded-3xl relative overflow-hidden cursor-zoom-in border border-surface-border bg-surface-card shadow-lg"
+                className="w-full max-w-xl aspect-[4/3] rounded-sm relative overflow-hidden cursor-zoom-in border border-surface-border bg-surface-card shadow-lg"
                 whileHover={{ scale: 1.01 }}
               >
                 <AnimatePresence mode="wait">
@@ -176,13 +176,13 @@ export default function ProductPage() {
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-xl text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-xl text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -191,7 +191,7 @@ export default function ProductPage() {
 
                 {!imageHovered && (
                   <div className="absolute inset-0 flex items-end justify-center pb-5 z-10">
-                    <span className="text-white/70 text-xs font-bold bg-black/40 backdrop-blur-md px-5 py-2 rounded-full border border-white/10">
+                    <span className="text-white/70 text-xs font-bold bg-black/40 backdrop-blur-md px-5 py-2 rounded-sm border border-white/10">
                       Hover to zoom
                     </span>
                   </div>
@@ -201,7 +201,7 @@ export default function ProductPage() {
               {/* Zoom panel */}
               {imageHovered && selectedImage && (
                 <div
-                  className="absolute top-0 rounded-3xl shadow-xl overflow-hidden border-2 border-primary-500/30 pointer-events-none z-50 w-[480px] h-[480px] hidden lg:block"
+                  className="absolute top-0 rounded-sm shadow-xl overflow-hidden border-2 border-primary-500/30 pointer-events-none z-50 w-[480px] h-[480px] hidden lg:block"
                   style={{ left: 'calc(100% + 2rem)' }}
                 >
                   <Image
@@ -216,7 +216,7 @@ export default function ProductPage() {
                     }}
                     sizes="480px"
                   />
-                  <div className="absolute top-4 right-4 bg-primary-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-md">
+                  <div className="absolute top-4 right-4 bg-primary-500 text-white text-xs font-black px-3 py-1.5 rounded-sm shadow-md">
                     2.5x Zoom
                   </div>
                 </div>
@@ -233,11 +233,10 @@ export default function ProductPage() {
                     onClick={() => setSelectedImage(imageUrl)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`w-16 h-16 rounded-xl border-2 overflow-hidden relative transition-all ${
-                      selectedImage === imageUrl
+                    className={`w-16 h-16 rounded-sm border-2 overflow-hidden relative transition-all ${selectedImage === imageUrl
                         ? 'border-primary-500 shadow-md'
                         : 'border-surface-border opacity-60 hover:opacity-100 hover:border-primary-500/50'
-                    }`}
+                      }`}
                   >
                     <Image src={imageUrl} alt="Product thumbnail" fill className="object-cover" sizes="64px" />
                   </motion.button>
@@ -251,11 +250,11 @@ export default function ProductPage() {
             <div>
               {/* Type badge */}
               <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-primary-500/10 text-primary-500 rounded-full text-sm font-black border border-primary-500/20">
+                <span className="px-3 py-1 bg-primary-500/10 text-primary-500 rounded-sm text-sm font-black border border-primary-500/20">
                   {product.type}
                 </span>
                 {!product.inStock && (
-                  <span className="px-3 py-1 rounded-full text-sm font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                  <span className="px-3 py-1 rounded-sm text-sm font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
                     Currently out of stock
                   </span>
                 )}
@@ -265,13 +264,13 @@ export default function ProductPage() {
               <p className="text-fg-muted text-base mb-8 leading-relaxed">{product.fullDescription}</p>
 
               {/* Specs */}
-              <div className="rounded-2xl border border-surface-border bg-surface-card/80 p-6 mb-6 relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/30 to-accent-500/30" />
+              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 mb-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/30" />
                 <h3 className="text-fg font-black mb-4 text-sm uppercase tracking-widest">Specifications</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {specs.map((spec) => (
                     <div key={spec.label} className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center flex-shrink-0 text-primary-500 mt-0.5">
+                      <div className="w-8 h-8 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center flex-shrink-0 text-primary-500 mt-0.5">
                         {spec.icon}
                       </div>
                       <div>
@@ -292,11 +291,10 @@ export default function ProductPage() {
                       key={mode}
                       type="button"
                       onClick={() => setColorMode(mode)}
-                      className={`rounded-xl border px-3 py-2.5 text-sm font-black transition-all ${
-                        colorMode === mode
+                      className={`rounded-sm border px-3 py-2.5 text-sm font-black transition-all ${colorMode === mode
                           ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
                           : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:text-fg hover:border-primary-500/30'
-                      }`}
+                        }`}
                     >
                       {mode}
                     </button>
@@ -307,7 +305,7 @@ export default function ProductPage() {
                   <select
                     value={singleColor}
                     onChange={(e) => setSingleColor(e.target.value)}
-                    className="w-full bg-surface-muted/60 border border-surface-border rounded-xl px-4 py-3 text-fg text-sm focus:outline-none focus:border-primary-500"
+                    className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3 text-fg text-sm focus:outline-none focus:border-primary-500"
                   >
                     {AVAILABLE_COLORS.map((color) => (
                       <option key={color.name} value={color.name}>{color.name}</option>
@@ -318,17 +316,17 @@ export default function ProductPage() {
             </div>
 
             {/* Price & CTA */}
-            <div className="rounded-2xl border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500/50 to-accent-500/50" />
+            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
               <div className="flex items-end justify-between mb-5">
                 <div>
                   <p className="text-fg-subtle text-xs font-bold uppercase tracking-wider mb-1">Price</p>
-                  <p className="text-5xl font-black gradient-text">₹{product.price}</p>
+                  <p className="text-5xl font-black text-primary-500">₹{product.price}</p>
                 </div>
                 {product.inStock && (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-500/10 border border-accent-500/20 text-accent-500 text-xs font-black">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-xs font-black">
                     <motion.span
-                      className="w-2 h-2 rounded-full bg-accent-500"
+                      className="w-2 h-2 rounded-sm bg-accent-500"
                       animate={{ opacity: [1, 0.3, 1] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />
@@ -342,13 +340,12 @@ export default function ProductPage() {
                 onClick={handleAddToCart}
                 whileHover={product.inStock ? { scale: 1.02 } : {}}
                 whileTap={product.inStock ? { scale: 0.98 } : {}}
-                className={`w-full py-4 rounded-xl font-black text-lg flex items-center justify-center gap-3 transition-all ${
-                  !product.inStock
+                className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
                     ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
                     : addedToCart
-                    ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
-                    : 'btn-glow bg-primary-500 hover:bg-primary-600 text-white'
-                }`}
+                      ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
+                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-white'
+                  }`}
               >
                 {!product.inStock ? (
                   'Out of Stock'
@@ -382,9 +379,9 @@ export default function ProductPage() {
                   transition={{ delay: i * 0.1 }}
                   onClick={() => router.push(`/products/${p.slug}`)}
                   whileHover={{ y: -4 }}
-                  className="rounded-2xl border border-surface-border bg-surface-card/80 overflow-hidden cursor-pointer group transition-all hover:shadow-lg"
+                  className="rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden cursor-pointer group transition-all hover:shadow-lg"
                 >
-                  <div className={`w-full aspect-[4/3] relative ${(p.image || p.images?.[0]) ? 'bg-surface-muted' : `bg-gradient-to-br ${p.imageColor}`}`}>
+                  <div className={`w-full aspect-[4/3] relative ${(p.image || p.images?.[0]) ? 'bg-surface-muted' : `bg-primary-50`}`}>
                     {(p.image || p.images?.[0]) ? (
                       <Image
                         src={p.image || p.images?.[0]}
@@ -399,7 +396,7 @@ export default function ProductPage() {
                   </div>
                   <div className="p-4 border-t border-surface-border/50">
                     <h3 className="text-fg font-bold text-sm mb-1 group-hover:text-primary-500 transition-colors">{p.name}</h3>
-                    <p className="gradient-text font-black">₹{p.price}</p>
+                    <p className="text-primary-500 font-black">₹{p.price}</p>
                   </div>
                 </motion.div>
               ))}

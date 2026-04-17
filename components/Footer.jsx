@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="w-full relative overflow-hidden">
       {/* Top border */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
+      <div className="h-[1px] w-full bg-primary-500/20" />
 
       {/* Background */}
       <div className="absolute inset-0 bg-surface-card/60 pointer-events-none" />
@@ -22,12 +22,12 @@ export default function Footer() {
               whileHover={{ scale: 1.02 }}
             >
               <div className="relative w-10 h-10 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-xl bg-primary-500/15" />
-                <div className="absolute inset-0 rounded-xl border border-primary-500/30" />
+                <div className="absolute inset-0 rounded-sm bg-primary-500/15" />
+                <div className="absolute inset-0 rounded-sm border border-primary-500/30" />
                 <span className="text-xl relative z-10">🖨️</span>
               </div>
               <span className="font-black text-xl tracking-tight text-fg">
-                Mahashri<span className="gradient-text">Lab</span>
+                Mahashri<span className="text-primary-500">Lab</span>
               </span>
             </motion.div>
 
@@ -36,9 +36,9 @@ export default function Footer() {
             </p>
 
             {/* Status indicator */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent-500/30 bg-accent-500/10 text-xs font-bold text-accent-500">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-accent-500/30 bg-accent-500/10 text-xs font-bold text-accent-500">
               <motion.span
-                className="w-2 h-2 rounded-full bg-accent-500"
+                className="w-2 h-2 rounded-sm bg-accent-500"
                 animate={{ opacity: [1, 0.3, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
@@ -56,7 +56,7 @@ export default function Footer() {
                     href="#"
                     className="text-fg-subtle hover:text-primary-500 transition-colors text-sm flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-surface-border group-hover:bg-primary-500 transition-colors" />
+                    <span className="w-1 h-1 rounded-sm bg-surface-border group-hover:bg-primary-500 transition-colors" />
                     {item}
                   </a>
                 </li>
@@ -74,7 +74,7 @@ export default function Footer() {
                     href="#"
                     className="text-fg-subtle hover:text-primary-500 transition-colors text-sm flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-surface-border group-hover:bg-primary-500 transition-colors" />
+                    <span className="w-1 h-1 rounded-sm bg-surface-border group-hover:bg-primary-500 transition-colors" />
                     {item}
                   </a>
                 </li>

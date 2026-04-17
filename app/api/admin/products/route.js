@@ -126,7 +126,7 @@ export async function POST(request) {
         price,
         image: finalPrimaryImage,
         images: finalImages,
-        imageColor: body.imageColor || 'from-[#6366f1] to-[#8b5cf6]',
+        imageColor: body.imageColor || 'bg-primary-50',
         type: body.type,
         dimensions: body.dimensions || 'N/A',
         weight: body.weight || 'N/A',

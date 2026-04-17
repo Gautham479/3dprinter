@@ -28,7 +28,7 @@ export default function UploadBox() {
     <div className="flex flex-col h-full relative">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4 text-fg font-black pb-2">
-        <div className="w-8 h-8 rounded-lg bg-primary-500/15 border border-primary-500/30 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-sm bg-primary-500/15 border border-primary-500/30 flex items-center justify-center">
           <Upload className="w-4 h-4 text-primary-500" />
         </div>
         <span>Upload Model</span>
@@ -37,7 +37,7 @@ export default function UploadBox() {
       {/* Drop zone */}
       <div
         {...getRootProps()}
-        className={`flex-1 flex flex-col items-center justify-center p-10 w-full rounded-2xl border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[380px] ${
+        className={`flex-1 flex flex-col items-center justify-center p-10 w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[380px] ${
           isDragActive
             ? 'border-primary-500 bg-primary-500/10 shadow-lg'
             : 'border-surface-border hover:border-primary-500/50 hover:bg-primary-50/50 bg-surface-card/60'
@@ -56,7 +56,7 @@ export default function UploadBox() {
             >
               {/* Success icon */}
               <motion.div
-                className="w-24 h-24 rounded-2xl bg-accent-500/15 border border-accent-500/30 flex items-center justify-center"
+                className="w-24 h-24 rounded-sm bg-accent-500/15 border border-accent-500/30 flex items-center justify-center"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -68,7 +68,7 @@ export default function UploadBox() {
                 <p className="text-sm text-fg-muted mt-1">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
 
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-500/10 border border-accent-500/20 text-accent-500 text-sm font-bold">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-sm font-bold">
                 <Cpu className="w-4 h-4" />
                 Model loaded — price calculated
               </div>
@@ -87,14 +87,14 @@ export default function UploadBox() {
               <div className="relative w-28 h-28 flex items-center justify-center">
                 {/* Subtle pulse ring */}
                 <motion.div
-                  className="absolute inset-0 rounded-2xl border border-primary-500/15"
+                  className="absolute inset-0 rounded-sm border border-primary-500/15"
                   animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 />
 
                 {/* Icon */}
                 <motion.div
-                  className="w-20 h-20 rounded-2xl bg-primary-500/10 border border-primary-500/25 flex items-center justify-center"
+                  className="w-20 h-20 rounded-sm bg-primary-500/10 border border-primary-500/25 flex items-center justify-center"
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 >
@@ -108,9 +108,9 @@ export default function UploadBox() {
                 <p className="text-xs text-fg-subtle mt-2 uppercase tracking-widest font-bold">STL files only, up to 100MB</p>
               </div>
 
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-muted/60 border border-surface-border text-fg-subtle text-sm font-medium">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-sm bg-surface-muted/60 border border-surface-border text-fg-subtle text-sm font-medium">
                 <motion.span
-                  className="w-2 h-2 rounded-full bg-accent-500"
+                  className="w-2 h-2 rounded-sm bg-accent-500"
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
@@ -127,7 +127,7 @@ export default function UploadBox() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center bg-primary-500/10 rounded-2xl z-20"
+              className="absolute inset-0 flex items-center justify-center bg-primary-500/10 rounded-sm z-20"
             >
               <div className="text-center">
                 <motion.div

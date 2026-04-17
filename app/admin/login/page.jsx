@@ -37,14 +37,14 @@ export default function AdminLoginPage() {
     router.refresh();
   };
 
-  const inputClass = "w-full rounded-xl border border-surface-border bg-surface-muted/60 px-4 py-3 text-fg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all placeholder:text-fg-subtle text-sm backdrop-blur-sm";
+  const inputClass = "w-full rounded-sm border border-surface-border bg-surface-muted/60 px-4 py-3 text-fg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all placeholder:text-fg-subtle text-sm backdrop-blur-sm";
 
   return (
     <main className="min-h-screen bg-surface-bg flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-sm blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-sm blur-3xl pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -54,23 +54,23 @@ export default function AdminLoginPage() {
       >
         {/* Card */}
         <div
-          className="rounded-3xl border border-primary-500/20 bg-surface-card/80 backdrop-blur-2xl p-8 shadow-2xl relative overflow-hidden"
+          className="rounded-sm border border-primary-500/20 bg-surface-card/80 backdrop-blur-2xl p-8 shadow-2xl relative overflow-hidden"
           style={{ boxShadow: '0 0 60px rgba(99,102,241,0.15), 0 30px 80px rgba(0,0,0,0.15)' }}
         >
           {/* Top accent */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500" />
 
           {/* Corner accents */}
           <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-primary-500/30 rounded-tl-3xl pointer-events-none" />
           <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-accent-500/30 rounded-tr-3xl pointer-events-none" />
 
           {/* Background glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-accent-500/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-primary-500/5 pointer-events-none" />
 
           <div className="relative">
             {/* Icon */}
             <motion.div
-              className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-500/30 flex items-center justify-center mx-auto mb-6"
+              className="w-16 h-16 rounded-sm bg-primary-500/20 border border-primary-500/30 flex items-center justify-center mx-auto mb-6"
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               style={{ boxShadow: '0 0 20px rgba(99,102,241,0.2)' }}
@@ -100,7 +100,7 @@ export default function AdminLoginPage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="text-xs text-fg-muted mb-4 bg-surface-muted/60 border border-surface-border rounded-xl p-3"
+                  className="text-xs text-fg-muted mb-4 bg-surface-muted/60 border border-surface-border rounded-sm p-3"
                 >
                   Reset by updating <code className="text-primary-500 font-bold">ADMIN_PASSWORD</code> in your deployment environment variables, then redeploy.
                 </motion.p>
@@ -150,7 +150,7 @@ export default function AdminLoginPage() {
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2"
+                    className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-sm px-3 py-2"
                   >
                     {error}
                   </motion.p>
@@ -161,12 +161,12 @@ export default function AdminLoginPage() {
                 disabled={loading}
                 whileHover={!loading ? { scale: 1.02 } : {}}
                 whileTap={!loading ? { scale: 0.98 } : {}}
-                className="w-full btn-glow bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-xl py-3 font-black disabled:opacity-60 flex items-center justify-center gap-2 transition-all"
+                className="w-full btn-glow bg-primary-500 text-white rounded-sm py-3 font-black disabled:opacity-60 flex items-center justify-center gap-2 transition-all"
               >
                 {loading ? (
                   <>
                     <motion.div
-                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-sm"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                     />

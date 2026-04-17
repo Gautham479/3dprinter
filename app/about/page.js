@@ -44,124 +44,155 @@ export default function AboutPage() {
             About Us
           </h1>
           <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Innovation and quality at the intersection of technology and creativity
+            Premium FDM 3D Printing Services from Karnataka, India
           </p>
         </motion.div>
       </section>
 
       {/* Main Content */}
       <section className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        {/* Who We Are */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16"
-          variants={containerVariants}
+          className="mb-16"
+          variants={itemVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {/* Our Story */}
-          <motion.div variants={itemVariants}>
-            <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-6">
-              Our Story
-            </h2>
-            <p className="text-body text-lg leading-relaxed mb-4">
-              Founded with a vision to democratize advanced manufacturing technology, we've been at the forefront of 3D printing innovation. Our journey began with a simple belief: everyone should have access to powerful tools that bring their ideas to life.
-            </p>
-            <p className="text-body text-lg leading-relaxed">
-              Over the years, we've grown from a startup to a trusted partner for thousands of makers, designers, and businesses worldwide. Our commitment to excellence and customer satisfaction has never wavered.
-            </p>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-8 rounded-lg border border-primary-accent/20">
-              <div className="text-4xl font-bold text-primary-accent mb-2">5K+</div>
-              <p className="text-body font-semibold">Happy Customers</p>
-            </div>
-            <div className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-8 rounded-lg border border-primary-accent/20">
-              <div className="text-4xl font-bold text-primary-accent mb-2">50K+</div>
-              <p className="text-body font-semibold">Projects Completed</p>
-            </div>
-            <div className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-8 rounded-lg border border-primary-accent/20">
-              <div className="text-4xl font-bold text-primary-accent mb-2">100+</div>
-              <p className="text-body font-semibold">Products</p>
-            </div>
-            <div className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-8 rounded-lg border border-primary-accent/20">
-              <div className="text-4xl font-bold text-primary-accent mb-2">24/7</div>
-              <p className="text-body font-semibold">Support Available</p>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Mission & Values */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <motion.div variants={itemVariants} className="bg-gradient-to-br from-primary-accent/5 to-secondary-accent/5 p-8 rounded-lg border border-primary-accent/10">
-            <h3 className="text-2xl font-bold text-heading mb-4">Our Mission</h3>
-            <p className="text-body text-lg leading-relaxed">
-              To empower creators, makers, and businesses with cutting-edge 3D printing technology and exceptional support. We believe in democratizing manufacturing and making advanced tools accessible to everyone.
-            </p>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="bg-gradient-to-br from-primary-accent/5 to-secondary-accent/5 p-8 rounded-lg border border-primary-accent/10">
-            <h3 className="text-2xl font-bold text-heading mb-4">Our Values</h3>
-            <ul className="text-body text-lg space-y-3">
-              <li className="flex items-start">
-                <span className="text-primary-accent mr-3 font-bold">✓</span>
-                <span><strong>Innovation:</strong> Constantly pushing boundaries</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary-accent mr-3 font-bold">✓</span>
-                <span><strong>Quality:</strong> Excellence in every product</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary-accent mr-3 font-bold">✓</span>
-                <span><strong>Support:</strong> Always there for our customers</span>
-              </li>
-            </ul>
-          </motion.div>
-        </motion.div>
-
-        {/* Team Section */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-12">
-            Why Choose Us?
+          <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-6">
+            Who We Are
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <p className="text-body text-lg leading-relaxed max-w-3xl">
+            We are a 3D printing business based in Karnataka, India, providing custom FDM 3D printing services for prototypes, functional parts, and custom designs. With a commitment to quality and precision, we help makers, designers, and businesses bring their ideas to life.
+          </p>
+        </motion.div>
+
+        {/* What We Do */}
+        <motion.div
+          className="mb-16"
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-6">
+            What We Do
+          </h2>
+          <p className="text-body text-lg leading-relaxed max-w-3xl mb-4">
+            We offer custom FDM 3D printing services with a simple process:
+          </p>
+          <ul className="text-body text-lg space-y-3">
+            <li className="flex items-start">
+              <span className="text-primary-accent mr-3 font-bold">•</span>
+              <span><strong>Upload your files:</strong> STL or OBJ format</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary-accent mr-3 font-bold">•</span>
+              <span><strong>Get instant pricing:</strong> No hidden fees</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary-accent mr-3 font-bold">•</span>
+              <span><strong>We print it:</strong> Using high-quality PLA and PETG materials on calibrated FDM printers</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary-accent mr-3 font-bold">•</span>
+              <span><strong>Quality assured:</strong> Every print is inspected before shipping</span>
+            </li>
+          </ul>
+        </motion.div>
+
+        {/* Our Process */}
+        <motion.div
+          className="mb-16"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-8">
+            Our Process
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                title: "Expert Team",
-                description: "Our experienced engineers and designers are passionate about 3D printing technology.",
+                step: "1",
+                title: "Analysis",
+                description: "Your 3D model is analyzed using PrusaSlicer to determine exact material usage, print time, and cost.",
               },
               {
-                title: "Quality Products",
-                description: "Every product is rigorously tested to ensure the highest standards of performance.",
+                step: "2",
+                title: "Printing",
+                description: "We print your order using calibrated FDM printers with quality filaments.",
               },
               {
-                title: "Customer Support",
-                description: "Our dedicated support team is ready to help you succeed with our products.",
+                step: "3",
+                title: "Quality Check",
+                description: "Each print is inspected for dimensional accuracy, layer adhesion, and surface quality.",
               },
-            ].map((item, index) => (
+              {
+                step: "4",
+                title: "Packaging & Shipping",
+                description: "Orders are carefully packaged with bubble wrap and rigid boxes, then shipped via Shiprocket.",
+              },
+            ].map((process, index) => (
               <motion.div
                 key={index}
-                className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-8 rounded-lg border border-primary-accent/20 hover:border-primary-accent/40 transition-all duration-300"
+                className="bg-gradient-to-br from-primary-accent/10 to-secondary-accent/10 p-6 rounded-lg border border-primary-accent/20 hover:border-primary-accent/40 transition-all duration-300"
                 variants={itemVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
               >
-                <h3 className="text-xl font-bold text-heading mb-3">{item.title}</h3>
-                <p className="text-body text-base leading-relaxed">{item.description}</p>
+                <div className="flex items-center mb-3">
+                  <div className="w-10 h-10 bg-primary-accent text-white rounded-full flex items-center justify-center font-bold text-lg mr-3">
+                    {process.step}
+                  </div>
+                  <h3 className="text-lg font-bold text-heading">{process.title}</h3>
+                </div>
+                <p className="text-body text-sm leading-relaxed">{process.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Why Trust Us */}
+        <motion.div
+          className="mb-16"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-8">
+            Why Trust Us
+          </h2>
+          <div className="space-y-4">
+            {[
+              {
+                title: "Transparent Pricing",
+                description: "Get instant, accurate quotes before you order. No hidden fees. Pricing is calculated based on material usage and print time.",
+              },
+              {
+                title: "Secure Payments",
+                description: "All payments are processed securely through Cashfree, a RBI-licensed payment gateway supporting UPI, cards, and net banking.",
+              },
+              {
+                title: "Free Shipping",
+                description: "We offer free shipping on all orders across India via Shiprocket.",
+              },
+              {
+                title: "Return Policy",
+                description: "We stand behind our products with a 7-day return policy for defective items. See our Refund Policy for details.",
+              },
+              {
+                title: "Dedicated Support",
+                description: "Reach us anytime via email or phone. We respond to all queries within 24 hours.",
+              },
+            ].map((trust, index) => (
+              <motion.div
+                key={index}
+                className="bg-gradient-to-br from-primary-accent/5 to-secondary-accent/5 p-6 rounded-lg border border-primary-accent/10 hover:border-primary-accent/20 transition-all duration-300"
+                variants={itemVariants}
+              >
+                <h3 className="text-xl font-bold text-heading mb-2">{trust.title}</h3>
+                <p className="text-body leading-relaxed">{trust.description}</p>
               </motion.div>
             ))}
           </div>
@@ -176,16 +207,16 @@ export default function AboutPage() {
           viewport={{ once: true }}
         >
           <h3 className="text-2xl sm:text-3xl font-bold text-heading mb-4">
-            Ready to Start Your Journey?
+            Ready to Get Your Parts Printed?
           </h3>
           <p className="text-body text-lg mb-6 max-w-2xl mx-auto">
-            Join thousands of satisfied customers and explore our range of premium 3D printing solutions today.
+            Upload your STL file, get an instant quote, and we'll print your custom parts with precision and care.
           </p>
           <a
             href="/products"
             className="inline-block px-8 py-3 bg-primary-accent text-white rounded-lg font-semibold hover:bg-secondary-accent transition-all duration-300 transform hover:scale-105"
           >
-            Explore Products
+            Upload Your Design
           </a>
         </motion.div>
       </section>

@@ -1,9 +1,16 @@
 "use client";
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 export default function Footer() {
+  const router = useRouter();
+
+  const handleNavigation = (path) => {
+    router.push(path);
+  };
+
   return (
     <footer className="w-full relative overflow-hidden">
       {/* Top border */}
@@ -50,15 +57,19 @@ export default function Footer() {
           <div>
             <h4 className="text-fg font-black mb-5 text-sm uppercase tracking-widest">Company</h4>
             <ul className="space-y-3">
-              {['About Us', 'Contact', 'Careers'].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
+              {[
+                { label: 'About Us', path: '/about' },
+                { label: 'Contact', path: '#' },
+                { label: 'Careers', path: '#' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => handleNavigation(item.path)}
                     className="text-fg-subtle hover:text-primary-500 transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-sm bg-surface-border group-hover:bg-primary-500 transition-colors" />
-                    {item}
-                  </a>
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -68,15 +79,20 @@ export default function Footer() {
           <div>
             <h4 className="text-fg font-black mb-5 text-sm uppercase tracking-widest">Legal</h4>
             <ul className="space-y-3">
-              {['Terms & Conditions', 'Privacy Policy', 'Refund Policy', 'Shipping Policy'].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
+              {[
+                { label: 'Terms & Conditions', path: '/legal/terms-conditions' },
+                { label: 'Privacy Policy', path: '/legal/privacy-policy' },
+                { label: 'Refund Policy', path: '/legal/refund-policy' },
+                { label: 'Shipping Policy', path: '/legal/shipping-policy' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => handleNavigation(item.path)}
                     className="text-fg-subtle hover:text-primary-500 transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-sm bg-surface-border group-hover:bg-primary-500 transition-colors" />
-                    {item}
-                  </a>
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Lock, Rocket, Search, ShoppingCart } from 'lucide-react';
+import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('quote');
   const [scrolled, setScrolled] = useState(false);
+  const [legalDropdownOpen, setLegalDropdownOpen] = useState(false);
   const cart = useStore((state) => state.cart);
   const openCart = useStore((state) => state.openCart);
   const searchQuery = useStore((state) => state.searchQuery);
@@ -130,7 +131,7 @@ export default function Navbar() {
               {navLinks.map((link) => (
                 <button
                   key={link.id}
-                  onClick={() => scrollTo(link.id)}
+                  onClick={() => link.path ? router.push(link.path) : scrollTo(link.id)}
                   className={`relative px-4 py-2 rounded-sm transition-all duration-200 ${activeSection === link.id
                       ? 'text-primary-500'
                       : 'text-fg-muted hover:text-fg hover:bg-surface-muted/50'
@@ -147,6 +148,49 @@ export default function Navbar() {
                   <span className="relative z-10">{link.label}</span>
                 </button>
               ))}
+
+              {/* Legal Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setLegalDropdownOpen(!legalDropdownOpen)}
+                  className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted/50 flex items-center gap-1.5"
+                >
+                  <span className="relative z-10">Legal</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${legalDropdownOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {legalDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 mt-2 bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden min-w-max z-50"
+                    >
+                      {[
+                        { label: 'Privacy Policy', path: '/legal/privacy-policy' },
+                        { label: 'Terms & Conditions', path: '/legal/terms-conditions' },
+                        { label: 'Refund Policy', path: '/legal/refund-policy' },
+                        { label: 'Shipping Policy', path: '/legal/shipping-policy' },
+                      ].map((item) => (
+                        <button
+                          key={item.path}
+                          onClick={() => {
+                            router.push(item.path);
+                            setLegalDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-fg-muted hover:text-fg hover:bg-surface-muted/60 transition-colors duration-150 border-b border-surface-border/30 last:border-b-0"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
 

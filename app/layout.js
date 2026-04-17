@@ -29,9 +29,11 @@ export default function RootLayout({ children }) {
       className={`${chivo.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-surface-bg text-fg">
-        <Script id="theme-init" strategy="beforeInteractive">
-          {themeInit}
-        </Script>
+        <Script 
+          id="theme-init" 
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeInit }}
+        />
         {children}
       </body>
     </html>

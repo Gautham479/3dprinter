@@ -33,30 +33,7 @@ function ScrollToSection() {
 }
 
 export default function Home() {
-  const scrollPosition = useStore((state) => state.scrollPosition);
-  const setScrollPosition = useStore((state) => state.setScrollPosition);
   const products = useStore((state) => state.products);
-
-  // Save scroll position on scroll
-  React.useEffect(() => {
-    const handleScroll = () => {
-      // Use requestAnimationFrame for performance
-      setScrollPosition(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [setScrollPosition]);
-
-  // Restore scroll position
-  React.useEffect(() => {
-    if (products.length > 0 && scrollPosition > 0) {
-      // Delay slightly to ensure layout has settled
-      const timer = setTimeout(() => {
-        window.scrollTo({ top: scrollPosition, behavior: 'instant' });
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [products.length, scrollPosition]);
 
   return (
     <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">

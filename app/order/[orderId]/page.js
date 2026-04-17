@@ -57,7 +57,7 @@ export default function OrderConfirmationPage(props) {
           </div>
           <h1 className="text-2xl font-black text-fg mb-4">Order Not Found</h1>
           <p className="text-fg-muted mb-8">{error || "We couldn't locate your order details."}</p>
-          <Link href="/" className="inline-flex items-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-white font-black px-6 py-3 rounded-sm transition-all">
+          <Link href="/" className="inline-flex items-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black px-6 py-3 rounded-sm transition-all">
             Return to Store
           </Link>
         </motion.div>
@@ -278,7 +278,7 @@ export default function OrderConfirmationPage(props) {
         >
           <Link
             href="/"
-            className="inline-flex items-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-white font-black px-8 py-4 rounded-sm transition-all"
+            className="inline-flex items-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black px-8 py-4 rounded-sm transition-all"
           >
             Continue Shopping
             <ChevronRight className="w-5 h-5" />

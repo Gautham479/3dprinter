@@ -29,7 +29,7 @@ export default function MainContentTabs() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`relative px-6 py-2.5 rounded-sm text-sm font-bold transition-colors flex items-center justify-center gap-2 min-w-[160px] z-10 ${visibleTab === tab.id ? 'text-white' : 'text-fg-muted hover:text-fg'
+            className={`relative px-6 py-2.5 rounded-sm text-sm font-bold transition-colors flex items-center justify-center gap-2 min-w-[160px] z-10 ${visibleTab === tab.id ? 'text-[var(--app-cta-contrast)]' : 'text-fg-muted hover:text-fg'
               }`}
           >
             {visibleTab === tab.id && (

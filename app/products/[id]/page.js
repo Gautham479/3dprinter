@@ -176,13 +176,13 @@ export default function ProductPage() {
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-[var(--app-cta-contrast)] transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-surface-bg/80 p-3 rounded-sm text-fg hover:bg-primary-500 hover:text-[var(--app-cta-contrast)] transition-all opacity-0 group-hover:opacity-100 shadow-md border border-surface-border z-20"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -191,7 +191,7 @@ export default function ProductPage() {
 
                 {!imageHovered && (
                   <div className="absolute inset-0 flex items-end justify-center pb-5 z-10">
-                    <span className="text-white/70 text-xs font-bold bg-black/40 backdrop-blur-md px-5 py-2 rounded-sm border border-white/10">
+                    <span className="text-[var(--app-cta-contrast)]/70 text-xs font-bold bg-black/40 backdrop-blur-md px-5 py-2 rounded-sm border border-white/10">
                       Hover to zoom
                     </span>
                   </div>
@@ -216,7 +216,7 @@ export default function ProductPage() {
                     }}
                     sizes="480px"
                   />
-                  <div className="absolute top-4 right-4 bg-primary-500 text-white text-xs font-black px-3 py-1.5 rounded-sm shadow-md">
+                  <div className="absolute top-4 right-4 bg-primary-500 text-[var(--app-cta-contrast)] text-xs font-black px-3 py-1.5 rounded-sm shadow-md">
                     2.5x Zoom
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export default function ProductPage() {
                     ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
                     : addedToCart
                       ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
-                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-white'
+                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
                   }`}
               >
                 {!product.inStock ? (

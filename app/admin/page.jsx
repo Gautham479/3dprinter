@@ -334,7 +334,7 @@ export default function AdminDashboardPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-bold transition-all ${activeTab === tab.id ? 'text-white' : 'text-fg-muted hover:text-fg'
+              className={`relative flex items-center gap-2 px-5 py-2.5 rounded-sm text-sm font-bold transition-all ${activeTab === tab.id ? 'text-[var(--app-cta-contrast)]' : 'text-fg-muted hover:text-fg'
                 }`}
             >
               {activeTab === tab.id && (
@@ -401,7 +401,7 @@ export default function AdminDashboardPage() {
                       disabled={saving}
                       whileHover={!saving ? { scale: 1.02 } : {}}
                       whileTap={!saving ? { scale: 0.98 } : {}}
-                      className="btn-glow bg-primary-500 text-white px-6 py-2.5 rounded-sm font-black disabled:opacity-60 flex items-center gap-2"
+                      className="btn-glow bg-primary-500 text-[var(--app-cta-contrast)] px-6 py-2.5 rounded-sm font-black disabled:opacity-60 flex items-center gap-2"
                     >
                       {saving ? (
                         <>
@@ -555,7 +555,7 @@ export default function AdminDashboardPage() {
                                   <button
                                     onClick={() => deleteProductImage(product.id, url)}
                                     disabled={deletingImage === url}
-                                    className="absolute inset-0 bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    className="absolute inset-0 bg-black/70 text-[var(--app-cta-contrast)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                                     title="Delete image"
                                   >
                                     {deletingImage === url ? '...' : <Trash2 className="w-4 h-4 text-red-400" />}

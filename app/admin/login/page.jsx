@@ -161,7 +161,7 @@ export default function AdminLoginPage() {
                 disabled={loading}
                 whileHover={!loading ? { scale: 1.02 } : {}}
                 whileTap={!loading ? { scale: 0.98 } : {}}
-                className="w-full btn-glow bg-primary-500 text-white rounded-sm py-3 font-black disabled:opacity-60 flex items-center justify-center gap-2 transition-all"
+                className="w-full btn-glow bg-primary-500 text-[var(--app-cta-contrast)] rounded-sm py-3 font-black disabled:opacity-60 flex items-center justify-center gap-2 transition-all"
               >
                 {loading ? (
                   <>

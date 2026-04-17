@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                 disabled={loading || !canCheckout}
                 whileHover={!loading ? { scale: 1.02 } : {}}
                 whileTap={!loading ? { scale: 0.98 } : {}}
-                className="w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-white transition-all disabled:opacity-50 disabled:pointer-events-none"
+                className="w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] transition-all disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? (
                   <>

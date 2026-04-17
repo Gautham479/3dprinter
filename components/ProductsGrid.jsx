@@ -229,7 +229,7 @@ export default function ProductsGrid() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
-                  ? 'bg-primary-500 text-white shadow-md'
+                  ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
                   : 'bg-surface-card/80 text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
                 }`}
             >

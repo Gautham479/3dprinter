@@ -75,7 +75,7 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { id: 'features', label: 'Materials' },
+    { id: 'features', label: 'About Material' },
     { id: 'how-it-works', label: 'How It Works' },
     { id: 'faq', label: 'FAQ' },
   ];

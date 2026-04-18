@@ -10,9 +10,9 @@ export default function HowItWorks() {
       icon: <UploadCloud className="w-8 h-8" />,
       title: "1. Upload Your Design",
       desc: "Drop your STL or OBJ files into our quoter to get an instant, AI-driven price.",
-      color: "bg-primary-500/15",
-      borderColor: "border-primary-500/25",
-      iconColor: "text-primary-500",
+      color: "bg-accent-500/15",
+      borderColor: "border-accent-500/25",
+      iconColor: "text-accent-500",
       number: "01",
     },
     {
@@ -48,10 +48,6 @@ export default function HowItWorks() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-sm border border-accent-500/30 bg-accent-500/10 text-sm text-accent-500 font-bold mb-6">
-            <span className="w-2 h-2 rounded-sm bg-accent-500 animate-pulse" />
-            Simple Process
-          </div>
           <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">How It Works</h2>
           <p className="text-lg text-fg-muted max-w-2xl mx-auto">
             From digital file to physical object in just three simple steps.

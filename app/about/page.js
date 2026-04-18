@@ -44,7 +44,7 @@ export default function AboutPage() {
             About Us
           </h1>
           <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Premium FDM 3D Printing Services from Karnataka, India
+            Multicolor 3D Printing Service
           </p>
         </motion.div>
       </section>
@@ -63,7 +63,7 @@ export default function AboutPage() {
             Who We Are
           </h2>
           <p className="text-body text-lg leading-relaxed max-w-3xl">
-            We are a 3D printing business based in Karnataka, India, providing custom FDM 3D printing services for prototypes, functional parts, and custom designs. With a commitment to quality and precision, we help makers, designers, and businesses bring their ideas to life.
+            We are a multicolor 3D printing service, providing multicolor 3D printing for prototypes, functional parts, and custom designs. With a commitment to quality and precision, we help makers, designers, and businesses bring their ideas to life.
           </p>
         </motion.div>
 
@@ -79,7 +79,7 @@ export default function AboutPage() {
             What We Do
           </h2>
           <p className="text-body text-lg leading-relaxed max-w-3xl mb-4">
-            We offer custom FDM 3D printing services with a simple process:
+            We offer multicolor 3D printing services with a simple process:
           </p>
           <ul className="text-body text-lg space-y-3">
             <li className="flex items-start">
@@ -174,10 +174,6 @@ export default function AboutPage() {
                 description: "All payments are processed securely through Cashfree, a RBI-licensed payment gateway supporting UPI, cards, and net banking.",
               },
               {
-                title: "Free Shipping",
-                description: "We offer free shipping on all orders across India via Shiprocket.",
-              },
-              {
                 title: "Return Policy",
                 description: "We stand behind our products with a 7-day return policy for defective items. See our Refund Policy for details.",
               },
@@ -212,12 +208,6 @@ export default function AboutPage() {
           <p className="text-body text-lg mb-6 max-w-2xl mx-auto">
             Upload your STL file, get an instant quote, and we'll print your custom parts with precision and care.
           </p>
-          <a
-            href="/products"
-            className="inline-block px-8 py-3 bg-primary-accent text-white rounded-lg font-semibold hover:bg-secondary-accent transition-all duration-300 transform hover:scale-105"
-          >
-            Upload Your Design
-          </a>
         </motion.div>
       </section>
 

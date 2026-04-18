@@ -83,6 +83,12 @@ export default function MainContentTabs() {
                 <p className="text-fg-muted">
                   Upload your own 3D models (STL files), configure your material preferences, and get an instant quote.
                 </p>
+                <a
+                  href="#materials"
+                  className="inline-block mt-4 text-sm font-bold text-primary-500 hover:text-accent-500 transition-colors underline underline-offset-4"
+                >
+                  About materials
+                </a>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] xl:grid-cols-[1fr_500px] gap-8 lg:gap-10 items-start w-full">
                 <div className="w-full relative h-[100%]">

@@ -73,7 +73,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-sm border border-primary-500/30 bg-primary-500/10 text-sm text-primary-600 font-bold mb-4"
         >
           <span className="w-1.5 h-1.5 rounded-sm bg-accent-500" />
-          Fast & Easy Online 3D Printing
+          Fast & Easy Online Multicolor 3D Printing
         </motion.div>
         
         <div className="flex gap-4">

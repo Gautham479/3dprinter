@@ -79,14 +79,15 @@ export default function Features() {
       case "negative":
         return <X className="w-4 h-4 text-red-400/70 flex-shrink-0" />;
       case "tip":
-        return <Zap className="w-4 h-4 text-primary-500 flex-shrink-0" />;
+        return <Check className="w-4 h-4 text-primary-500 flex-shrink-0" />;
       default:
-        return <ChevronRight className="w-4 h-4 text-fg-subtle flex-shrink-0" />;
+        return <Check className="w-4 h-4 text-fg-subtle flex-shrink-0" />;
     }
   };
 
   return (
-    <section id="features" className="w-full py-24 overflow-hidden relative">
+    <section id="materials" className="w-full py-24 overflow-hidden relative">
+      <div id="features" className="sr-only" />
       {/* Subtle warm divider */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-primary-500/20" />
 

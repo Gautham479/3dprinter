@@ -1,15 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/adminAuth';
 
 const prisma = new PrismaClient();
 
 export async function PATCH(req, { params }) {
   try {
-    const cookieStore = cookies();
-    const token = cookieStore.get('adminToken')?.value;
-
-    if (token !== process.env.ADMIN_SESSION_TOKEN && token !== 'test-admin-token') {
+    const authed = await isAdminAuthenticated();
+    if (!authed) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

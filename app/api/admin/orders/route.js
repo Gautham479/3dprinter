@@ -1,15 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { isAdminAuthenticated } from '@/lib/adminAuth';
 
 const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const cookieStore = cookies();
-    const token = cookieStore.get('adminToken')?.value;
-
-    if (token !== process.env.ADMIN_SESSION_TOKEN && token !== 'test-admin-token') {
+    const authed = await isAdminAuthenticated();
+    if (!authed) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -23,6 +21,6 @@ export async function GET() {
     return NextResponse.json(orders);
   } catch (error) {
     console.error("Admin Orders Fetch Error:", error);
-    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch orders', details: error.message }, { status: 500 });
   }
 }

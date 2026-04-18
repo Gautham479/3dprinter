@@ -64,8 +64,14 @@ export default function STLViewer({ file }) {
         <directionalLight position={[50, 50, 50]} intensity={1.5} castShadow />
         <directionalLight position={[-50, -50, -50]} intensity={0.5} />
         
-        {/* Grid floor representing build plate */}
-        <gridHelper args={[250, 25, '#444444', '#222222']} position={[0, -25, 0]} />
+        {/* 3D Build Volume representing 250x250x250 mesh */}
+        <group position={[0, 0, 0]}>
+          <gridHelper args={[250, 25, '#444444', '#222222']} position={[0, -125, 0]} />
+          <mesh>
+            <boxGeometry args={[250, 250, 250]} />
+            <meshBasicMaterial color="#444444" wireframe={true} transparent opacity={0.15} />
+          </mesh>
+        </group>
 
         <Suspense fallback={<Loader />}>
           <Bounds fit clip observe margin={1.2}>

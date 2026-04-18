@@ -72,17 +72,6 @@ export const useStore = create((set) => ({
 
 // A simple mock pricing calculator based on selections
 function calculateMockPrice(config) {
-  let price = MOCK_BASE_PRICE;
-  
-  if (config.material === 'ABS') price += 100;
-  else if (config.material === 'PETG') price += 150;
-  else if (config.material === 'TPU') price += 200;
-
-  if (config.quality === 'High (0.1mm)') price += 200;
-  else if (config.quality === 'Draft (0.3mm)') price -= 100;
-
-  // Add cost based on strength filling
-  price += Math.floor(config.strength * 2.5);
-
-  return price;
+  // Temporary: Set default price to 1 Rupee for custom orders as requested
+  return 1;
 }

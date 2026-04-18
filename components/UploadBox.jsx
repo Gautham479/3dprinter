@@ -38,7 +38,7 @@ export default function UploadBox() {
       {/* Drop zone */}
       <div
         {...getRootProps()}
-        className={`flex-1 flex flex-col items-center justify-center w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[380px] ${
+        className={`flex-1 flex flex-col items-center justify-center w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[400px] h-[400px] lg:h-[450px] max-h-[500px] ${
           isDragActive
             ? 'border-primary-500 bg-primary-500/10 shadow-lg'
             : 'border-surface-border hover:border-primary-500/50 hover:bg-primary-50/50 bg-surface-card/60'

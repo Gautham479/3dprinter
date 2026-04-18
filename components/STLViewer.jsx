@@ -2,23 +2,37 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Center, Bounds, Html } from '@react-three/drei';
+import { OrbitControls, Bounds, Html } from '@react-three/drei';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { useLoader } from '@react-three/fiber';
 import { Loader2 } from 'lucide-react';
 
 function STLModel({ fileUrl }) {
   const geometry = useLoader(STLLoader, fileUrl);
+  const [offsetY, setOffsetY] = useState(0);
 
   useEffect(() => {
     if (geometry) {
       geometry.computeVertexNormals();
       geometry.center(); // Center the geometry's bounding box
+      geometry.computeBoundingBox();
+      
+      // Because we rotate by -Math.PI/2 on X, the local Z axis becomes world Y.
+      // After centering, local Z goes from -sizeZ/2 to +sizeZ/2.
+      // Move it up by sizeZ/2 so the bottom sits perfectly at world Y=0.
+      const sizeZ = geometry.boundingBox.max.z - geometry.boundingBox.min.z;
+      setOffsetY(sizeZ / 2);
     }
   }, [geometry]);
 
   return (
-    <mesh geometry={geometry} castShadow receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh 
+      geometry={geometry} 
+      position={[0, offsetY, 0]} 
+      castShadow 
+      receiveShadow 
+      rotation={[-Math.PI / 2, 0, 0]}
+    >
       <meshStandardMaterial 
         color="#8a8d91" 
         metalness={0.7} 
@@ -66,8 +80,8 @@ export default function STLViewer({ file }) {
         
         {/* 3D Build Volume representing 250x250x250 mesh */}
         <group position={[0, 0, 0]}>
-          <gridHelper args={[250, 25, '#444444', '#222222']} position={[0, -125, 0]} />
-          <mesh>
+          <gridHelper args={[250, 25, '#444444', '#222222']} position={[0, 0, 0]} />
+          <mesh position={[0, 125, 0]}>
             <boxGeometry args={[250, 250, 250]} />
             <meshBasicMaterial color="#444444" wireframe={true} transparent opacity={0.15} />
           </mesh>
@@ -75,9 +89,7 @@ export default function STLViewer({ file }) {
 
         <Suspense fallback={<Loader />}>
           <Bounds fit clip observe margin={1.2}>
-            <Center>
-              <STLModel fileUrl={fileUrl} />
-            </Center>
+            <STLModel fileUrl={fileUrl} />
           </Bounds>
         </Suspense>
 

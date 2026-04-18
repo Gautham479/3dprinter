@@ -75,7 +75,7 @@ export default function STLViewer({ file }) {
           </Bounds>
         </Suspense>
 
-        <OrbitControls makeDefault autoRotate autoRotateSpeed={1.5} enableDamping />
+        <OrbitControls makeDefault enableDamping />
       </Canvas>
 
       {/* UI Overlay */}

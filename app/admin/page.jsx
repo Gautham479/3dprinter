@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { MATERIAL_TYPES, PRODUCT_TYPES } from '@/lib/catalog';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap } from 'lucide-react';
+import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download } from 'lucide-react';
 
 const EMPTY_FORM = {
   name: '',
@@ -39,6 +39,11 @@ export default function AdminDashboardPage() {
   const [sortKey, setSortKey] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
   const [selectedProductIds, setSelectedProductIds] = useState([]);
+  
+  const [orderSearch, setOrderSearch] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState('ALL');
+  const [orderTypeFilter, setOrderTypeFilter] = useState('ALL');
+  const [updatingOrderId, setUpdatingOrderId] = useState('');
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -102,6 +107,33 @@ export default function AdminDashboardPage() {
       return 0;
     });
   }, [products, searchQuery, sortKey, sortOrder]);
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter(o => {
+      if (orderStatusFilter !== 'ALL' && o.status !== orderStatusFilter) return false;
+      if (orderTypeFilter !== 'ALL' && o.orderType !== orderTypeFilter) return false;
+      if (orderSearch) {
+        const q = orderSearch.toLowerCase();
+        return (o.orderId?.toLowerCase().includes(q) || 
+                o.customerName?.toLowerCase().includes(q) || 
+                o.email?.toLowerCase().includes(q));
+      }
+      return true;
+    });
+  }, [orders, orderSearch, orderStatusFilter, orderTypeFilter]);
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    setUpdatingOrderId(orderId);
+    const res = await fetch(`/api/admin/orders/${orderId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res.ok) {
+      await fetchOrders();
+    }
+    setUpdatingOrderId('');
+  };
 
   const handleBulkDelete = async () => {
     if (!selectedProductIds.length) return;
@@ -580,41 +612,95 @@ export default function AdminDashboardPage() {
             >
               <section className="rounded-sm border border-surface-border/60 bg-surface-card/60 backdrop-blur-xl p-6 relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-cyan-500/50" />
-                <h2 className="text-xl font-black text-fg mb-6 flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5 text-accent-500" />
-                  Recent Orders
-                </h2>
+                
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                  <h2 className="text-xl font-black text-fg flex items-center gap-2">
+                    <ShoppingBag className="w-5 h-5 text-cyan-500" />
+                    Orders Manager
+                  </h2>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-subtle" />
+                      <input
+                        type="text"
+                        placeholder="Search orders..."
+                        value={orderSearch}
+                        onChange={(e) => setOrderSearch(e.target.value)}
+                        className={`${inputClass} pl-9 !w-auto min-w-[200px]`}
+                      />
+                    </div>
+                    <select value={orderStatusFilter} onChange={(e) => setOrderStatusFilter(e.target.value)} className={`${inputClass} !w-auto`}>
+                      <option value="ALL">All Statuses</option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="PAID">PAID</option>
+                      <option value="PROCESSING">PROCESSING</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                    <select value={orderTypeFilter} onChange={(e) => setOrderTypeFilter(e.target.value)} className={`${inputClass} !w-auto`}>
+                      <option value="ALL">All Types</option>
+                      <option value="custom">Custom</option>
+                      <option value="product">Product</option>
+                      <option value="mixed">Mixed</option>
+                    </select>
+                  </div>
+                </div>
+
                 {orders.length === 0 ? (
                   <div className="text-center py-12 border border-dashed border-surface-border rounded-sm">
                     <ShoppingBag className="w-12 h-12 text-fg-subtle mx-auto mb-3" />
                     <p className="text-fg-muted font-semibold">No orders received yet.</p>
                   </div>
+                ) : filteredOrders.length === 0 ? (
+                  <div className="text-center py-12 border border-dashed border-surface-border rounded-sm">
+                    <p className="text-fg-muted font-semibold">No orders match your filters.</p>
+                  </div>
                 ) : (
                   <div className="space-y-4">
-                    {orders.map((order, i) => (
+                    {filteredOrders.map((order, i) => (
                       <motion.div
                         key={order.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="border border-surface-border/60 rounded-sm p-5 bg-surface-muted/20 flex flex-col md:flex-row gap-6 relative overflow-hidden"
+                        className={`border border-surface-border/60 rounded-sm p-5 bg-surface-muted/20 flex flex-col md:flex-row gap-6 relative overflow-hidden ${updatingOrderId === order.id ? 'opacity-60' : ''}`}
                       >
-                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] rounded--sm ${order.status === 'PAID' ? 'bg-green-500' :
-                            order.status === 'PENDING' ? 'bg-amber-500' : 'bg-red-500'
+                        <div className={`absolute left-0 top-0 bottom-0 w-[3px] rounded--sm ${order.status === 'PAID' || order.status === 'COMPLETED' ? 'bg-green-500' :
+                            order.status === 'PENDING' ? 'bg-amber-500' : order.status === 'PROCESSING' ? 'bg-cyan-500' : 'bg-red-500'
                           }`} />
 
                         <div className="flex-1 space-y-4 pl-2">
                           <div className="flex justify-between items-start">
                             <div>
-                              <p className="font-black text-lg text-fg">{order.orderId}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-black text-lg text-fg">{order.orderId}</p>
+                                <span className="bg-surface-border/50 text-fg-muted px-2 py-0.5 rounded-sm text-[10px] font-black uppercase">
+                                  {order.orderType || 'product'}
+                                </span>
+                              </div>
                               <p className="text-xs text-fg-muted">{new Date(order.createdAt).toLocaleString()}</p>
                             </div>
-                            <span className={`px-2.5 py-1 rounded-sm text-xs font-black ${order.status === 'PAID' ? 'bg-green-500/15 text-green-400 border border-green-500/20' :
-                                order.status === 'PENDING' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' :
-                                  'bg-red-500/15 text-red-400 border border-red-500/20'
-                              }`}>
-                              {order.status}
-                            </span>
+                            
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-fg-subtle">Status:</span>
+                              <select 
+                                value={order.status}
+                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                                disabled={updatingOrderId === order.id}
+                                className={`px-2 py-1 rounded-sm text-xs font-black outline-none border focus:ring-2 focus:ring-primary-500/50 transition-all cursor-pointer ${
+                                  order.status === 'PAID' || order.status === 'COMPLETED' ? 'bg-green-500/15 text-green-400 border-green-500/20' :
+                                  order.status === 'PENDING' ? 'bg-amber-500/15 text-amber-400 border-amber-500/20' :
+                                  order.status === 'PROCESSING' ? 'bg-cyan-500/15 text-cyan-400 border-cyan-500/20' :
+                                  'bg-red-500/15 text-red-400 border-red-500/20'
+                                }`}
+                              >
+                                <option value="PENDING" className="bg-surface-bg text-fg">PENDING</option>
+                                <option value="PAID" className="bg-surface-bg text-fg">PAID</option>
+                                <option value="PROCESSING" className="bg-surface-bg text-fg">PROCESSING</option>
+                                <option value="COMPLETED" className="bg-surface-bg text-fg">COMPLETED</option>
+                                <option value="CANCELLED" className="bg-surface-bg text-fg">CANCELLED</option>
+                              </select>
+                            </div>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-surface-muted/40 p-4 rounded-sm border border-surface-border/50 text-sm">
@@ -630,16 +716,41 @@ export default function AdminDashboardPage() {
                               <p className="text-fg-muted text-xs">{order.city}, {order.state} {order.pincode}</p>
                             </div>
                           </div>
+                          
+                          {order.notes && (
+                            <div className="bg-surface-border/20 p-3 rounded-sm border border-surface-border/40">
+                              <p className="text-fg-subtle text-xs uppercase font-black tracking-wider mb-1">Order Notes</p>
+                              <p className="text-sm text-fg whitespace-pre-wrap">{order.notes}</p>
+                            </div>
+                          )}
                         </div>
 
                         <div className="md:w-80 flex flex-col justify-between border-t md:border-t-0 md:border-l border-surface-border/50 pt-4 md:pt-0 md:pl-6">
                           <div>
                             <p className="text-fg-subtle text-xs uppercase font-black tracking-wider mb-3">Items Included</p>
-                            <ul className="space-y-2 text-sm max-h-[140px] overflow-y-auto custom-scrollbar">
+                            <ul className="space-y-3 text-sm max-h-[180px] overflow-y-auto custom-scrollbar pr-2">
                               {order.items?.map(item => (
-                                <li key={item.id} className="flex justify-between items-start">
-                                  <span className="text-fg font-bold text-xs">{item.fileName}</span>
-                                  <span className="text-fg-muted whitespace-nowrap ml-2 text-xs">₹{item.price}</span>
+                                <li key={item.id} className="bg-surface-bg border border-surface-border/60 p-2.5 rounded-sm">
+                                  <div className="flex justify-between items-start mb-1">
+                                    <span className="text-fg font-bold text-xs truncate max-w-[180px]" title={item.fileName}>{item.fileName}</span>
+                                    <span className="text-primary-500 font-black whitespace-nowrap ml-2 text-xs">₹{item.price}</span>
+                                  </div>
+                                  <div className="text-[10px] text-fg-muted flex flex-wrap gap-1 mb-2">
+                                    <span className="bg-surface-muted px-1.5 py-0.5 rounded-sm border border-surface-border/50">{item.material}</span>
+                                    {item.quality && <span className="bg-surface-muted px-1.5 py-0.5 rounded-sm border border-surface-border/50">{item.quality.split(' ')[0]}</span>}
+                                  </div>
+                                  
+                                  {item.fileUrl && (
+                                    <a 
+                                      href={item.fileUrl} 
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center justify-center gap-1.5 w-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 py-1.5 rounded-sm text-[10px] font-black transition-colors"
+                                    >
+                                      <Download className="w-3 h-3" />
+                                      Download Model
+                                    </a>
+                                  )}
                                 </li>
                               ))}
                             </ul>

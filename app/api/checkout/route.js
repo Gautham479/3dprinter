@@ -49,6 +49,11 @@ export async function POST(req) {
       }
     }
 
+    // Determine orderType
+    const isAllCustom = items.every(i => i.type === 'custom');
+    const isAllProduct = items.every(i => i.type === 'product');
+    const orderType = isAllCustom ? 'custom' : (isAllProduct ? 'product' : 'mixed');
+
     // Create Order in DB
     const dbOrder = await prisma.order.create({
       data: {
@@ -63,10 +68,14 @@ export async function POST(req) {
         totalAmount,
         deliveryFee,
         status: 'PENDING',
+        orderType,
+        notes: notes || null,
         razorpayOrderId,
         items: {
           create: items.map(item => ({
             fileName: item.fileName,
+            fileUrl: item.fileUrl || null,
+            type: item.type || 'custom',
             price: item.price,
             material: item.config?.material || 'Unknown',
             color: item.config?.color || 'Unknown',

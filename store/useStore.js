@@ -52,6 +52,8 @@ export const useStore = create((set) => ({
     const newItem = {
       id: Math.random().toString(36).substr(2, 9),
       fileName: state.selectedFile.name,
+      file: state.selectedFile, // Keep the raw File object for upload
+      type: 'custom',
       config: state.config,
       price: state.mockPrice
     };

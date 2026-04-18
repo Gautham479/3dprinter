@@ -44,7 +44,9 @@ model Order {
   pincode           String
   totalAmount       Int
   deliveryFee       Int
-  status            String      // PENDING, PAID, FAILED
+  status            String      // PENDING, PAID, FAILED, PROCESSING, COMPLETED, CANCELLED
+  orderType         String      @default("product") // product, custom, mixed
+  notes             String?     @db.Text
   razorpayOrderId   String?     @unique
   razorpayPaymentId String?     @unique
   razorpaySignature String?
@@ -58,6 +60,8 @@ model OrderItem {
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   fileName  String
+  fileUrl   String? // Store secure or public 3D file URL here
+  type      String  @default("custom") // product or custom
   price     Int
   material  String
   color     String

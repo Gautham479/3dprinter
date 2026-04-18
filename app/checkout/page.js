@@ -85,10 +85,35 @@ export default function CheckoutPage() {
     setError('');
 
     try {
+      const processedCart = [];
+      for (const item of cart) {
+        if (item.type === 'custom' && item.file instanceof File) {
+          const formData = new FormData();
+          formData.append('file', item.file);
+
+          const uploadRes = await fetch('/api/upload-3d', {
+            method: 'POST',
+            body: formData,
+          });
+          const uploadData = await uploadRes.json();
+          if (!uploadRes.ok) {
+            throw new Error(uploadData.error || 'Failed to upload 3D file for ' + item.fileName);
+          }
+          
+          processedCart.push({
+            ...item,
+            fileUrl: uploadData.url,
+            file: undefined 
+          });
+        } else {
+          processedCart.push({ ...item, file: undefined });
+        }
+      }
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart, ...formData })
+        body: JSON.stringify({ items: processedCart, ...formData })
       });
 
       const data = await response.json();

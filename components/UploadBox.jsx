@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, CheckCircle, FileBox, Cpu } from 'lucide-react';
+import STLViewer from './STLViewer';
 import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -37,7 +38,7 @@ export default function UploadBox() {
       {/* Drop zone */}
       <div
         {...getRootProps()}
-        className={`flex-1 flex flex-col items-center justify-center p-10 w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[380px] ${
+        className={`flex-1 flex flex-col items-center justify-center w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[380px] ${
           isDragActive
             ? 'border-primary-500 bg-primary-500/10 shadow-lg'
             : 'border-surface-border hover:border-primary-500/50 hover:bg-primary-50/50 bg-surface-card/60'
@@ -49,31 +50,25 @@ export default function UploadBox() {
           {selectedFile ? (
             <motion.div
               key="file"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="flex flex-col items-center text-center space-y-4 relative z-10"
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="absolute inset-0 z-10 bg-surface-card cursor-default"
+              onClick={(e) => e.stopPropagation()} // Prevent dropzone click when interacting with 3D model
             >
-              {/* Success icon */}
-              <motion.div
-                className="w-24 h-24 rounded-sm bg-accent-500/15 border border-accent-500/30 flex items-center justify-center"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+              <STLViewer file={selectedFile} />
+              
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedFile(null);
+                }}
+                className="absolute top-4 right-16 p-2 bg-red-500/90 hover:bg-red-600 text-white rounded-md backdrop-blur-sm transition-colors shadow-lg z-20 flex items-center gap-2"
+                title="Remove model"
               >
-                <CheckCircle className="w-12 h-12 text-accent-500" />
-              </motion.div>
-
-              <div>
-                <p className="text-fg font-black text-xl">{selectedFile.name}</p>
-                <p className="text-sm text-fg-muted mt-1">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-              </div>
-
-              <div className="flex items-center gap-2 px-4 py-2 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-sm font-bold">
-                <Cpu className="w-4 h-4" />
-                Model loaded — price calculated
-              </div>
-
-              <p className="text-sm text-primary-500 font-bold">Click or drag here to upload a different file</p>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <span className="text-xs font-bold">Remove</span>
+              </button>
             </motion.div>
           ) : (
             <motion.div

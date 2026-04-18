@@ -7,45 +7,39 @@ function sanitizeFileName(fileName) {
 
 export async function POST(req) {
   try {
-    const formData = await req.formData();
-    const file = formData.get('file');
+    const { fileName, contentType } = await req.json();
 
-    if (!file || typeof file.arrayBuffer !== 'function') {
-      return NextResponse.json({ error: 'Invalid file provided' }, { status: 400 });
+    if (!fileName) {
+      return NextResponse.json({ error: 'fileName is required' }, { status: 400 });
     }
 
-    // Convert file to buffer
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    if (!buffer.length) {
-      return NextResponse.json({ error: 'File is empty' }, { status: 400 });
-    }
-
-    const safeName = sanitizeFileName(file.name || 'custom-model.stl');
-    // Using the same bucket 'product-images' as it's an easy default without setting up new RLS policies, 
-    // but placing 3D models in a "3d-models" folder
-    const fileName = `3d-models/${Date.now()}-${safeName}`;
+    const safeName = sanitizeFileName(fileName);
+    const storagePath = `3d-models/${Date.now()}-${safeName}`;
     const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'product-images';
 
     const supabase = getSupabaseAdminClient();
-    const { error: uploadError } = await supabase.storage
-      .from(bucket)
-      .upload(fileName, buffer, {
-        contentType: file.type || 'application/octet-stream',
-        upsert: false,
-      });
 
-    if (uploadError) {
-      console.error("Supabase storage error:", uploadError);
-      return NextResponse.json({ error: `Supabase upload failed: ${uploadError.message}` }, { status: 500 });
+    // Generate a signed upload URL valid for 60 seconds
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .createSignedUploadUrl(storagePath);
+
+    if (error) {
+      console.error("Supabase signed URL error:", error);
+      return NextResponse.json({ error: `Could not generate upload URL: ${error.message}` }, { status: 500 });
     }
 
-    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
-    
-    return NextResponse.json({ url: data?.publicUrl || '' });
+    // Get the final public URL that the file WILL have after client uploads it
+    const publicUrlData = supabase.storage.from(bucket).getPublicUrl(storagePath);
+
+    return NextResponse.json({ 
+      signedUrl: data.signedUrl, 
+      path: data.path,
+      token: data.token,
+      url: publicUrlData.data?.publicUrl || '' 
+    });
   } catch (error) {
-    console.error("Upload 3D File Error:", error);
-    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+    console.error("Pre-sign 3D File Error:", error);
+    return NextResponse.json({ error: 'Failed to initialize file upload payload' }, { status: 500 });
   }
 }

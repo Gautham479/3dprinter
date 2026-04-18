@@ -88,21 +88,38 @@ export default function CheckoutPage() {
       const processedCart = [];
       for (const item of cart) {
         if (item.type === 'custom' && item.file instanceof File) {
-          const formData = new FormData();
-          formData.append('file', item.file);
-
-          const uploadRes = await fetch('/api/upload-3d', {
+          
+          // 1. Get presigned URL from our API
+          const presignRes = await fetch('/api/upload-3d', {
             method: 'POST',
-            body: formData,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              fileName: item.file.name,
+              contentType: item.file.type || 'application/octet-stream'
+            }),
           });
-          const uploadData = await uploadRes.json();
+          
+          const presignData = await presignRes.json();
+          if (!presignRes.ok) {
+            throw new Error(presignData.error || 'Failed to initialize 3D file upload for ' + item.fileName);
+          }
+          
+          // 2. Upload file directly to Supabase using the signed URL
+          const uploadRes = await fetch(presignData.signedUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': item.file.type || 'application/octet-stream',
+            },
+            body: item.file,
+          });
+
           if (!uploadRes.ok) {
-            throw new Error(uploadData.error || 'Failed to upload 3D file for ' + item.fileName);
+            throw new Error('Supabase failed to accept the 3D file upload. It might be too large.');
           }
           
           processedCart.push({
             ...item,
-            fileUrl: uploadData.url,
+            fileUrl: presignData.url,
             file: undefined 
           });
         } else {

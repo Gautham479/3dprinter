@@ -23,6 +23,7 @@ const selectStyle = {
 
 export default function ConfigPanel() {
   const { config, setConfig, selectedFile, mockPrice, addToCart } = useStore();
+  const strengthPercentage = ((config.strength - 10) / 90) * 100;
 
   return (
     <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
@@ -139,7 +140,7 @@ export default function ConfigPanel() {
               onChange={(e) => setConfig({ strength: Number(e.target.value) })}
               className="w-full h-2 rounded-sm appearance-none cursor-pointer"
               style={{
-                background: `linear-gradient(to right, var(--app-primary-500) 0%, var(--app-accent-500) ${config.strength}%, var(--app-surface-border) ${config.strength}%)`,
+                background: `linear-gradient(to right, var(--app-primary-500) 0%, var(--app-accent-500) ${strengthPercentage}%, var(--app-surface-border) ${strengthPercentage}%)`,
               }}
             />
           </div>

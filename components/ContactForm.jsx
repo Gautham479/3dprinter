@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MessageCircle, Phone, User } from 'lucide-react';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
     email: '',
+    phone: '',
+    category: '',
     query: ''
   });
 
@@ -26,45 +26,39 @@ export default function ContactForm() {
     setLoading(true);
     setError('');
 
-    // Validate form
-    if (!formData.name || !formData.phone || !formData.email || !formData.query) {
-      setError('Please fill in all fields');
-      setLoading(false);
-      return;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
-      setLoading(false);
-      return;
-    }
-
-    // Phone validation (basic - allows 10+ digits)
-    const phoneRegex = /^\d{10,}$/;
-    if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
-      setError('Please enter a valid phone number');
+    if (!formData.name || !formData.email || !formData.query) {
+      setError('Please fill in required fields');
       setLoading(false);
       return;
     }
 
     try {
-      // Send to your backend endpoint
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: '6782b0a0-3a1b-469c-9fa1-45ae9f0562ea',
+          subject: 'New Message from MahashriLab Website',
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          category: formData.category || 'Not specified',
+          message: formData.query
+        })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to send message');
+      const json = await response.json();
+
+      if (response.status !== 200 || !json.success) {
+        throw new Error(json.message || 'Failed to send message');
       }
 
       setSubmitted(true);
-      setFormData({ name: '', phone: '', email: '', query: '' });
+      setFormData({ name: '', phone: '', email: '', category: '', query: '' });
 
-      // Reset success message after 5 seconds
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
       setError(err.message || 'Failed to send message. Please try again.');
@@ -73,143 +67,108 @@ export default function ContactForm() {
     }
   };
 
+  const labelClass = "absolute left-4 top-4 text-fg-muted transition-all pointer-events-none peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary-500 peer-focus:bg-background peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:bg-background peer-[&:not(:placeholder-shown)]:px-1 peer-[&:not(:placeholder-shown)]:text-primary-500";
+  const inputClass = "peer w-full bg-surface-card rounded-xl px-4 py-4 outline-none border border-surface-border focus:border-primary-500/50 text-fg placeholder-transparent shadow-lg transition-all";
+
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 py-8">
+    <div className="w-full max-w-xl mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative"
       >
-        {/* Header */}
-        <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-black mb-3 text-fg">
-            Send Us a Message
-          </h2>
-          <p className="text-fg-muted text-lg">
-            We'd love to hear from you. Get in touch with us for any inquiries.
-          </p>
-        </div>
+        <h3 className="text-primary-500 uppercase tracking-widest text-sm font-bold mb-2 text-center">
+          Get in touch
+        </h3>
+        <h2 className="text-3xl font-black mb-8 text-fg text-center">
+          Send Us a Message
+        </h2>
 
-        {/* Form Container */}
-        <div className="relative">
-          {/* Background */}
-          <div className="absolute inset-0 bg-primary-500/5 rounded-sm border border-surface-border/40" />
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="relative z-10 p-8 space-y-6">
-            {/* Success Message */}
-            {submitted && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="p-4 rounded-sm bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold"
-              >
-                ✓ Thank you! We've received your message and will get back to you soon.
-              </motion.div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="p-4 rounded-sm bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold"
-              >
-                ✗ {error}
-              </motion.div>
-            )}
-
-            {/* Name Field */}
-            <div>
-              <label className="block text-sm font-semibold text-fg mb-2 flex items-center gap-2">
-                <User size={16} className="text-primary-500" />
-                Your Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="John Doe"
-                disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
-              />
-            </div>
-
-            {/* Email Field */}
-            <div>
-              <label className="block text-sm font-semibold text-fg mb-2 flex items-center gap-2">
-                <Mail size={16} className="text-primary-500" />
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="john@example.com"
-                disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
-              />
-            </div>
-
-            {/* Phone Field */}
-            <div>
-              <label className="block text-sm font-semibold text-fg mb-2 flex items-center gap-2">
-                <Phone size={16} className="text-primary-500" />
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Your phone number"
-                disabled={loading || submitted}
-                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all disabled:opacity-50"
-              />
-            </div>
-
-            {/* Query/Message Field */}
-            <div>
-              <label className="block text-sm font-semibold text-fg mb-2 flex items-center gap-2">
-                <MessageCircle size={16} className="text-primary-500" />
-                Your Message
-              </label>
-              <textarea
-                name="query"
-                value={formData.query}
-                onChange={handleInputChange}
-                placeholder="Tell us what's on your mind..."
-                disabled={loading || submitted}
-                rows="5"
-                className="w-full px-4 py-3 rounded-sm bg-surface-card border border-surface-border/40 text-fg placeholder-fg-muted focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 transition-all resize-none disabled:opacity-50"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <motion.button
-              type="submit"
-              disabled={loading || submitted}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3 rounded-sm bg-primary-500 text-[var(--app-cta-contrast)] font-bold relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {submitted && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold"
             >
-              <div className="absolute inset-0 bg-primary-600 opacity-0 hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">
-                {loading ? 'Sending...' : submitted ? 'Message Sent!' : 'Send Message'}
-              </span>
-            </motion.button>
+              ✓ Thank you! We've received your message.
+            </motion.div>
+          )}
 
-            {/* Info Text */}
-            <p className="text-xs text-fg-muted text-center">
-              We typically respond within 24 hours. Thank you for reaching out!
-            </p>
-          </form>
-        </div>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold"
+            >
+              ✗ {error}
+            </motion.div>
+          )}
+
+          <div className="relative">
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Your Name"
+              className={inputClass}
+            />
+            <label htmlFor="name" className={labelClass}>Your Name</label>
+          </div>
+
+          <div className="relative">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email Address"
+              className={inputClass}
+            />
+            <label htmlFor="email" className={labelClass}>Email Address</label>
+          </div>
+
+          <div className="relative">
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Phone Number"
+              className={inputClass}
+            />
+            <label htmlFor="phone" className={labelClass}>Phone Number</label>
+          </div>
+
+
+
+          <div className="relative">
+            <textarea
+              name="query"
+              id="query"
+              value={formData.query}
+              onChange={handleInputChange}
+              placeholder="Your Message"
+              rows="5"
+              className={`${inputClass} resize-none`}
+            />
+            <label htmlFor="query" className={labelClass}>Your Message</label>
+          </div>
+
+          <motion.button
+            type="submit"
+            disabled={loading || submitted}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full px-6 py-4 rounded-xl bg-primary-500 text-[var(--app-cta-contrast)] font-black shadow-lg disabled:opacity-50 transition-colors hover:bg-primary-600"
+          >
+            {loading ? 'Sending...' : submitted ? 'Message Sent!' : 'Send Message'}
+          </motion.button>
+        </form>
       </motion.div>
     </div>
   );

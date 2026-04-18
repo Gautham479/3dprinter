@@ -59,7 +59,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {[
                 { label: 'About Us', path: '/about' },
-                { label: 'Contact', path: '#' },
+                { label: 'Contact', path: '/contact' },
                 { label: 'Careers', path: '#' },
               ].map((item) => (
                 <li key={item.label}>

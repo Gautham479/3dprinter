@@ -11,9 +11,9 @@ export default function Features() {
     {
       name: "PLA (Basic & Lightweight)",
       emoji: "🌿",
-      color: "bg-primary-500/10",
-      borderColor: "border-primary-500/25",
-      accentColor: "text-primary-500",
+      color: "bg-red-500/10",
+      borderColor: "border-red-500/40",
+      accentColor: "text-red-500",
       points: [
         { text: "Best for display parts, prototypes, or light use", type: "normal" },
         { text: "Smooth finish and clean look", type: "normal" },

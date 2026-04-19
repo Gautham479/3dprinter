@@ -42,21 +42,24 @@ export default function ConfigPanel() {
 
       <div className="space-y-6 relative">
         {/* Material */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-black text-fg">
             <Box className="w-4 h-4 text-primary-500" /> Material
           </label>
-          <select
-            value={config.material}
-            onChange={(e) => setConfig({ material: e.target.value })}
-            className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
-            style={selectStyle}
-          >
-            <option value="PLA">PLA</option>
-            <option value="PETG">PETG</option>
-            <option value="ABS">ABS</option>
-            <option value="TPU">TPU</option>
-          </select>
+          <div className="grid grid-cols-4 gap-2">
+            {['PLA', 'PETG', 'ABS', 'TPU'].map((mat) => (
+              <button
+                key={mat}
+                onClick={() => setConfig({ material: mat })}
+                className={`py-2.5 px-1 rounded-sm text-sm font-bold border transition-all text-center ${config.material === mat
+                    ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
+                    : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
+                  }`}
+              >
+                {mat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Color Mode */}
@@ -106,20 +109,29 @@ export default function ConfigPanel() {
         </div>
 
         {/* Quality */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-black text-fg">
             <Layers className="w-4 h-4 text-primary-500" /> Quality
           </label>
-          <select
-            value={config.quality}
-            onChange={(e) => setConfig({ quality: e.target.value })}
-            className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3.5 text-fg appearance-none focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all text-sm font-bold"
-            style={selectStyle}
-          >
-            <option value="Draft (0.3mm)">Draft (0.3mm)</option>
-            <option value="Standard (0.2mm)">Standard (0.2mm)</option>
-            <option value="High (0.1mm)">High (0.1mm)</option>
-          </select>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: 'Draft (0.3mm)', label: 'Draft', detail: '0.3mm' },
+              { id: 'Standard (0.2mm)', label: 'Standard', detail: '0.2mm' },
+              { id: 'High (0.1mm)', label: 'High', detail: '0.1mm' }
+            ].map((q) => (
+              <button
+                key={q.id}
+                onClick={() => setConfig({ quality: q.id })}
+                className={`py-2 px-1 rounded-sm border transition-all flex flex-col items-center justify-center gap-0.5 ${config.quality === q.id
+                    ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
+                    : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
+                  }`}
+              >
+                <span className="text-sm font-bold">{q.label}</span>
+                <span className="text-[10px] opacity-70 font-semibold">{q.detail}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Strength */}

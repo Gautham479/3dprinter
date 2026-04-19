@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
 import { useStore } from '../store/useStore';
@@ -17,6 +17,20 @@ export default function Navbar() {
   const openCart = useStore((state) => state.openCart);
   const searchQuery = useStore((state) => state.searchQuery);
   const setSearchQuery = useStore((state) => state.setSearchQuery);
+
+  const logoClicksRef = useRef(0);
+  const clickTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        router.push('/admin/login');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +74,21 @@ export default function Navbar() {
     }
   };
 
+  const handleLogoClick = () => {
+    logoClicksRef.current += 1;
+    if (logoClicksRef.current >= 7) {
+      router.push('/admin/login');
+      logoClicksRef.current = 0;
+    }
+    
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      logoClicksRef.current = 0;
+    }, 2000); // Reset clicks after 2 seconds
+
+    goToHome();
+  };
+
   const handleSearchChange = (event) => {
     const nextQuery = event.target.value;
     setSearchQuery(nextQuery);
@@ -97,7 +126,7 @@ export default function Navbar() {
           <div className="flex items-center gap-8">
             <motion.div
               className="flex items-center gap-2.5 cursor-pointer group"
-              onClick={goToHome}
+              onClick={handleLogoClick}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -196,14 +225,6 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => router.push('/admin/login')}
-              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-sm border border-surface-border bg-surface-card/50 text-fg-muted hover:text-primary-500 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              Admin Login
-            </button>
-
             {/* Search */}
             <div className="hidden md:flex items-center gap-2 bg-surface-card/60 border border-surface-border rounded-sm px-3 py-2 w-64 hover:border-primary-500/40 focus-within:border-primary-500/60 focus-within:bg-surface-card transition-all">
               <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />

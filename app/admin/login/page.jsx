@@ -40,7 +40,10 @@ export default function AdminLoginPage() {
   const inputClass = "w-full rounded-sm border border-surface-border bg-surface-muted/60 px-4 py-3 text-fg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all placeholder:text-fg-subtle text-sm backdrop-blur-sm";
 
   return (
-    <main className="min-h-screen bg-surface-bg flex items-center justify-center px-4 relative overflow-hidden">
+    <main 
+      className="min-h-screen bg-surface-bg flex items-center justify-center px-4 relative overflow-hidden"
+      onClick={() => router.push('/')}
+    >
       {/* Background */}
       <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-sm blur-3xl pointer-events-none" />
@@ -51,6 +54,7 @@ export default function AdminLoginPage() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="w-full max-w-md relative"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Card */}
         <div

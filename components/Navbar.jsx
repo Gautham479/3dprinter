@@ -23,7 +23,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+      if (e.ctrlKey && e.altKey && e.code === 'KeyA') {
         e.preventDefault();
         router.push('/admin/login');
       }

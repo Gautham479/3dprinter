@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { isAdminAuthenticated } from '@/lib/adminAuth';
-import { ensureProductsSeeded } from '@/lib/productService';
 import { MATERIAL_TYPES, PRODUCT_TYPES } from '@/lib/catalog';
 import { saveProductImage, saveProductImages } from '@/lib/uploadImage';
 
@@ -26,8 +25,6 @@ export async function GET() {
   if (unauthorized) return unauthorized;
 
   try {
-    await ensureProductsSeeded();
-
     const products = await prisma.product.findMany({
       orderBy: { createdAt: 'asc' },
     });

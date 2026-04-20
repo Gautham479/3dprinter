@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { MATERIAL_TYPES, PRODUCT_TYPES } from '@/lib/catalog';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download } from 'lucide-react';
+import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download, Palette } from 'lucide-react';
 
 const EMPTY_FORM = {
   name: '',
@@ -27,6 +27,9 @@ export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [colorForm, setColorForm] = useState({ name: '', hex: '#111111', material: 'PLA' });
+  const [savingColor, setSavingColor] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [imageFile, setImageFile] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
@@ -80,9 +83,41 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchColors = async () => {
+    const response = await fetch('/api/colors');
+    if (response.ok) {
+      const data = await response.json();
+      setColors(data);
+    }
+  };
+
+  const handleCreateColor = async (e) => {
+    e.preventDefault();
+    setSavingColor(true);
+    const response = await fetch('/api/admin/colors', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(colorForm),
+    });
+    if (response.ok) {
+      await fetchColors();
+      setColorForm({ name: '', hex: '#111111', material: 'PLA' });
+    }
+    setSavingColor(false);
+  };
+
+  const handleDeleteColor = async (id) => {
+    if (!window.confirm('Delete this color?')) return;
+    const response = await fetch(`/api/admin/colors/${id}`, { method: 'DELETE' });
+    if (response.ok) {
+      await fetchColors();
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchOrders();
+    fetchColors();
   }, []);
 
   const inStockCount = useMemo(() => products.filter((product) => product.inStock).length, [products]);
@@ -375,6 +410,7 @@ export default function AdminDashboardPage() {
           {[
             { id: 'products', label: 'Products Manager', icon: <Package className="w-4 h-4" /> },
             { id: 'orders', label: 'Orders Manager', icon: <ShoppingBag className="w-4 h-4" /> },
+            { id: 'colors', label: 'Colors Manager', icon: <Palette className="w-4 h-4" /> },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -631,7 +667,7 @@ export default function AdminDashboardPage() {
                 )}
               </section>
             </motion.div>
-          ) : (
+          ) : activeTab === 'orders' ? (
             <motion.div
               key="orders"
               initial={{ opacity: 0, y: 10 }}
@@ -805,7 +841,67 @@ export default function AdminDashboardPage() {
                 )}
               </section>
             </motion.div>
-          )}
+          ) : activeTab === 'colors' ? (
+            <motion.div
+              key="colors"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              <section className="rounded-sm border border-purple-500/20 bg-surface-card/60 backdrop-blur-xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-purple-500/50" />
+                <h2 className="text-xl font-black text-fg mb-5 flex items-center gap-2">
+                  <Palette className="w-5 h-5 text-purple-500" />
+                  Colors Manager
+                </h2>
+                
+                <form onSubmit={handleCreateColor} className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8 bg-surface-muted/30 p-4 border border-surface-border/60 rounded-sm">
+                  <input className={inputClass} placeholder="Color Name (e.g. Matte Black)" value={colorForm.name} onChange={(e) => setColorForm(prev => ({ ...prev, name: e.target.value }))} required />
+                  <div className="flex items-center gap-2">
+                    <input type="color" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} className="h-10 w-10 rounded-sm cursor-pointer border border-surface-border bg-surface-card p-0.5" />
+                    <input className={inputClass} placeholder="Hex" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} required />
+                  </div>
+                  <select className={inputClass} value={colorForm.material} onChange={(e) => setColorForm(prev => ({ ...prev, material: e.target.value }))}>
+                    {MATERIAL_TYPES.map(mat => <option key={mat} value={mat}>{mat}</option>)}
+                  </select>
+                  <button type="submit" disabled={savingColor} className="btn-glow bg-purple-500 hover:bg-purple-600 text-[var(--app-cta-contrast)] font-black rounded-sm px-4 py-2 transition-all">
+                    {savingColor ? 'Adding...' : 'Add Color'}
+                  </button>
+                </form>
+
+                <div className="space-y-6">
+                  {MATERIAL_TYPES.map(mat => {
+                    const materialColors = colors.filter(c => c.material === mat);
+                    return (
+                      <div key={mat}>
+                        <h3 className="text-lg font-bold text-fg mb-3">{mat} Colors</h3>
+                        {materialColors.length === 0 ? (
+                          <p className="text-sm text-fg-muted mb-4">No colors added for {mat} yet.</p>
+                        ) : (
+                          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
+                            {materialColors.map(color => (
+                              <div key={color.id} className="relative flex flex-col items-center gap-2 p-3 border border-surface-border/60 bg-surface-muted/30 rounded-sm group">
+                                <div className="w-8 h-8 rounded-full border border-surface-border shadow-md" style={{ backgroundColor: color.hex }} />
+                                <span className="text-xs font-bold text-fg text-center">{color.name}</span>
+                                <span className="text-[10px] text-fg-muted uppercase">{color.hex}</span>
+                                <button
+                                  onClick={() => handleDeleteColor(color.id)}
+                                  className="absolute top-1 right-1 p-1 bg-red-500/80 hover:bg-red-500 text-[var(--app-cta-contrast)] rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            </motion.div>
+          ) : null}
         </AnimatePresence>
       </div>
     </main>

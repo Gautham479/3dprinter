@@ -16,6 +16,7 @@ export const useStore = create((set) => ({
   isCartOpen: false,
   searchQuery: '',
   products: [],
+  colors: [],
   scrollPosition: 0,
   activeTab: 'products',
 
@@ -23,6 +24,17 @@ export const useStore = create((set) => ({
   closeCart: () => set({ isCartOpen: false }),
   setSearchQuery: (query) => set({ searchQuery: query }),
   setProducts: (products) => set({ products }),
+  fetchColors: async () => {
+    try {
+      const res = await fetch('/api/colors');
+      if (res.ok) {
+        const colors = await res.json();
+        set({ colors });
+      }
+    } catch (e) {
+      console.error('Failed to fetch colors', e);
+    }
+  },
   setScrollPosition: (pos) => set({ scrollPosition: pos }),
   setActiveTab: (tab) => set({ activeTab: tab }),
 

@@ -5,13 +5,7 @@ import { Zap, Box, Palette, Layers, ShoppingCart, UploadCloud, Sliders } from 'l
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
 
-const AVAILABLE_COLORS = [
-  { name: 'Black', hex: '#111111' },
-  { name: 'Gray', hex: '#6b7280' },
-  { name: 'Beige', hex: '#d6c4a8' },
-  { name: 'Latte Brown', hex: '#8b6b4a' },
-  { name: 'Ivory White', hex: '#f8f5e9' },
-];
+// Dynamic colors are loaded from useStore
 
 const selectStyle = {
   backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23c9955b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
@@ -22,17 +16,17 @@ const selectStyle = {
 };
 
 export default function ConfigPanel() {
-  const { config, setConfig, selectedFile, mockPrice, addToCart } = useStore();
+  const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors } = useStore();
   const strengthPercentage = ((config.strength - 10) / 90) * 100;
   const colorContainerRef = useRef(null);
 
+  useEffect(() => {
+    fetchColors();
+  }, [fetchColors]);
+
   const availableColorsForMaterial = useMemo(() => {
-    return AVAILABLE_COLORS.filter(color => {
-      if (config.material === 'PETG') return ['Black', 'Gray'].includes(color.name);
-      if (config.material === 'ABS' || config.material === 'TPU') return ['Black'].includes(color.name);
-      return true;
-    });
-  }, [config.material]);
+    return colors.filter(color => color.material === config.material);
+  }, [config.material, colors]);
 
   useEffect(() => {
     if (config.color && config.color !== 'Multicolor') {

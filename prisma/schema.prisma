@@ -80,3 +80,12 @@ model Contact {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model FilamentColor {
+  id        String   @id @default(cuid())
+  name      String
+  hex       String
+  material  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

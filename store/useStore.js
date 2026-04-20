@@ -16,7 +16,17 @@ export const useStore = create((set) => ({
   isCartOpen: false,
   searchQuery: '',
   products: [],
-  colors: [],
+  colors: [
+    { id: 'default-1', name: 'Black', hex: '#111111', material: 'PETG' },
+    { id: 'default-2', name: 'Grey', hex: '#6b7280', material: 'PETG' },
+    { id: 'default-3', name: 'Black', hex: '#111111', material: 'ABS' },
+    { id: 'default-4', name: 'Black', hex: '#111111', material: 'TPU' },
+    { id: 'default-5', name: 'Black', hex: '#111111', material: 'PLA' },
+    { id: 'default-6', name: 'Grey', hex: '#6b7280', material: 'PLA' },
+    { id: 'default-7', name: 'White', hex: '#ffffff', material: 'PLA' },
+    { id: 'default-8', name: 'Brown', hex: '#8b4513', material: 'PLA' },
+    { id: 'default-9', name: 'Cream', hex: '#fffdd0', material: 'PLA' },
+  ],
   scrollPosition: 0,
   activeTab: 'products',
 
@@ -29,7 +39,10 @@ export const useStore = create((set) => ({
       const res = await fetch('/api/colors');
       if (res.ok) {
         const colors = await res.json();
-        set({ colors });
+        // Only override defaults if database actually returns some colors
+        if (colors && colors.length > 0) {
+          set({ colors });
+        }
       }
     } catch (e) {
       console.error('Failed to fetch colors', e);
@@ -60,7 +73,7 @@ export const useStore = create((set) => ({
 
   addToCart: () => set((state) => {
     if (!state.selectedFile || !state.mockPrice) return state;
-    
+
     const newItem = {
       id: Math.random().toString(36).substr(2, 9),
       fileName: state.selectedFile.name,
@@ -69,7 +82,7 @@ export const useStore = create((set) => ({
       config: state.config,
       price: state.mockPrice
     };
-    
+
     return {
       cart: [...state.cart, newItem],
       selectedFile: null,

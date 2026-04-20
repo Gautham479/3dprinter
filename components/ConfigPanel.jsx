@@ -39,11 +39,6 @@ export default function ConfigPanel() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Don't deselect if clicking inside the color container
-      if (colorContainerRef.current && colorContainerRef.current.contains(event.target)) {
-        return;
-      }
-      
       // Prevent deselecting when clicking Add to Cart
       if (event.target.closest('.add-to-cart-btn')) {
         return;
@@ -128,7 +123,8 @@ export default function ConfigPanel() {
                   <button
                     key={color.name}
                     title={color.name}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       if (config.color === color.name) {
                         setConfig({ color: null });
                       } else {

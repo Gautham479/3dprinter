@@ -12,9 +12,9 @@ export default function Materials() {
     {
       name: "PLA (Basic & Lightweight)",
       image: "/images/materials/home-lifestyle.png",
-      color: "bg-red-500/10",
-      borderColor: "border-red-500/40",
-      accentColor: "text-red-500",
+      color: "bg-primary-500/10",
+      borderColor: "border-primary-500",
+      accentColor: "text-primary-500",
       points: [
         { content: <><strong className="text-fg">Smooth finish</strong> with a clean look</>, type: "normal" },
         { content: <>Great for <strong className="text-fg">prototypes</strong>, models, and display items</>, type: "normal" },
@@ -25,9 +25,9 @@ export default function Materials() {
     {
       name: "PETG (All-Rounder Choice)",
       image: "/images/materials/industrial-precision.png",
-      color: "bg-accent-500/10",
-      borderColor: "border-accent-500/25",
-      accentColor: "text-accent-500",
+      color: "bg-primary-500/10",
+      borderColor: "border-primary-500",
+      accentColor: "text-primary-500",
       points: [
         { content: <>Strong and <strong className="text-fg">durable</strong> for everyday use</>, type: "normal" },
         { content: <><strong className="text-fg">Water-resistant</strong> and long-lasting</>, type: "positive" },
@@ -38,9 +38,9 @@ export default function Materials() {
     {
       name: "ABS (High Strength & Heat Resistant)",
       image: "/images/materials/technical-enclosure.png",
-      color: "bg-amber-600/10",
-      borderColor: "border-amber-600/25",
-      accentColor: "text-amber-600",
+      color: "bg-primary-500/10",
+      borderColor: "border-primary-500",
+      accentColor: "text-primary-500",
       points: [
         { content: <>Tough and <strong className="text-fg">impact-resistant</strong></>, type: "positive" },
         { content: <>Handles <strong className="text-fg">high temperatures</strong></>, type: "positive" },
@@ -51,9 +51,9 @@ export default function Materials() {
     {
       name: "TPU (Flexible & Shock Absorbing)",
       image: "/images/materials/flexible-tpu.png",
-      color: "bg-rose-500/10",
-      borderColor: "border-rose-400/25",
-      accentColor: "text-rose-500",
+      color: "bg-primary-500/10",
+      borderColor: "border-primary-500",
+      accentColor: "text-primary-500",
       points: [
         { content: <>Flexible with a <strong className="text-fg">rubber-like</strong> feel</>, type: "normal" },
         { content: <>Absorbs <strong className="text-fg">shock</strong> and vibration</>, type: "positive" },
@@ -115,9 +115,9 @@ export default function Materials() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               onHoverStart={() => setActiveCard(i)}
               onHoverEnd={() => setActiveCard(null)}
-              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-0 flex flex-col md:flex-row cursor-default overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary-500/30 group`}
+              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-0 flex flex-col md:flex-row cursor-default overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary-500/20 hover:border-primary-500 group`}
             >
-              <div className={`absolute inset-0 ${material.color} opacity-0 transition-opacity duration-300 ${activeCard === i ? 'opacity-100' : ''}`} />
+              <div className={`absolute inset-0 bg-primary-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
               
               {/* Material Image */}
               <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted overflow-hidden">

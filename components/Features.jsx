@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Check, X, Zap, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Features() {
   const [activeCard, setActiveCard] = useState(null);
@@ -15,10 +15,10 @@ export default function Features() {
       borderColor: "border-red-500/40",
       accentColor: "text-red-500",
       points: [
-        { text: "Best for display parts, prototypes, or light use", type: "normal" },
-        { text: "Smooth finish and clean look", type: "normal" },
-        { text: "Not ideal for heat or outdoor use", type: "negative" },
-        { text: "Good if you just need something simple and cost-effective", type: "tip" }
+        { content: <><strong className="text-fg">Smooth finish</strong> with a clean look</>, type: "normal" },
+        { content: <>Great for <strong className="text-fg">prototypes</strong>, models, and display items</>, type: "normal" },
+        { content: <>Lightweight and <strong className="text-fg">accurate prints</strong></>, type: "normal" },
+        { content: <>Affordable and an easy choice for <strong className="text-fg">basic needs</strong></>, type: "tip" }
       ]
     },
     {
@@ -28,11 +28,10 @@ export default function Features() {
       borderColor: "border-accent-500/25",
       accentColor: "text-accent-500",
       points: [
-        { text: "Strong and durable for everyday use", type: "normal" },
-        { text: "Can handle sunlight and outdoor conditions better than PLA", type: "positive" },
-        { text: "Water-resistant and long-lasting", type: "positive" },
-        { text: "Safe for basic electrical enclosures (non-conductive)", type: "positive" },
-        { text: "Best choice for most customers", type: "tip" }
+        { content: <>Strong and <strong className="text-fg">durable</strong> for everyday use</>, type: "normal" },
+        { content: <><strong className="text-fg">Water-resistant</strong> and long-lasting</>, type: "positive" },
+        { content: <>Handles <strong className="text-fg">outdoor conditions</strong> and sunlight</>, type: "positive" },
+        { content: <>Reliable for <strong className="text-fg">functional parts</strong> and enclosures</>, type: "tip" }
       ]
     },
     {
@@ -42,11 +41,10 @@ export default function Features() {
       borderColor: "border-amber-600/25",
       accentColor: "text-amber-600",
       points: [
-        { text: "Very strong and tough material", type: "normal" },
-        { text: "Handles high temperatures and sunlight better", type: "positive" },
-        { text: "Good for automotive or outdoor parts", type: "positive" },
-        { text: "Suitable for electrical housings (heat resistance helps)", type: "positive" },
-        { text: "Choose this if your part will face heat or rough use", type: "tip" }
+        { content: <>Tough and <strong className="text-fg">impact-resistant</strong></>, type: "positive" },
+        { content: <>Handles <strong className="text-fg">high temperatures</strong></>, type: "positive" },
+        { content: <>Suitable for <strong className="text-fg">heavy-use</strong> parts</>, type: "normal" },
+        { content: <>Ideal for <strong className="text-fg">automotive</strong> and practical applications</>, type: "tip" }
       ]
     },
     {
@@ -56,10 +54,10 @@ export default function Features() {
       borderColor: "border-rose-400/25",
       accentColor: "text-rose-500",
       points: [
-        { text: "Rubber-like and flexible", type: "normal" },
-        { text: "Can bend, stretch, and absorb impact", type: "positive" },
-        { text: "Not for rigid or structural parts", type: "negative" },
-        { text: "Perfect for grips, covers, gaskets, or protective parts", type: "tip" }
+        { content: <>Flexible with a <strong className="text-fg">rubber-like</strong> feel</>, type: "normal" },
+        { content: <>Absorbs <strong className="text-fg">shock</strong> and vibration</>, type: "positive" },
+        { content: <>Ideal for <strong className="text-fg">seals</strong>, gaskets, bushings, and similar parts</>, type: "normal" },
+        { content: <>Great for <strong className="text-fg">grips</strong>, covers, and protective parts</>, type: "tip" }
       ]
     }
   ];
@@ -72,17 +70,14 @@ export default function Features() {
     { question: "Budget / basic use?", answer: "PLA", icon: "💡" }
   ];
 
-  const getIcon = (type) => {
-    switch (type) {
-      case "positive":
-        return <Check className="w-4 h-4 text-accent-500 flex-shrink-0" />;
-      case "negative":
-        return <X className="w-4 h-4 text-red-400/70 flex-shrink-0" />;
-      case "tip":
-        return <Check className="w-4 h-4 text-primary-500 flex-shrink-0" />;
-      default:
-        return <Check className="w-4 h-4 text-fg-subtle flex-shrink-0" />;
-    }
+  const getBullet = (type) => {
+    const base = "mt-1.5 flex-shrink-0 leading-none";
+    // Keep bullets subtle on dark backgrounds; emphasis stays in the text highlights.
+    return (
+      <span className={`${base} text-[10px] text-white/35`} aria-hidden="true">
+        ⬢
+      </span>
+    );
   };
 
   return (
@@ -142,9 +137,9 @@ export default function Features() {
                       transition={{ delay: i * 0.1 + j * 0.05 }}
                       className="flex gap-3 items-start"
                     >
-                      {getIcon(point.type)}
+                      {getBullet(point.type)}
                       <span className={`text-fg-muted leading-relaxed text-sm ${point.type === 'negative' ? 'opacity-60' : ''} ${point.type === 'tip' ? 'font-semibold text-fg' : ''}`}>
-                        {point.text}
+                        {point.content ?? point.text}
                       </span>
                     </motion.li>
                   ))}

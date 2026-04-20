@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Zap, Box, Palette, Layers, ShoppingCart, UploadCloud, Sliders } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
@@ -24,6 +24,45 @@ const selectStyle = {
 export default function ConfigPanel() {
   const { config, setConfig, selectedFile, mockPrice, addToCart } = useStore();
   const strengthPercentage = ((config.strength - 10) / 90) * 100;
+  const colorContainerRef = useRef(null);
+
+  const availableColorsForMaterial = useMemo(() => {
+    return AVAILABLE_COLORS.filter(color => {
+      if (config.material === 'PETG') return ['Black', 'Gray'].includes(color.name);
+      if (config.material === 'ABS' || config.material === 'TPU') return ['Black'].includes(color.name);
+      return true;
+    });
+  }, [config.material]);
+
+  useEffect(() => {
+    if (config.color && config.color !== 'Multicolor') {
+      const isValid = availableColorsForMaterial.some(c => c.name === config.color);
+      if (!isValid) {
+        setConfig({ color: null });
+      }
+    }
+  }, [config.material, config.color, availableColorsForMaterial, setConfig]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Don't deselect if clicking inside the color container
+      if (colorContainerRef.current && colorContainerRef.current.contains(event.target)) {
+        return;
+      }
+      
+      // Prevent deselecting when clicking Add to Cart
+      if (event.target.closest('.add-to-cart-btn')) {
+        return;
+      }
+
+      if (config.color && config.color !== 'Multicolor') {
+        setConfig({ color: null });
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [config.color, setConfig]);
 
   return (
     <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
@@ -85,16 +124,23 @@ export default function ConfigPanel() {
 
           {config.colorMode !== 'Multicolor' && (
             <motion.div
+              ref={colorContainerRef}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="space-y-2"
             >
               <div className="flex gap-2 flex-wrap">
-                {AVAILABLE_COLORS.map((color) => (
+                {availableColorsForMaterial.map((color) => (
                   <button
                     key={color.name}
                     title={color.name}
-                    onClick={() => setConfig({ color: color.name })}
+                    onClick={() => {
+                      if (config.color === color.name) {
+                        setConfig({ color: null });
+                      } else {
+                        setConfig({ color: color.name });
+                      }
+                    }}
                     className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${config.color === color.name
                         ? 'border-primary-500 scale-110 shadow-md'
                         : 'border-surface-border hover:border-primary-500/50'
@@ -103,7 +149,7 @@ export default function ConfigPanel() {
                   />
                 ))}
               </div>
-              <p className="text-xs text-fg-subtle font-semibold">Selected: {config.color}</p>
+              <p className="text-xs text-fg-subtle font-semibold">Selected: {config.color || 'None'}</p>
             </motion.div>
           )}
         </div>
@@ -200,7 +246,7 @@ export default function ConfigPanel() {
           onClick={addToCart}
           whileHover={selectedFile ? { scale: 1.02 } : {}}
           whileTap={selectedFile ? { scale: 0.98 } : {}}
-          className={`w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 transition-all ${selectedFile
+          className={`add-to-cart-btn w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 transition-all ${selectedFile
               ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
               : 'bg-surface-muted border border-surface-border text-fg-subtle cursor-not-allowed'
             }`}

@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ProductsGrid from '@/components/ProductsGrid';
+import Materials from '@/components/Materials';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
@@ -60,19 +61,8 @@ export default function Home() {
         <Hero />
       </section>
 
-      {/* Featured Products */}
-      <section id="content" className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl font-black text-fg mb-3">Featured Collection</h2>
-          <div className="h-[2px] w-20 bg-primary-500 mx-auto rounded-sm mb-4" />
-          <p className="text-fg-muted">
-            Our hand-picked selection of premium 3D printed accessories and items.
-          </p>
-        </div>
-        <ProductsGrid featuredOnly={true} hideFilters={true} />
-      </section>
-
       {/* Additional Added Sections */}
+      <Materials />
       <HowItWorks />
       <FAQ />
       

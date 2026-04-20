@@ -3,12 +3,9 @@
 import React, { useState } from 'react';
 import { Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import CartDrawer from '@/components/CartDrawer';
 import Image from 'next/image';
 
-export default function MaterialsPage() {
+export default function Materials() {
   const [activeCard, setActiveCard] = useState(null);
 
   const materials = [
@@ -27,7 +24,7 @@ export default function MaterialsPage() {
     },
     {
       name: "PETG (All-Rounder Choice)",
-      image: "/images/materials/technical-enclosure.png",
+      image: "/images/materials/industrial-precision.png",
       color: "bg-accent-500/10",
       borderColor: "border-accent-500/25",
       accentColor: "text-accent-500",
@@ -40,7 +37,7 @@ export default function MaterialsPage() {
     },
     {
       name: "ABS (High Strength & Heat Resistant)",
-      image: "/images/materials/industrial-precision.png",
+      image: "/images/materials/technical-enclosure.png",
       color: "bg-amber-600/10",
       borderColor: "border-amber-600/25",
       accentColor: "text-amber-600",
@@ -84,11 +81,10 @@ export default function MaterialsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">
-      <Navbar />
-      <CartDrawer />
-      
-      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6 min-h-[60vh] overflow-hidden relative">
+    <section id="materials" className="w-full py-24 overflow-hidden relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-primary-500/20" />
+
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -100,9 +96,9 @@ export default function MaterialsPage() {
             <Zap className="w-3.5 h-3.5" />
             Material Science
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-fg mb-4">
+          <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">
             Materials Guide
-          </h1>
+          </h2>
           <p className="text-lg text-fg-muted max-w-2xl mx-auto">
             Select the right material for your project based on your specific needs. Experience the difference in quality and durability.
           </p>
@@ -191,9 +187,7 @@ export default function MaterialsPage() {
             ))}
           </div>
         </motion.div>
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
+    </section>
   );
 }

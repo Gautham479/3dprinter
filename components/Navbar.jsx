@@ -13,7 +13,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('quote');
   const [scrolled, setScrolled] = useState(false);
-  const [legalDropdownOpen, setLegalDropdownOpen] = useState(false);
   const cart = useStore((state) => state.cart);
   const openCart = useStore((state) => state.openCart);
   const searchQuery = useStore((state) => state.searchQuery);
@@ -36,7 +35,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      const sections = ['quote', 'features', 'how-it-works', 'faq'];
+      const sections = ['quote', 'materials', 'how-it-works', 'faq'];
       let current = 'quote';
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -106,9 +105,9 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Custom Print', path: '/custom', id: 'custom' },
-    { label: 'About Material', path: '/materials', id: 'materials' },
+    { id: 'materials', label: 'About Material' },
     { id: 'how-it-works', label: 'How It Works' },
-    { id: 'faq', label: 'FAQ' },
+    { label: 'Contact', path: '/contact', id: 'contact' },
   ];
 
   return (
@@ -176,7 +175,7 @@ export default function Navbar() {
                       All Products
                     </button>
                     {PRODUCT_TYPES.map(type => (
-                      <button key={type} onClick={() => router.push(`/products?category=${encodeURIComponent(type)}`)} className="px-4 py-2.5 text-sm text-left text-fg-muted hover:text-fg hover:bg-surface-muted/60 border-b border-surface-border/30 last:border-b-0 transition-colors">
+                      <button key={type} onClick={() => router.push(`/category/${encodeURIComponent(type)}`)} className="px-4 py-2.5 text-sm text-left text-fg-muted hover:text-fg hover:bg-surface-muted/60 border-b border-surface-border/30 last:border-b-0 transition-colors">
                         {type}
                       </button>
                     ))}
@@ -206,46 +205,34 @@ export default function Navbar() {
               ))}
 
               {/* Legal Dropdown */}
-              <div className="relative">
+              <div
+                className="relative group/dropdown"
+                onMouseEnter={() => setScrolled(window.scrollY > 20)}
+              >
                 <button
-                  onClick={() => setLegalDropdownOpen(!legalDropdownOpen)}
                   className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted/50 flex items-center gap-1.5"
                 >
                   <span className="relative z-10">Legal</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${legalDropdownOpen ? 'rotate-180' : ''}`}
-                  />
+                  <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover/dropdown:rotate-180" />
                 </button>
-
-                <AnimatePresence>
-                  {legalDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden min-w-max z-50"
-                    >
-                      {[
-                        { label: 'Privacy Policy', path: '/legal/privacy-policy' },
-                        { label: 'Terms & Conditions', path: '/legal/terms-conditions' },
-                        { label: 'Refund Policy', path: '/legal/refund-policy' },
-                        { label: 'Shipping Policy', path: '/legal/shipping-policy' },
-                      ].map((item) => (
-                        <button
-                          key={item.path}
-                          onClick={() => {
-                            router.push(item.path);
-                            setLegalDropdownOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2.5 text-sm text-fg-muted hover:text-fg hover:bg-surface-muted/60 transition-colors duration-150 border-b border-surface-border/30 last:border-b-0"
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="absolute top-full left-0 mt-0 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:-mt-0 pt-2 transition-all duration-200 z-50 min-w-[200px]">
+                  <div className="bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    {[
+                      { label: 'Privacy Policy', path: '/legal/privacy-policy' },
+                      { label: 'Terms & Conditions', path: '/legal/terms-conditions' },
+                      { label: 'Refund Policy', path: '/legal/refund-policy' },
+                      { label: 'Shipping Policy', path: '/legal/shipping-policy' },
+                    ].map((item) => (
+                      <button
+                        key={item.path}
+                        onClick={() => router.push(item.path)}
+                        className="w-full text-left px-4 py-2.5 text-sm text-fg-muted hover:text-fg hover:bg-surface-muted/60 transition-colors duration-150 border-b border-surface-border/30 last:border-b-0"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -27,14 +27,6 @@ export default function UploadBox() {
 
   return (
     <div className="flex flex-col h-full relative">
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-4 text-fg font-black pb-2">
-        <div className="w-8 h-8 rounded-sm bg-primary-500/15 border border-primary-500/30 flex items-center justify-center">
-          <Upload className="w-4 h-4 text-primary-500" />
-        </div>
-        <span>Upload Model</span>
-      </div>
-
       {/* Drop zone */}
       <div
         {...getRootProps()}
@@ -103,14 +95,7 @@ export default function UploadBox() {
                 <p className="text-xs text-fg-subtle mt-2 uppercase tracking-widest font-bold">STL files only, up to 100MB</p>
               </div>
 
-              <div className="flex items-center gap-2 px-4 py-2 rounded-sm bg-surface-muted/60 border border-surface-border text-fg-subtle text-sm font-medium">
-                <motion.span
-                  className="w-2 h-2 rounded-sm bg-accent-500"
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                1000+ models quoted this month
-              </div>
+
             </motion.div>
           )}
         </AnimatePresence>

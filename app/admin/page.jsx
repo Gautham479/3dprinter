@@ -20,6 +20,7 @@ const EMPTY_FORM = {
   weight: '',
   printTime: '',
   inStock: true,
+  isFeatured: false,
 };
 
 export default function AdminDashboardPage() {
@@ -181,6 +182,7 @@ export default function AdminDashboardPage() {
     payload.set('weight', form.weight);
     payload.set('printTime', form.printTime);
     payload.set('inStock', String(form.inStock));
+    payload.set('isFeatured', String(form.isFeatured));
     if (imageFile) {
       payload.set('imageFile', imageFile);
     }
@@ -250,6 +252,17 @@ export default function AdminDashboardPage() {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ inStock: !product.inStock }),
+    });
+    if (response.ok) {
+      await fetchProducts();
+    }
+  };
+
+  const toggleFeature = async (product) => {
+    const response = await fetch(`/api/admin/products/${product.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isFeatured: !product.isFeatured }),
     });
     if (response.ok) {
       await fetchProducts();
@@ -423,10 +436,16 @@ export default function AdminDashboardPage() {
                   <input className={inputClass} placeholder="Dimensions" value={form.dimensions} onChange={(e) => updateField('dimensions', e.target.value)} />
                   <input className={inputClass} placeholder="Weight" value={form.weight} onChange={(e) => updateField('weight', e.target.value)} />
                   <input className={inputClass} placeholder="Print time" value={form.printTime} onChange={(e) => updateField('printTime', e.target.value)} />
-                  <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
-                    <input type="checkbox" checked={form.inStock} onChange={(e) => updateField('inStock', e.target.checked)} className="w-4 h-4 accent-primary-500" />
-                    In stock
-                  </label>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
+                      <input type="checkbox" checked={form.inStock} onChange={(e) => updateField('inStock', e.target.checked)} className="w-4 h-4 accent-primary-500" />
+                      In stock
+                    </label>
+                    <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
+                      <input type="checkbox" checked={form.isFeatured} onChange={(e) => updateField('isFeatured', e.target.checked)} className="w-4 h-4 accent-primary-500" />
+                      Include on Homepage
+                    </label>
+                  </div>
                   <div className="md:col-span-2">
                     {error ? <p className="text-red-400 text-sm mb-3 bg-red-500/10 border border-red-500/20 rounded-sm px-3 py-2">{error}</p> : null}
                     <motion.button
@@ -559,9 +578,18 @@ export default function AdminDashboardPage() {
                                 <Upload className="w-3 h-3" />
                                 {uploadingProductId === product.id ? 'Uploading...' : 'Add Images'}
                               </button>
-                              <button
-                                onClick={() => toggleStock(product)}
-                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-black transition-colors ${product.inStock
+                                <button
+                                  onClick={() => toggleFeature(product)}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-black transition-colors ${product.isFeatured
+                                      ? 'bg-blue-500/15 border border-blue-500/30 text-blue-400 hover:bg-blue-500/25'
+                                      : 'bg-surface-muted border border-surface-border text-fg-muted hover:text-fg'
+                                    }`}
+                                >
+                                  {product.isFeatured ? 'Unfeature' : 'Feature'}
+                                </button>
+                                <button
+                                  onClick={() => toggleStock(product)}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-black transition-colors ${product.inStock
                                     ? 'bg-green-500/15 border border-green-500/30 text-green-400 hover:bg-green-500/25'
                                     : 'bg-amber-500/15 border border-amber-500/30 text-amber-400 hover:bg-amber-500/25'
                                   }`}

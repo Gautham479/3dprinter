@@ -156,12 +156,18 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
   );
 }
 
-export default function ProductsGrid() {
-  const [selectedType, setSelectedType] = useState('All');
+export default function ProductsGrid({ featuredOnly = false, hideFilters = false, initialCategory = 'All' }) {
+  const [selectedType, setSelectedType] = useState(initialCategory);
+  
+  useEffect(() => {
+    // If the prop changes dynamically via router, update the selected type
+    setSelectedType(initialCategory);
+  }, [initialCategory]);
+
   const [productColorOptions, setProductColorOptions] = useState({});
-  const products = useStore((state) => state.products);
   const setProducts = useStore((state) => state.setProducts);
-  const [loading, setLoading] = useState(!products || products.length === 0);
+  const [localProducts, setLocalProducts] = useState(null);
+  const [loading, setLoading] = useState(true);
   const addDirectItemToCart = useStore((state) => state.addDirectItemToCart);
   const openCart = useStore((state) => state.openCart);
   const searchQuery = useStore((state) => state.searchQuery);
@@ -169,18 +175,24 @@ export default function ProductsGrid() {
 
   useEffect(() => {
     const loadProducts = async () => {
-      if (!products || products.length === 0) setLoading(true);
-      const response = await fetch('/api/products?includeOutOfStock=1');
+      setLoading(true);
+      const url = featuredOnly 
+        ? '/api/products?includeOutOfStock=1&featured=1'
+        : '/api/products?includeOutOfStock=1';
+      const response = await fetch(url);
       const data = await response.json().catch(() => []);
-      if (Array.isArray(data)) setProducts(data);
+      setLocalProducts(data);
+      if (!featuredOnly && Array.isArray(data)) {
+        setProducts(data);
+      }
       setLoading(false);
     };
     loadProducts();
-  }, [setProducts]);
+  }, [featuredOnly, setProducts]);
 
   const activeType = searchQuery.trim() ? 'All' : selectedType;
 
-  const filteredProducts = (products || []).filter((product) => {
+  const filteredProducts = (localProducts || []).filter((product) => {
     const typeMatches = activeType === 'All' || product.type === activeType;
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const queryMatches =
@@ -220,24 +232,26 @@ export default function ProductsGrid() {
   return (
     <div>
       {/* Filter tabs */}
-      <div className="mb-10 overflow-x-auto pb-2">
-        <div className="flex gap-2">
-          {filters.map((type) => (
-            <motion.button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
-                  ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
-                  : 'bg-surface-card/80 text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
-                }`}
-            >
-              {type}
-            </motion.button>
-          ))}
+      {!hideFilters && (
+        <div className="mb-10 overflow-x-auto pb-2">
+          <div className="flex gap-2">
+            {filters.map((type) => (
+              <motion.button
+                key={type}
+                onClick={() => setSelectedType(type)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
+                    ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
+                    : 'bg-surface-card/80 text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
+                  }`}
+              >
+                {type}
+              </motion.button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Grid */}
       {loading ? (

@@ -6,6 +6,7 @@ import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PRODUCT_TYPES } from '../lib/catalog';
 
 export default function Navbar() {
   const router = useRouter();
@@ -104,7 +105,8 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { id: 'features', label: 'About Material' },
+    { label: 'Custom Print', path: '/custom', id: 'custom' },
+    { label: 'About Material', path: '/materials', id: 'materials' },
     { id: 'how-it-works', label: 'How It Works' },
     { id: 'faq', label: 'FAQ' },
   ];
@@ -157,6 +159,31 @@ export default function Navbar() {
 
             {/* Nav Links */}
             <div className="hidden lg:flex items-center gap-1 text-sm font-semibold">
+              <div
+                className="relative group/dropdown"
+                onMouseEnter={() => setScrolled(window.scrollY > 20)}
+              >
+                <button
+                  onClick={() => router.push('/products')}
+                  className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted/50 flex items-center gap-1.5"
+                >
+                  <span className="relative z-10">Products</span>
+                  <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover/dropdown:rotate-180" />
+                </button>
+                <div className="absolute top-full left-0 mt-0 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:-mt-0 pt-2 transition-all duration-200 z-50 min-w-[200px]">
+                  <div className="bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    <button onClick={() => router.push('/products')} className="px-4 py-2.5 text-sm text-left text-primary-500 font-bold hover:bg-surface-muted/60 border-b border-surface-border/30 transition-colors">
+                      All Products
+                    </button>
+                    {PRODUCT_TYPES.map(type => (
+                      <button key={type} onClick={() => router.push(`/products?category=${encodeURIComponent(type)}`)} className="px-4 py-2.5 text-sm text-left text-fg-muted hover:text-fg hover:bg-surface-muted/60 border-b border-surface-border/30 last:border-b-0 transition-colors">
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {navLinks.map((link) => (
                 <button
                   key={link.id}

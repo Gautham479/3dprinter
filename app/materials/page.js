@@ -3,14 +3,18 @@
 import React, { useState } from 'react';
 import { Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import CartDrawer from '@/components/CartDrawer';
+import Image from 'next/image';
 
-export default function Features() {
+export default function MaterialsPage() {
   const [activeCard, setActiveCard] = useState(null);
 
   const materials = [
     {
       name: "PLA (Basic & Lightweight)",
-      emoji: "🌿",
+      image: "/images/materials/home-lifestyle.png",
       color: "bg-red-500/10",
       borderColor: "border-red-500/40",
       accentColor: "text-red-500",
@@ -23,7 +27,7 @@ export default function Features() {
     },
     {
       name: "PETG (All-Rounder Choice)",
-      emoji: "🔷",
+      image: "/images/materials/technical-enclosure.png",
       color: "bg-accent-500/10",
       borderColor: "border-accent-500/25",
       accentColor: "text-accent-500",
@@ -36,7 +40,7 @@ export default function Features() {
     },
     {
       name: "ABS (High Strength & Heat Resistant)",
-      emoji: "🔥",
+      image: "/images/materials/industrial-precision.png",
       color: "bg-amber-600/10",
       borderColor: "border-amber-600/25",
       accentColor: "text-amber-600",
@@ -49,7 +53,7 @@ export default function Features() {
     },
     {
       name: "TPU (Flexible & Shock Absorbing)",
-      emoji: "🌀",
+      image: "/images/materials/flexible-tpu.png",
       color: "bg-rose-500/10",
       borderColor: "border-rose-400/25",
       accentColor: "text-rose-500",
@@ -63,16 +67,15 @@ export default function Features() {
   ];
 
   const quickGuide = [
-    { question: "Outdoor / Sun use?", answer: "PETG or ABS", icon: "☀️" },
-    { question: "High heat?", answer: "ABS", icon: "🔥" },
-    { question: "Electrical use?", answer: "PETG or ABS", icon: "⚡" },
-    { question: "Flexible part?", answer: "TPU", icon: "🌀" },
-    { question: "Budget / basic use?", answer: "PLA", icon: "💡" }
+    { question: "Outdoor / Sun use?", answer: "PETG or ABS" },
+    { question: "High heat?", answer: "ABS" },
+    { question: "Electrical use?", answer: "PETG or ABS" },
+    { question: "Flexible part?", answer: "TPU" },
+    { question: "Budget / basic use?", answer: "PLA" }
   ];
 
   const getBullet = (type) => {
     const base = "mt-1.5 flex-shrink-0 leading-none";
-    // Keep bullets subtle on dark backgrounds; emphasis stays in the text highlights.
     return (
       <span className={`${base} text-[10px] text-white/35`} aria-hidden="true">
         ⬢
@@ -81,12 +84,11 @@ export default function Features() {
   };
 
   return (
-    <section id="materials" className="w-full py-24 overflow-hidden relative">
-      <div id="features" className="sr-only" />
-      {/* Subtle warm divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-primary-500/20" />
-
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">
+      <Navbar />
+      <CartDrawer />
+      
+      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6 min-h-[60vh] overflow-hidden relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,16 +100,16 @@ export default function Features() {
             <Zap className="w-3.5 h-3.5" />
             Material Science
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">
-            Materials – Choose What Fits Your Use
-          </h2>
+          <h1 className="text-3xl md:text-5xl font-black text-fg mb-4">
+            Materials Guide
+          </h1>
           <p className="text-lg text-fg-muted max-w-2xl mx-auto">
-            Select the right material for your project based on your specific needs
+            Select the right material for your project based on your specific needs. Experience the difference in quality and durability.
           </p>
         </motion.div>
 
         {/* Materials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {materials.map((material, i) => (
             <motion.div
               key={i}
@@ -117,14 +119,24 @@ export default function Features() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               onHoverStart={() => setActiveCard(i)}
               onHoverEnd={() => setActiveCard(null)}
-              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-7 cursor-default overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary-500/30`}
+              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-0 flex flex-col md:flex-row cursor-default overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary-500/30 group`}
             >
-              {/* Background gradient */}
               <div className={`absolute inset-0 ${material.color} opacity-0 transition-opacity duration-300 ${activeCard === i ? 'opacity-100' : ''}`} />
+              
+              {/* Material Image */}
+              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted overflow-hidden">
+                <Image 
+                  src={material.image} 
+                  alt={material.name} 
+                  fill 
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
 
-              <div className="relative">
+              {/* Material Details */}
+              <div className="md:w-3/5 p-7 relative">
                 <h3 className="text-xl font-black text-fg mb-5 flex items-center gap-3">
-                  <span className="text-2xl">{material.emoji}</span>
                   <span>{material.name}</span>
                 </h3>
                 <ul className="space-y-3">
@@ -158,8 +170,7 @@ export default function Features() {
           className="relative rounded-sm border border-surface-border bg-surface-card/80 p-8 overflow-hidden"
         >
           <h3 className="text-2xl font-black text-fg mb-6 flex items-center gap-2 relative">
-            <span>💡</span>
-            <span>Quick Guide</span>
+            <span>Quick Reference Guide</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative">
@@ -171,16 +182,18 @@ export default function Features() {
                 viewport={{ once: false }}
                 transition={{ delay: 0.3 + i * 0.07 }}
                 whileHover={{ scale: 1.05, y: -4 }}
-                className="bg-surface-muted/60 p-4 rounded-sm border border-surface-border hover:border-primary-500/40 transition-all cursor-default group"
+                className="bg-surface-muted/60 p-5 rounded-sm border border-surface-border hover:border-primary-500/40 transition-all cursor-default group"
               >
-                <div className="text-2xl mb-2">{item.icon}</div>
-                <p className="text-sm font-bold text-fg mb-1.5 group-hover:text-primary-500 transition-colors">{item.question}</p>
-                <p className="text-accent-500 font-black text-sm">{item.answer}</p>
+                <p className="text-sm font-bold text-fg mb-2 group-hover:text-primary-500 transition-colors uppercase tracking-wider">{item.question}</p>
+                <div className="h-0.5 w-10 bg-surface-border mb-3 group-hover:bg-primary-500/40 transition-colors" />
+                <p className="text-primary-500 font-black text-lg">{item.answer}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
-      </div>
-    </section>
+      </main>
+      
+      <Footer />
+    </div>
   );
 }

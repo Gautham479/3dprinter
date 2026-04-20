@@ -64,6 +64,7 @@ export async function POST(request) {
     weight: String(formData.get('weight') || '').trim(),
     printTime: String(formData.get('printTime') || '').trim(),
     inStock: String(formData.get('inStock') || 'true') === 'true',
+    isFeatured: String(formData.get('isFeatured') || 'false') === 'true',
   };
 
   const imageFile = formData.get('imageFile');
@@ -132,6 +133,7 @@ export async function POST(request) {
         weight: body.weight || 'N/A',
         printTime: body.printTime || 'N/A',
         inStock: body.inStock !== false,
+        isFeatured: body.isFeatured,
       },
     });
 

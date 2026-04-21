@@ -18,8 +18,8 @@ export default function Materials() {
       points: [
         { content: <><strong className="text-fg">Smooth finish</strong> with a clean look</>, type: "normal" },
         { content: <>Great for <strong className="text-fg">prototypes</strong>, models, and display items</>, type: "normal" },
-        { content: <>Lightweight and <strong className="text-fg">accurate prints</strong></>, type: "normal" },
-        { content: <>Affordable and an easy choice for <strong className="text-fg">basic needs</strong></>, type: "tip" }
+        { content: <><strong className="text-fg">Lightweight</strong> and accurate prints</>, type: "normal" },
+        { content: <><strong className="text-fg">Affordable</strong> and an easy choice for basic needs</>, type: "tip" }
       ]
     },
     {
@@ -31,7 +31,7 @@ export default function Materials() {
       points: [
         { content: <>Strong and <strong className="text-fg">durable</strong> for everyday use</>, type: "normal" },
         { content: <><strong className="text-fg">Water-resistant</strong> and long-lasting</>, type: "positive" },
-        { content: <>Handles <strong className="text-fg">outdoor conditions</strong> and sunlight</>, type: "positive" },
+        { content: <>Handles <strong className="text-fg">outdoor conditions</strong> and <strong className="text-fg">sunlight</strong></>, type: "positive" },
         { content: <>Reliable for <strong className="text-fg">functional parts</strong> and enclosures</>, type: "tip" }
       ]
     },
@@ -57,19 +57,52 @@ export default function Materials() {
       points: [
         { content: <>Flexible with a <strong className="text-fg">rubber-like</strong> feel</>, type: "normal" },
         { content: <>Absorbs <strong className="text-fg">shock</strong> and vibration</>, type: "positive" },
-        { content: <>Ideal for <strong className="text-fg">seals</strong>, gaskets, bushings, and similar parts</>, type: "normal" },
-        { content: <>Great for <strong className="text-fg">grips</strong>, covers, and protective parts</>, type: "tip" }
+        { content: <>Ideal for <strong className="text-fg">seals</strong>, <strong className="text-fg">gaskets</strong>, <strong className="text-fg">bushings</strong>, and similar parts</>, type: "normal" },
+        { content: <>Great for <strong className="text-fg">grips</strong>, <strong className="text-fg">covers</strong>, and <strong className="text-fg">protective parts</strong></>, type: "tip" }
       ]
     }
   ];
 
   const quickGuide = [
-    { question: "Outdoor / Sun use?", answer: "PETG or ABS" },
-    { question: "High heat?", answer: "ABS" },
-    { question: "Electrical use?", answer: "PETG or ABS" },
-    { question: "Flexible part?", answer: "TPU" },
-    { question: "Budget / basic use?", answer: "PLA" }
+    { question: "☀️ Outdoor / Sun use?", answer: "PETG or ABS", theme: "yellow" },
+    { question: "🔥 High heat?", answer: "ABS", theme: "red" },
+    { question: "⚡ Electrical use?", answer: "PETG or ABS", theme: "blue" },
+    { question: "🛡️ Flexible part?", answer: "TPU", theme: "indigo" },
+    { question: "💰 Budget / basic use?", answer: "PLA", theme: "emerald" }
   ];
+
+  const colorMap = {
+    yellow: {
+      wrapper: "hover:bg-amber-500/20 hover:shadow-amber-500/20 hover:border-amber-500",
+      title: "group-hover:text-amber-500",
+      line: "group-hover:bg-amber-500/80",
+      answer: "group-hover:text-amber-400"
+    },
+    red: {
+      wrapper: "hover:bg-red-500/20 hover:shadow-red-500/20 hover:border-red-500",
+      title: "group-hover:text-red-500",
+      line: "group-hover:bg-red-500/80",
+      answer: "group-hover:text-red-400"
+    },
+    blue: {
+      wrapper: "hover:bg-blue-500/20 hover:shadow-blue-500/20 hover:border-blue-500",
+      title: "group-hover:text-blue-500",
+      line: "group-hover:bg-blue-500/80",
+      answer: "group-hover:text-blue-400"
+    },
+    indigo: {
+      wrapper: "hover:bg-indigo-500/20 hover:shadow-indigo-500/20 hover:border-indigo-500",
+      title: "group-hover:text-indigo-500",
+      line: "group-hover:bg-indigo-500/80",
+      answer: "group-hover:text-indigo-400"
+    },
+    emerald: {
+      wrapper: "hover:bg-emerald-500/20 hover:shadow-emerald-500/20 hover:border-emerald-500",
+      title: "group-hover:text-emerald-500",
+      line: "group-hover:bg-emerald-500/80",
+      answer: "group-hover:text-emerald-400"
+    }
+  };
 
   const getBullet = (type) => {
     const base = "mt-1.5 flex-shrink-0 leading-none";
@@ -178,11 +211,11 @@ export default function Materials() {
                 viewport={{ once: false }}
                 transition={{ delay: 0.3 + i * 0.07 }}
                 whileHover={{ scale: 1.05, y: -4 }}
-                className="bg-surface-muted/60 p-5 rounded-sm border border-surface-border hover:border-primary-500/40 transition-all cursor-default group"
+                className={`bg-surface-muted/60 hover:shadow-xl p-5 rounded-sm border border-surface-border transition-all duration-300 cursor-default group ${colorMap[item.theme].wrapper}`}
               >
-                <p className="text-sm font-bold text-fg mb-2 group-hover:text-primary-500 transition-colors uppercase tracking-wider">{item.question}</p>
-                <div className="h-0.5 w-10 bg-surface-border mb-3 group-hover:bg-primary-500/40 transition-colors" />
-                <p className="text-primary-500 font-black text-lg">{item.answer}</p>
+                <p className={`text-sm font-bold text-fg mb-2 transition-colors uppercase tracking-wider ${colorMap[item.theme].title}`}>{item.question}</p>
+                <div className={`h-0.5 w-10 bg-surface-border mb-3 transition-colors ${colorMap[item.theme].line}`} />
+                <p className={`text-primary-500 font-black text-lg transition-colors ${colorMap[item.theme].answer}`}>{item.answer}</p>
               </motion.div>
             ))}
           </div>

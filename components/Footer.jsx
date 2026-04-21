@@ -28,10 +28,25 @@ export default function Footer() {
               className="flex items-center gap-2.5 mb-5"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="relative w-10 h-10 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-sm bg-primary-500/15" />
-                <div className="absolute inset-0 rounded-sm border border-primary-500/30" />
-                <span className="text-xl relative z-10">🖨️</span>
+              <div className="relative flex items-center justify-center p-1">
+                {/* Custom 3D Printer Logo */}
+                <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9 text-primary-500">
+                  {/* Bed Plate */}
+                  <rect x="48" y="416" width="416" height="48" rx="24" />
+                  
+                  {/* Letter 3 */}
+                  <path d="M120 200 A 50 50 0 0 1 160 260 A 50 50 0 0 1 120 320" />
+                  <path d="M100 200 H160" />
+                  
+                  {/* Letter D */}
+                  <path d="M256 200 v120" />
+                  <path d="M256 200 C360 200 360 320 256 320" />
+                  
+                  {/* Printer Rail and Extruder */}
+                  <path d="M80 80 h350" />
+                  <rect x="200" y="48" width="112" height="64" rx="12" />
+                  <path d="M256 112 v40 L 256 200" strokeDasharray="16 16" />
+                </svg>
               </div>
               <span className="font-black text-xl tracking-tight text-fg">
                 Mahashri<span className="text-primary-500">Lab</span>
@@ -60,7 +75,6 @@ export default function Footer() {
               {[
                 { label: 'About Us', path: '/about' },
                 { label: 'Contact', path: '/contact' },
-                { label: 'Careers', path: '#' },
               ].map((item) => (
                 <li key={item.label}>
                   <button

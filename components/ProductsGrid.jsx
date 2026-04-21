@@ -181,9 +181,10 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
         : '/api/products?includeOutOfStock=1';
       const response = await fetch(url);
       const data = await response.json().catch(() => []);
-      setLocalProducts(data);
-      if (!featuredOnly && Array.isArray(data)) {
-        setProducts(data);
+      const productsArray = Array.isArray(data) ? data : [];
+      setLocalProducts(productsArray);
+      if (!featuredOnly) {
+        setProducts(productsArray);
       }
       setLoading(false);
     };

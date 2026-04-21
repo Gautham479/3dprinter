@@ -24,20 +24,36 @@ const EMPTY_FORM = {
 };
 
 const COLOR_PRESETS = [
-  { name: 'Black', hex: '#111111' },
-  { name: 'White', hex: '#ffffff' },
-  { name: 'Grey', hex: '#6b7280' },
-  { name: 'Red', hex: '#ef4444' },
-  { name: 'Blue', hex: '#3b82f6' },
-  { name: 'Green', hex: '#22c55e' },
-  { name: 'Yellow', hex: '#eab308' },
-  { name: 'Orange', hex: '#f97316' },
-  { name: 'Purple', hex: '#a855f7' },
-  { name: 'Pink', hex: '#ec4899' },
-  { name: 'Brown', hex: '#8b4513' },
-  { name: 'Gold', hex: '#ffd700' },
-  { name: 'Silver', hex: '#c0c0c0' },
-  { name: 'Clear', hex: '#e2e8f0' },
+  // Grayscale
+  { name: 'Pure White', hex: '#ffffff' }, { name: 'Off White', hex: '#f8fafc' },
+  { name: 'Light Grey', hex: '#cbd5e1' }, { name: 'Cool Grey', hex: '#64748b' },
+  { name: 'Dark Grey', hex: '#334155' }, { name: 'Matte Black', hex: '#1e293b' },
+  { name: 'Pure Black', hex: '#000000' },
+  // Reds & Pinks
+  { name: 'Cherry Red', hex: '#dc2626' }, { name: 'Crimson', hex: '#991b1b' },
+  { name: 'Coral', hex: '#f87171' }, { name: 'Hot Pink', hex: '#db2777' },
+  { name: 'Soft Pink', hex: '#fbcfe8' }, { name: 'Magenta', hex: '#d946ef' },
+  // Oranges & Browns
+  { name: 'Bright Orange', hex: '#f97316' }, { name: 'Burnt Orange', hex: '#c2410c' },
+  { name: 'Peach', hex: '#fdba74' }, { name: 'Wood Brown', hex: '#78350f' },
+  { name: 'Desert Sand', hex: '#d97706' }, { name: 'Beige', hex: '#fef3c7' },
+  // Yellows
+  { name: 'Lemon Yellow', hex: '#fde047' }, { name: 'Sunflower', hex: '#eab308' },
+  { name: 'Gold', hex: '#ca8a04' },
+  // Greens
+  { name: 'Lime Green', hex: '#84cc16' }, { name: 'Kelly Green', hex: '#22c55e' },
+  { name: 'Forest Green', hex: '#15803d' }, { name: 'Mint', hex: '#a7f3d0' },
+  { name: 'Olive', hex: '#4d7c0f' }, { name: 'Teal', hex: '#14b8a6' },
+  // Blues
+  { name: 'Sky Blue', hex: '#7dd3fc' }, { name: 'Ocean Blue', hex: '#0ea5e9' },
+  { name: 'Royal Blue', hex: '#2563eb' }, { name: 'Navy Blue', hex: '#1e3a8a' },
+  { name: 'Indigo', hex: '#4f46e5' }, { name: 'Ice Blue', hex: '#e0f2fe' },
+  // Purples
+  { name: 'Lavender', hex: '#d8b4fe' }, { name: 'Amethyst', hex: '#a855f7' },
+  { name: 'Deep Purple', hex: '#7e22ce' }, { name: 'Plum', hex: '#4c1d95' },
+  // Specials
+  { name: 'Silver Silk', hex: '#94a3b8' }, { name: 'Copper', hex: '#b45309' },
+  { name: 'Bronze', hex: '#92400e' }, { name: 'Translucent', hex: '#e2e8f0' }
 ];
 
 export default function AdminDashboardPage() {
@@ -147,7 +163,12 @@ export default function AdminDashboardPage() {
 
       setColorForm(prev => ({ ...prev, name: '', hex: '#111111' }));
     } else {
-      setError('Failed to add color. Please try again.');
+      let errorMsg = 'Failed to add color. Please try again.';
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMsg = errorData.error;
+      } catch (e) {}
+      setError(errorMsg);
     }
     setSavingColor(false);
   };

@@ -28,6 +28,7 @@ export async function POST(request) {
 
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create color.' }, { status: 500 });
+    console.error("Error creating color:", error);
+    return NextResponse.json({ error: 'Failed to create color: ' + (error.message || error.toString()) }, { status: 500 });
   }
 }

@@ -11,27 +11,27 @@ export default function HowItWorks() {
       title: "1. Upload Your Design",
       desc: "Drop your STL or OBJ files into our quoter to get an instant, AI-driven price.",
       color: "bg-accent-500/15",
-      borderColor: "border-accent-500/25",
       iconColor: "text-accent-500",
       number: "01",
+      shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
     },
     {
       icon: <CheckCircle className="w-8 h-8" />,
       title: "2. Configure & Order",
       desc: "Select your desired material, color, and strength. Add to cart and check out seamlessly.",
       color: "bg-accent-500/15",
-      borderColor: "border-accent-500/25",
       iconColor: "text-accent-500",
       number: "02",
+      shape: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)", // Octagon
     },
     {
       icon: <Package className="w-8 h-8" />,
       title: "3. Receive Your Parts",
       desc: "We print, perform quality control, and ship your parts directly to your door.",
       color: "bg-amber-600/15",
-      borderColor: "border-amber-600/25",
       iconColor: "text-amber-700",
       number: "03",
+      shape: "polygon(50% 0%, 65% 18%, 95% 25%, 82% 50%, 95% 75%, 65% 82%, 50% 100%, 35% 82%, 5% 75%, 18% 50%, 5% 25%, 35% 18%)", // Flower
     }
   ];
 
@@ -76,19 +76,15 @@ export default function HowItWorks() {
               transition={{ duration: 0.6, delay: i * 0.2 }}
               className="flex flex-col items-center text-center relative z-10 group"
             >
-              {/* Step number background */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-[80px] font-black text-surface-border/30 select-none pointer-events-none leading-none">
-                {step.number}
-              </div>
-
-              {/* Icon circle */}
+              {/* Icon shape */}
               <motion.div
-                whileHover={{ scale: 1.1, rotate: 3 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                className={`relative w-24 h-24 rounded-sm flex items-center justify-center mb-6 shadow-lg border ${step.borderColor} bg-surface-card overflow-hidden`}
+                className="relative w-28 h-28 flex items-center justify-center mb-6 bg-surface-muted/40 transition-all hover:bg-surface-muted/60"
+                style={{ clipPath: step.shape }}
               >
                 {/* Gradient background */}
-                <div className={`absolute inset-0 ${step.color} opacity-60 group-hover:opacity-100 transition-opacity`} />
+                <div className={`absolute inset-0 ${step.color} opacity-40 group-hover:opacity-100 transition-opacity`} />
 
                 <div className={`relative z-10 ${step.iconColor}`}>
                   {step.icon}

@@ -6,6 +6,7 @@ export const useStore = create((set) => ({
   selectedFile: null,
   config: {
     material: 'PLA',
+    plaFinish: 'Basic',
     color: 'Black',
     colorMode: 'Single Color',
     quality: 'Standard (0.2mm)',

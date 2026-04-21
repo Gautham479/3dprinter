@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Zap, Box, Palette, Layers, ShoppingCart, UploadCloud, Sliders } from 'lucide-react';
+import { Zap, Box, Palette, Layers, ShoppingCart, UploadCloud, Sliders, Sparkles } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
 
@@ -89,6 +89,33 @@ export default function ConfigPanel() {
             ))}
           </div>
         </div>
+
+        {/* PLA Finish (Only for PLA) */}
+        {config.material === 'PLA' && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="space-y-3"
+          >
+            <label className="flex items-center gap-2 text-sm font-black text-fg">
+              <Sparkles className="w-4 h-4 text-primary-500" /> Finish Type
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {['Basic', 'Matt'].map((finish) => (
+                <button
+                  key={finish}
+                  onClick={() => setConfig({ plaFinish: finish })}
+                  className={`py-2.5 px-3 rounded-sm text-sm font-bold border transition-all ${config.plaFinish === finish
+                      ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
+                      : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
+                    }`}
+                >
+                  {finish}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Color Mode */}
         <div className="space-y-3">

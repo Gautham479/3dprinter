@@ -180,26 +180,32 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {navLinks.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => link.path ? router.push(link.path) : scrollTo(link.id)}
-                  className={`relative px-4 py-2 rounded-sm transition-all duration-200 ${activeSection === link.id
-                      ? 'text-primary-500'
-                      : 'text-fg-muted hover:text-fg hover:bg-surface-muted/50'
-                    }`}
-                >
-                  {activeSection === link.id && (
-                    <motion.div
-                      layoutId="navActive"
-                      className="absolute inset-0 rounded-sm bg-primary-500/10 border border-primary-500/20"
-                      initial={false}
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{link.label}</span>
-                </button>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = link.path 
+                  ? pathname === link.path || pathname.startsWith(`${link.path}/`) 
+                  : pathname === '/' && activeSection === link.id;
+
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => link.path ? router.push(link.path) : scrollTo(link.id)}
+                    className={`relative px-4 py-2 rounded-sm transition-all duration-200 ${isActive
+                        ? 'text-primary-500'
+                        : 'text-fg-muted hover:text-fg hover:bg-surface-muted/50'
+                      }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="navActive"
+                        className="absolute inset-0 rounded-sm bg-primary-500/10 border border-primary-500/20"
+                        initial={false}
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{link.label}</span>
+                  </button>
+                );
+              })}
 
               {/* Legal Dropdown */}
               <div

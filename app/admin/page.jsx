@@ -23,6 +23,23 @@ const EMPTY_FORM = {
   isFeatured: false,
 };
 
+const COLOR_PRESETS = [
+  { name: 'Black', hex: '#111111' },
+  { name: 'White', hex: '#ffffff' },
+  { name: 'Grey', hex: '#6b7280' },
+  { name: 'Red', hex: '#ef4444' },
+  { name: 'Blue', hex: '#3b82f6' },
+  { name: 'Green', hex: '#22c55e' },
+  { name: 'Yellow', hex: '#eab308' },
+  { name: 'Orange', hex: '#f97316' },
+  { name: 'Purple', hex: '#a855f7' },
+  { name: 'Pink', hex: '#ec4899' },
+  { name: 'Brown', hex: '#8b4513' },
+  { name: 'Gold', hex: '#ffd700' },
+  { name: 'Silver', hex: '#c0c0c0' },
+  { name: 'Clear', hex: '#e2e8f0' },
+];
+
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]);
@@ -39,6 +56,8 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [recentColors, setRecentColors] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
@@ -93,15 +112,42 @@ export default function AdminDashboardPage() {
 
   const handleCreateColor = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+
+    if (!colorForm.name || !colorForm.hex || !colorForm.material) {
+      setError('Please fill all fields');
+      return;
+    }
+    
+    // Check duplicates
+    const isDuplicate = colors.some(c => c.name.toLowerCase() === colorForm.name.toLowerCase() && c.material === colorForm.material);
+    if (isDuplicate) {
+      setError(`Color "${colorForm.name}" already exists in ${colorForm.material}`);
+      return;
+    }
+
     setSavingColor(true);
     const response = await fetch('/api/admin/colors', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(colorForm),
     });
+    
     if (response.ok) {
       await fetchColors();
-      setColorForm({ name: '', hex: '#111111', material: 'PLA' });
+      
+      setSuccessMessage(`Color "${colorForm.name}" added to ${colorForm.material}!`);
+      setTimeout(() => setSuccessMessage(''), 3000);
+      
+      setRecentColors(prev => {
+        const newRecent = [{name: colorForm.name, hex: colorForm.hex}, ...prev.filter(c => c.name !== colorForm.name || c.hex !== colorForm.hex)].slice(0, 5);
+        return newRecent;
+      });
+
+      setColorForm(prev => ({ ...prev, name: '', hex: '#111111' }));
+    } else {
+      setError('Failed to add color. Please try again.');
     }
     setSavingColor(false);
   };
@@ -856,38 +902,104 @@ export default function AdminDashboardPage() {
                   Colors Manager
                 </h2>
                 
-                <form onSubmit={handleCreateColor} className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8 bg-surface-muted/30 p-4 border border-surface-border/60 rounded-sm">
-                  <input className={inputClass} placeholder="Color Name (e.g. Matte Black)" value={colorForm.name} onChange={(e) => setColorForm(prev => ({ ...prev, name: e.target.value }))} required />
-                  <div className="flex items-center gap-2">
-                    <input type="color" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} className="h-10 w-10 rounded-sm cursor-pointer border border-surface-border bg-surface-card p-0.5" />
-                    <input className={inputClass} placeholder="Hex" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} required />
+                {/* Preset Palette */}
+                <div className="mb-6">
+                  <p className="text-xs text-fg-muted font-bold uppercase tracking-wider mb-3">Preset Palette</p>
+                  <div className="flex flex-wrap gap-2">
+                    {COLOR_PRESETS.map(preset => (
+                      <button
+                        key={preset.name}
+                        type="button"
+                        onClick={() => setColorForm(prev => ({ ...prev, name: preset.name, hex: preset.hex }))}
+                        className="w-8 h-8 rounded-full border border-surface-border hover:scale-110 transition-transform shadow-sm relative group"
+                        style={{ backgroundColor: preset.hex }}
+                        title={preset.name}
+                      >
+                        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-bg text-fg text-[10px] px-2 py-1 rounded-sm opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity border border-surface-border z-10">
+                          {preset.name}
+                        </span>
+                      </button>
+                    ))}
                   </div>
-                  <select className={inputClass} value={colorForm.material} onChange={(e) => setColorForm(prev => ({ ...prev, material: e.target.value }))}>
-                    {MATERIAL_TYPES.map(mat => <option key={mat} value={mat}>{mat}</option>)}
-                  </select>
-                  <button type="submit" disabled={savingColor} className="btn-glow bg-purple-500 hover:bg-purple-600 text-[var(--app-cta-contrast)] font-black rounded-sm px-4 py-2 transition-all">
-                    {savingColor ? 'Adding...' : 'Add Color'}
-                  </button>
+                </div>
+
+                {recentColors.length > 0 && (
+                  <div className="mb-6 pb-6 border-b border-surface-border/50">
+                    <p className="text-xs text-fg-muted font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
+                      Recently Added <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded-sm">Click to reuse</span>
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {recentColors.map((recent, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setColorForm(prev => ({ ...prev, name: recent.name, hex: recent.hex }))}
+                          className="flex items-center gap-2 bg-surface-muted/30 hover:bg-surface-muted/60 border border-surface-border px-3 py-1.5 rounded-sm transition-colors"
+                        >
+                          <div className="w-3 h-3 rounded-full border border-surface-border/50" style={{ backgroundColor: recent.hex }} />
+                          <span className="text-xs text-fg font-bold">{recent.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {error && <p className="text-red-400 text-sm mb-4 bg-red-500/10 border border-red-500/20 rounded-sm px-4 py-3">{error}</p>}
+                {successMessage && <p className="text-green-400 text-sm mb-4 bg-green-500/10 border border-green-500/20 rounded-sm px-4 py-3 flex items-center gap-2"><CheckCircle className="w-4 h-4" />{successMessage}</p>}
+
+                <form onSubmit={handleCreateColor} className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-8 bg-surface-muted/30 p-5 border border-surface-border/60 rounded-sm relative">
+                  <div className="md:col-span-3">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Color Name</label>
+                    <input className={inputClass} placeholder="e.g. Matte Black" value={colorForm.name} onChange={(e) => setColorForm(prev => ({ ...prev, name: e.target.value }))} required />
+                  </div>
+                  <div className="md:col-span-3">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">HEX / Picker</label>
+                    <div className="flex items-center gap-2">
+                      <div className="relative shrink-0">
+                        <input type="color" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} className="absolute inset-0 opacity-0 w-full h-full cursor-pointer" />
+                        <div className="h-10 w-10 rounded-full border-2 border-surface-border bg-surface-card p-0.5 shadow-md flex items-center justify-center transition-colors hover:border-purple-500">
+                          <div className="w-full h-full rounded-full" style={{ backgroundColor: colorForm.hex }} />
+                        </div>
+                      </div>
+                      <input className={`${inputClass} uppercase`} placeholder="#000000" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} required pattern="^#[0-9A-Fa-f]{6}$" title="Must be a valid HEX color (e.g., #FF0000)" />
+                    </div>
+                  </div>
+                  <div className="md:col-span-3">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Category</label>
+                    <select className={inputClass} value={colorForm.material} onChange={(e) => setColorForm(prev => ({ ...prev, material: e.target.value }))}>
+                      {MATERIAL_TYPES.map(mat => <option key={mat} value={mat}>{mat}</option>)}
+                    </select>
+                  </div>
+                  <div className="md:col-span-3 flex items-end">
+                    <button type="submit" disabled={savingColor} className="w-full btn-glow bg-purple-500 hover:bg-purple-600 text-[var(--app-cta-contrast)] font-black rounded-sm px-4 h-10 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                      {savingColor ? 'Adding...' : <><Plus className="w-4 h-4" /> Add Color</>}
+                    </button>
+                  </div>
                 </form>
 
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {MATERIAL_TYPES.map(mat => {
                     const materialColors = colors.filter(c => c.material === mat);
+                    const isSelected = colorForm.material === mat;
                     return (
-                      <div key={mat}>
-                        <h3 className="text-lg font-bold text-fg mb-3">{mat} Colors</h3>
+                      <div key={mat} className={`p-5 rounded-sm border transition-all duration-300 ${isSelected ? 'border-purple-500/50 bg-purple-500/5' : 'border-surface-border bg-surface-muted/10'}`}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <h3 className={`text-lg font-black ${isSelected ? 'text-purple-500' : 'text-fg'}`}>{mat} Colors</h3>
+                          <span className="bg-surface-border/60 text-fg-subtle px-2 py-0.5 rounded-sm text-xs font-bold">{materialColors.length} items</span>
+                        </div>
                         {materialColors.length === 0 ? (
-                          <p className="text-sm text-fg-muted mb-4">No colors added for {mat} yet.</p>
+                          <p className="text-sm text-fg-muted italic">No colors added for {mat} yet.</p>
                         ) : (
-                          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                             {materialColors.map(color => (
-                              <div key={color.id} className="relative flex flex-col items-center gap-2 p-3 border border-surface-border/60 bg-surface-muted/30 rounded-sm group">
-                                <div className="w-8 h-8 rounded-full border border-surface-border shadow-md" style={{ backgroundColor: color.hex }} />
-                                <span className="text-xs font-bold text-fg text-center">{color.name}</span>
+                              <div key={color.id} className="relative flex flex-col items-center gap-2 p-4 border border-surface-border/60 bg-surface-card shadow-sm hover:shadow-md hover:border-purple-500/40 rounded-sm group transition-all">
+                                <div className="w-10 h-10 rounded-full border border-surface-border shadow-sm group-hover:scale-110 transition-transform" style={{ backgroundColor: color.hex }} />
+                                <span className="text-xs font-bold text-fg text-center mt-1 truncate w-full" title={color.name}>{color.name}</span>
                                 <span className="text-[10px] text-fg-muted uppercase">{color.hex}</span>
                                 <button
                                   onClick={() => handleDeleteColor(color.id)}
-                                  className="absolute top-1 right-1 p-1 bg-red-500/80 hover:bg-red-500 text-[var(--app-cta-contrast)] rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="absolute top-2 right-2 p-1.5 bg-red-500/90 hover:bg-red-500 text-[var(--app-cta-contrast)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
+                                  title="Delete color"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>

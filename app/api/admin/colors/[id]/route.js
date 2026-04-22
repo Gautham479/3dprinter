@@ -15,12 +15,14 @@ export async function DELETE(request, { params }) {
   if (unauthorized) return unauthorized;
 
   try {
-    const id = params.id;
+    const { id } = await params;
+    console.log("Attempting to delete color with ID:", id);
     await prisma.filamentColor.delete({
       where: { id },
     });
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete color.' }, { status: 500 });
+    console.error("Error deleting color:", error);
+    return NextResponse.json({ error: 'Failed to delete color: ' + (error.message || error.toString()) }, { status: 500 });
   }
 }

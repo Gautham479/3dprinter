@@ -119,7 +119,7 @@ export default function AdminDashboardPage() {
   };
 
   const fetchColors = async () => {
-    const response = await fetch('/api/colors');
+    const response = await fetch('/api/colors', { cache: 'no-store' });
     if (response.ok) {
       const data = await response.json();
       setColors(data);
@@ -178,6 +178,14 @@ export default function AdminDashboardPage() {
     const response = await fetch(`/api/admin/colors/${id}`, { method: 'DELETE' });
     if (response.ok) {
       await fetchColors();
+    } else {
+      let errorMsg = 'Failed to delete color.';
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMsg = errorData.error;
+      } catch (e) {}
+      setError(errorMsg);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 

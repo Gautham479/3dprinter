@@ -101,7 +101,7 @@ export default function ConfigPanel() {
               <Sparkles className="w-4 h-4 text-primary-500" /> Finish Type
             </label>
             <div className="grid grid-cols-2 gap-2">
-              {['Basic', 'Matt'].map((finish) => (
+              {['Basic', 'Matte'].map((finish) => (
                 <button
                   key={finish}
                   onClick={() => setConfig({ plaFinish: finish })}

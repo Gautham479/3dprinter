@@ -22,7 +22,7 @@ export default function HowItWorks() {
       color: "bg-accent-500/15",
       iconColor: "text-accent-500",
       number: "02",
-      shape: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)", // Octagon
+      shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
     },
     {
       icon: <Package className="w-8 h-8" />,
@@ -80,7 +80,7 @@ export default function HowItWorks() {
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                className="relative w-28 h-28 flex items-center justify-center mb-6 bg-surface-muted/40 transition-all hover:bg-surface-muted/60"
+                className="relative w-28 h-28 flex items-center justify-center mb-6 bg-surface-bg transition-all"
                 style={{ clipPath: step.shape }}
               >
                 {/* Gradient background */}

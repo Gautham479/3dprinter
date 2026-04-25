@@ -57,7 +57,7 @@ export default function Home() {
       </section>
 
       {/* Hero Section */}
-      <section id="hero" className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-8 sm:pt-4 sm:pb-10">
+      <section id="hero" className="w-full">
         <Hero />
       </section>
 

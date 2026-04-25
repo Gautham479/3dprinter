@@ -302,15 +302,31 @@ export default function ProductPage() {
                 </div>
 
                 {colorMode === 'Single Color' && (
-                  <select
-                    value={singleColor}
-                    onChange={(e) => setSingleColor(e.target.value)}
-                    className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-4 py-3 text-fg text-sm focus:outline-none focus:border-primary-500"
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="space-y-2 mt-2"
                   >
-                    {AVAILABLE_COLORS.map((color) => (
-                      <option key={color.name} value={color.name}>{color.name}</option>
-                    ))}
-                  </select>
+                    <div className="flex gap-2 flex-wrap">
+                      {AVAILABLE_COLORS.map((color) => (
+                        <button
+                          key={color.name}
+                          type="button"
+                          title={color.name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSingleColor(color.name);
+                          }}
+                          className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
+                              ? 'border-primary-500 scale-110 shadow-md'
+                              : 'border-surface-border hover:border-primary-500/50'
+                            }`}
+                          style={{ backgroundColor: color.hex }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
+                  </motion.div>
                 )}
               </div>
             </div>

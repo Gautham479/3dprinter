@@ -16,14 +16,14 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { name, hex, material } = body;
+    const { name, hex, material, colorType } = body;
 
     if (!name || !hex || !material) {
       return NextResponse.json({ error: 'Name, hex, and material are required.' }, { status: 400 });
     }
 
     const created = await prisma.filamentColor.create({
-      data: { name, hex, material },
+      data: { name, hex, material, colorType: colorType || 'Basic' },
     });
 
     return NextResponse.json(created, { status: 201 });
@@ -32,3 +32,4 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Failed to create color: ' + (error.message || error.toString()) }, { status: 500 });
   }
 }
+

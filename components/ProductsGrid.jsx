@@ -85,7 +85,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
               <span className="text-primary-500 font-black ml-3 text-sm">₹{product.price}</span>
             </div>
 
-            <p className="text-fg-muted text-sm mb-4 flex-grow line-clamp-2 leading-relaxed">{product.description}</p>
+            <p className="text-fg-muted text-sm mb-4 flex-grow line-clamp-2 leading-relaxed">{product.fullDescription}</p>
 
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="px-2 py-1 bg-primary-500/10 rounded-sm text-xs text-primary-500 font-bold border border-primary-500/20">
@@ -199,7 +199,7 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     const queryMatches =
       normalizedQuery.length === 0 ||
       product.name.toLowerCase().includes(normalizedQuery) ||
-      product.description.toLowerCase().includes(normalizedQuery) ||
+      (product.fullDescription?.toLowerCase() || '').includes(normalizedQuery) ||
       product.type.toLowerCase().includes(normalizedQuery);
     return typeMatches && queryMatches;
   });

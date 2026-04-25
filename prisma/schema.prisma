@@ -16,8 +16,7 @@ model Product {
   id              String   @id @default(cuid())
   slug            String   @unique
   name            String
-  description     String
-  fullDescription String
+  fullDescription String?
   material        String
   price           Int
   image           String
@@ -86,6 +85,7 @@ model FilamentColor {
   name      String
   hex       String
   material  String
+  colorType String   @default("Basic")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

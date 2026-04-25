@@ -51,7 +51,6 @@ export async function POST(request) {
   const body = {
     name: String(formData.get('name') || '').trim(),
     slug: String(formData.get('slug') || '').trim(),
-    description: String(formData.get('description') || '').trim(),
     fullDescription: String(formData.get('fullDescription') || '').trim(),
     material: String(formData.get('material') || '').trim(),
     price: String(formData.get('price') || '').trim(),
@@ -67,7 +66,7 @@ export async function POST(request) {
   const imageFile = formData.get('imageFile');
   const imageFiles = formData.getAll('imageFiles');
 
-  const requiredFields = ['name', 'description', 'fullDescription', 'material', 'price', 'type'];
+  const requiredFields = ['name', 'material', 'price', 'type'];
   for (const field of requiredFields) {
     if (!body[field]) {
       return NextResponse.json({ error: `${field} is required` }, { status: 400 });
@@ -118,7 +117,6 @@ export async function POST(request) {
       data: {
         slug,
         name: body.name.trim(),
-        description: body.description.trim(),
         fullDescription: body.fullDescription.trim(),
         material: body.material,
         price,

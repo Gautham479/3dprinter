@@ -9,7 +9,6 @@ import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCir
 const EMPTY_FORM = {
   name: '',
   slug: '',
-  description: '',
   fullDescription: '',
   material: 'PLA',
   price: '',
@@ -61,7 +60,7 @@ export default function AdminDashboardPage() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [colors, setColors] = useState([]);
-  const [colorForm, setColorForm] = useState({ name: '', hex: '#111111', material: 'PLA' });
+  const [colorForm, setColorForm] = useState({ name: '', hex: '#111111', material: 'PLA', colorType: 'Basic' });
   const [savingColor, setSavingColor] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [imageFile, setImageFile] = useState(null);
@@ -202,7 +201,7 @@ export default function AdminDashboardPage() {
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
       return (p.name?.toLowerCase() || '').includes(q) ||
-        (p.description?.toLowerCase() || '').includes(q) ||
+        (p.fullDescription?.toLowerCase() || '').includes(q) ||
         (p.type?.toLowerCase() || '').includes(q) ||
         (p.material?.toLowerCase() || '').includes(q);
     }).sort((a, b) => {
@@ -282,7 +281,6 @@ export default function AdminDashboardPage() {
     const payload = new FormData();
     payload.set('name', form.name);
     payload.set('slug', form.slug);
-    payload.set('description', form.description);
     payload.set('fullDescription', form.fullDescription);
     payload.set('material', form.material);
     payload.set('price', String(Number(form.price)));
@@ -526,8 +524,7 @@ export default function AdminDashboardPage() {
                 <form onSubmit={handleCreateProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input className={inputClass} placeholder="Name" value={form.name} onChange={(e) => updateField('name', e.target.value)} required />
                   <input className={inputClass} placeholder="Slug (optional)" value={form.slug} onChange={(e) => updateField('slug', e.target.value)} />
-                  <input className={`${inputClass} md:col-span-2`} placeholder="Short description" value={form.description} onChange={(e) => updateField('description', e.target.value)} required />
-                  <textarea className={`${inputClass} md:col-span-2 min-h-24 resize-none`} placeholder="Full description" value={form.fullDescription} onChange={(e) => updateField('fullDescription', e.target.value)} required />
+                  <textarea className={`${inputClass} md:col-span-2 min-h-24 resize-none`} placeholder="Full description" value={form.fullDescription} onChange={(e) => updateField('fullDescription', e.target.value)} />
                   <select className={inputClass} value={form.type} onChange={(e) => updateField('type', e.target.value)}>
                     {PRODUCT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
                   </select>
@@ -668,9 +665,44 @@ export default function AdminDashboardPage() {
                                 onChange={() => toggleSelect(product.id)}
                                 className="mt-1 w-4 h-4 cursor-pointer accent-primary-500"
                               />
-                              <div>
-                                <p className="font-black text-fg">{product.name}</p>
-                                <p className="text-sm text-fg-muted">{product.type} | {product.material} | ₹{product.price}</p>
+                              <div className="flex flex-col gap-1">
+                                <input
+                                  key={`name-${product.id}-${product.name}`}
+                                  type="text"
+                                  defaultValue={product.name}
+                                  onBlur={async (e) => {
+                                    const val = e.target.value.trim();
+                                    if (val && val !== product.name) {
+                                      await fetch(`/api/admin/products/${product.id}`, {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ name: val }),
+                                      });
+                                      fetchProducts();
+                                    }
+                                  }}
+                                  className="font-black text-fg bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all w-[250px]"
+                                />
+                                <div className="text-sm text-fg-muted flex items-center gap-1">
+                                  <span>{product.type} | {product.material} | ₹</span>
+                                  <input
+                                    key={`price-${product.id}-${product.price}`}
+                                    type="number"
+                                    defaultValue={product.price}
+                                    onBlur={async (e) => {
+                                      const val = Number(e.target.value);
+                                      if (!isNaN(val) && val !== product.price && val >= 0) {
+                                        await fetch(`/api/admin/products/${product.id}`, {
+                                          method: 'PATCH',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ price: val }),
+                                        });
+                                        fetchProducts();
+                                      }
+                                    }}
+                                    className="w-20 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all"
+                                  />
+                                </div>
                               </div>
                             </div>
                             <div className="flex flex-wrap items-center gap-2">
@@ -993,13 +1025,23 @@ export default function AdminDashboardPage() {
                       <input className={`${inputClass} uppercase`} placeholder="#000000" value={colorForm.hex} onChange={(e) => setColorForm(prev => ({ ...prev, hex: e.target.value }))} required pattern="^#[0-9A-Fa-f]{6}$" title="Must be a valid HEX color (e.g., #FF0000)" />
                     </div>
                   </div>
-                  <div className="md:col-span-3">
+                  <div className="md:col-span-2">
                     <label className="block text-xs text-fg-muted font-bold mb-1.5">Category</label>
                     <select className={inputClass} value={colorForm.material} onChange={(e) => setColorForm(prev => ({ ...prev, material: e.target.value }))}>
                       {MATERIAL_TYPES.map(mat => <option key={mat} value={mat}>{mat}</option>)}
                     </select>
                   </div>
-                  <div className="md:col-span-3 flex items-end">
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Color Type</label>
+                    <select className={inputClass} value={colorForm.colorType} onChange={(e) => setColorForm(prev => ({ ...prev, colorType: e.target.value }))}>
+                      <option value="Basic">Basic</option>
+                      <option value="Matte">Matte</option>
+                      <option value="Silk">Silk</option>
+                      <option value="Translucent">Translucent</option>
+                      <option value="Special">Special</option>
+                    </select>
+                  </div>
+                  <div className="md:col-span-2 flex items-end">
                     <button type="submit" disabled={savingColor} className="w-full btn-glow bg-purple-500 hover:bg-purple-600 text-[var(--app-cta-contrast)] font-black rounded-sm px-4 h-10 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                       {savingColor ? 'Adding...' : <><Plus className="w-4 h-4" /> Add Color</>}
                     </button>
@@ -1024,7 +1066,10 @@ export default function AdminDashboardPage() {
                               <div key={color.id} className="relative flex flex-col items-center gap-2 p-4 border border-surface-border/60 bg-surface-card shadow-sm hover:shadow-md hover:border-purple-500/40 rounded-sm group transition-all">
                                 <div className="w-10 h-10 rounded-full border border-surface-border shadow-sm group-hover:scale-110 transition-transform" style={{ backgroundColor: color.hex }} />
                                 <span className="text-xs font-bold text-fg text-center mt-1 truncate w-full" title={color.name}>{color.name}</span>
-                                <span className="text-[10px] text-fg-muted uppercase">{color.hex}</span>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-[10px] text-fg-muted uppercase">{color.hex}</span>
+                                  <span className="text-[9px] bg-surface-border/40 text-fg-subtle px-1 rounded-sm uppercase">{color.colorType || 'Basic'}</span>
+                                </div>
                                 <button
                                   onClick={() => handleDeleteColor(color.id)}
                                   className="absolute top-2 right-2 p-1.5 bg-red-500/90 hover:bg-red-500 text-[var(--app-cta-contrast)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"

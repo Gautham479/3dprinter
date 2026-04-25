@@ -26,7 +26,6 @@ export default function ProductPage() {
   const [imageHovered, setImageHovered] = useState(false);
   const [zoom, setZoom] = useState({ x: 0, y: 0 });
   const [selectedImage, setSelectedImage] = useState('');
-  const [colorMode, setColorMode] = useState('Single Color');
   const [singleColor, setSingleColor] = useState('Black');
   const addDirectItemToCart = useStore((state) => state.addDirectItemToCart);
   const openCart = useStore((state) => state.openCart);
@@ -71,8 +70,8 @@ export default function ProductPage() {
         config: {
           material: product.material,
           quality: 'Pre-printed',
-          colorMode,
-          color: colorMode === 'Multicolor' ? 'Multicolor' : singleColor,
+          colorMode: 'Single Color',
+          color: singleColor,
           strength: 20
         },
         price: product.price
@@ -285,23 +284,7 @@ export default function ProductPage() {
               {/* Color option */}
               <div className="mb-6">
                 <p className="text-fg-muted text-sm font-bold mb-3 uppercase tracking-wider">Color Option</p>
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  {['Single Color', 'Multicolor'].map((mode) => (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setColorMode(mode)}
-                      className={`rounded-sm border px-3 py-2.5 text-sm font-black transition-all ${colorMode === mode
-                          ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
-                          : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:text-fg hover:border-primary-500/30'
-                        }`}
-                    >
-                      {mode}
-                    </button>
-                  ))}
-                </div>
 
-                {colorMode === 'Single Color' && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -327,7 +310,6 @@ export default function ProductPage() {
                     </div>
                     <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
                   </motion.div>
-                )}
               </div>
             </div>
 

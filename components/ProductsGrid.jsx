@@ -98,30 +98,6 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
 
             {/* Color options */}
             <div className="space-y-2 mt-auto">
-              <div className="grid grid-cols-2 gap-2">
-                {['Single Color', 'Multicolor'].map((mode) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      updateProductColorOption(product.id, {
-                        colorMode: mode,
-                        color: mode === 'Multicolor' ? 'Multicolor' : (productColorOptions[product.id]?.color || AVAILABLE_COLORS[0].name)
-                      });
-                    }}
-                    className={`text-xs rounded-sm border px-2 py-1.5 font-bold transition-all ${(productColorOptions[product.id]?.colorMode || 'Single Color') === mode
-                        ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
-                        : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30'
-                      }`}
-                  >
-                    {mode}
-                  </button>
-                ))}
-              </div>
-
-              {(productColorOptions[product.id]?.colorMode || 'Single Color') === 'Single Color' && (
                 <select
                   value={productColorOptions[product.id]?.color || AVAILABLE_COLORS[0].name}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
@@ -132,7 +108,6 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
                     <option key={color.name} value={color.name}>{color.name}</option>
                   ))}
                 </select>
-              )}
             </div>
           </div>
         </motion.div>

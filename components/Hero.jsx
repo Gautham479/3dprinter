@@ -2,7 +2,8 @@
 
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { RefreshCcw, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -75,15 +76,14 @@ export default function Hero() {
 
 
         {/* Content overlay */}
-        <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pointer-events-none">
+        <div className="relative z-20 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-full pointer-events-none">
           
-          <div className="flex w-full justify-between items-center">
-            {/* Left Side Floating Feature */}
+          <div className="absolute top-32 left-4 sm:left-8 lg:left-12">
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="max-w-[250px] pointer-events-auto"
+              className="max-w-[280px] pointer-events-auto"
             >
               <div className="bg-surface-card/80 backdrop-blur-md p-5 rounded-sm border border-surface-border shadow-lg">
                 <h3 className="font-black text-fg text-lg mb-2 flex items-center gap-2">
@@ -95,41 +95,30 @@ export default function Hero() {
                 </p>
               </div>
             </motion.div>
-
-            {/* Right Side Floating Feature */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-              className="max-w-[250px] pointer-events-auto mt-40 lg:mt-64"
-            >
-              <div className="bg-surface-card/80 backdrop-blur-md p-5 rounded-sm border border-surface-border shadow-lg">
-                <h3 className="font-black text-fg text-lg mb-2 flex items-center gap-2">
-                  <RefreshCcw className="w-5 h-5 text-primary-500" />
-                  Ultra-Clean Finish
-                </h3>
-                <p className="text-sm text-fg-muted leading-relaxed">
-                  Experience the highest quality surface resolution with zero layer lines visible on our elite materials.
-                </p>
-              </div>
-            </motion.div>
           </div>
 
         </div>
         
-        {/* Bottom Call to Action Centered */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto text-center flex flex-col items-center">
+        {/* Bottom Call to Action - Moved to right to avoid video collision */}
+        <div className="absolute bottom-10 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto text-right flex flex-col items-end">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-sm border border-primary-500/30 bg-primary-500/10 text-sm text-primary-600 font-bold shadow-lg backdrop-blur-sm"
+            className="flex flex-col items-end gap-3"
           >
-            <span className="w-1.5 h-1.5 rounded-sm bg-accent-500" />
-            Fast & Easy Online Multicolor 3D Printing
+            <h2 className="text-2xl md:text-3xl font-black text-white drop-shadow-md tracking-tight">
+              Where Your Ideas Become Reality
+            </h2>
+            <Link 
+              href="/category/Kit%20Cards" 
+              className="px-8 py-3 mt-2 rounded-sm bg-accent-600 hover:bg-accent-500 text-white text-sm uppercase tracking-wider font-black transition-all shadow-[0_0_20px_rgba(var(--app-accent-500),0.3)] hover:shadow-[0_0_30px_rgba(var(--app-accent-500),0.5)] border border-accent-400/50"
+            >
+              Explore Products
+            </Link>
           </motion.div>
           
-          <div className="text-xs text-white/50 mt-4 uppercase tracking-widest font-bold animate-pulse">
+          <div className="text-xs text-white/50 mt-8 uppercase tracking-widest font-bold animate-pulse">
             Scroll to discover
           </div>
         </div>

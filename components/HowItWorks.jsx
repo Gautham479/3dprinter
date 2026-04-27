@@ -1,37 +1,46 @@
 "use client";
 
 import React from 'react';
-import { UploadCloud, CheckCircle, Package } from 'lucide-react';
+import { UploadCloud, Zap, CheckCircle, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function HowItWorks() {
   const steps = [
     {
       icon: <UploadCloud className="w-8 h-8" />,
-      title: "1. Upload Your Design",
-      desc: "Drop your STL or OBJ files into our quoter to get an instant, AI-driven price.",
+      title: "1. Upload and configure",
+      desc: "Drop your STL or OBJ files and choose your material, color, and strength.",
       color: "bg-accent-500/15",
       iconColor: "text-accent-500",
       number: "01",
       shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
     },
     {
-      icon: <CheckCircle className="w-8 h-8" />,
-      title: "2. Configure & Order",
-      desc: "Select your desired material, color, and strength. Add to cart and check out seamlessly.",
+      icon: <Zap className="w-8 h-8" />,
+      title: "2. Instant quote",
+      desc: "Get an instant, AI-driven price for your configured parts.",
       color: "bg-accent-500/15",
       iconColor: "text-accent-500",
       number: "02",
       shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
     },
     {
+      icon: <CheckCircle className="w-8 h-8" />,
+      title: "3. Crafted with Precision",
+      desc: "We print and perform strict quality control to ensure perfection.",
+      color: "bg-accent-500/15",
+      iconColor: "text-accent-500",
+      number: "03",
+      shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
+    },
+    {
       icon: <Package className="w-8 h-8" />,
-      title: "3. Receive Your Parts",
-      desc: "We print, perform quality control, and ship your parts directly to your door.",
+      title: "4. Fast Deliver",
+      desc: "We ship your finished parts directly to your door securely.",
       color: "bg-amber-600/15",
       iconColor: "text-amber-700",
-      number: "03",
-      shape: "polygon(50% 0%, 65% 18%, 95% 25%, 82% 50%, 95% 75%, 65% 82%, 50% 100%, 35% 82%, 5% 75%, 18% 50%, 5% 25%, 35% 18%)", // Flower
+      number: "04",
+      shape: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)", // Hexagon
     }
   ];
 
@@ -50,13 +59,13 @@ export default function HowItWorks() {
         >
           <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">How It Works</h2>
           <p className="text-lg text-fg-muted max-w-2xl mx-auto">
-            From digital file to physical object in just three simple steps.
+            From digital file to physical object in four simple steps.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
           {/* Connector line */}
-          <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-[2px] z-0">
+          <div className="hidden md:block absolute top-16 left-[12%] right-[12%] h-[2px] z-0">
             <div className="w-full h-full bg-surface-border/60" />
             <motion.div
               className="absolute inset-0 bg-primary-500/60"

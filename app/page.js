@@ -4,6 +4,8 @@ import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Categories from '@/components/Categories';
+import StorefrontGrid from '@/components/StorefrontGrid';
 import ProductsGrid from '@/components/ProductsGrid';
 import Materials from '@/components/Materials';
 import HowItWorks from '@/components/HowItWorks';
@@ -60,6 +62,12 @@ export default function Home() {
       <section id="hero" className="w-full">
         <Hero />
       </section>
+
+      {/* Categories Section */}
+      <Categories />
+
+      {/* Amazon-Style Storefront Section */}
+      <StorefrontGrid />
 
       {/* Additional Added Sections */}
       <Materials />

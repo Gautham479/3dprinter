@@ -45,18 +45,7 @@ export default function Home() {
         <ScrollToSection />
       </Suspense>
       
-      {/* Top headline in empty space */}
-      <section className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 text-center">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-fg tracking-tight leading-tight"
-        >
-          Where Your Ideas <span className="text-primary-500">Become Reality</span>
-        </motion.h1>
-      </section>
+
 
       {/* Hero Section */}
       <section id="hero" className="w-full">

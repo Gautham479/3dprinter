@@ -26,7 +26,7 @@ function ProductsContent() {
             Browse our complete collection of high-quality 3D printed accessories.
           </p>
         </div>
-        <ProductsGrid hideFilters={true} initialCategory={category} />
+        <ProductsGrid hideFilters={false} initialCategory={category} />
       </motion.div>
     </div>
   );

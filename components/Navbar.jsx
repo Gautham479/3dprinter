@@ -207,36 +207,6 @@ export default function Navbar() {
                 );
               })}
 
-              {/* Legal Dropdown */}
-              <div
-                className="relative group/dropdown"
-                onMouseEnter={() => setScrolled(window.scrollY > 20)}
-              >
-                <button
-                  className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted/50 flex items-center gap-1.5"
-                >
-                  <span className="relative z-10">Legal</span>
-                  <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover/dropdown:rotate-180" />
-                </button>
-                <div className="absolute top-full left-0 mt-0 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:-mt-0 pt-2 transition-all duration-200 z-50 min-w-[200px]">
-                  <div className="bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden flex flex-col">
-                    {[
-                      { label: 'Privacy Policy', path: '/legal/privacy-policy' },
-                      { label: 'Terms & Conditions', path: '/legal/terms-conditions' },
-                      { label: 'Refund Policy', path: '/legal/refund-policy' },
-                      { label: 'Shipping Policy', path: '/legal/shipping-policy' },
-                    ].map((item) => (
-                      <button
-                        key={item.path}
-                        onClick={() => router.push(item.path)}
-                        className="w-full text-left px-4 py-2.5 text-sm text-fg-muted hover:text-fg hover:bg-surface-muted/60 transition-colors duration-150 border-b border-surface-border/30 last:border-b-0"
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 

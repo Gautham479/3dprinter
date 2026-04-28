@@ -10,8 +10,9 @@ export default function Categories() {
     {
       title: "Idols",
       desc: "Collectible idols and premium figurines",
-      image: "https://loremflickr.com/600/400/lordshiva,statue",
-      objectPosition: "object-top",
+      images: ["/photos/idols.jpeg"],
+      objectPosition: "object-center",
+      objectFit: "object-contain",
       borderColor: "border-yellow-400",
       bgColor: "bg-black",
       hoverBg: "hover:bg-zinc-900",
@@ -22,7 +23,12 @@ export default function Categories() {
     {
       title: "Action Figures",
       desc: "Dynamic heroes and articulated models",
-      image: "https://loremflickr.com/600/400/actionfigure",
+      images: [
+        "/photos/action 1.jpeg",
+        "/photos/action 2.jpeg",
+        "/photos/action 3.jpeg",
+        "/photos/action 4.jpeg"
+      ],
       objectPosition: "object-top",
       borderColor: "border-red-500",
       bgColor: "bg-black",
@@ -34,7 +40,11 @@ export default function Categories() {
     {
       title: "Daily Accessories",
       desc: "Everyday lifestyle essentials and gadgets",
-      image: "https://loremflickr.com/600/400/watch,gadget",
+      images: [
+        "/photos/daily acc .jpeg",
+        "/photos/daily acc 1.jpeg",
+        "/photos/daily acc 2.jpeg"
+      ],
       borderColor: "border-orange-400",
       bgColor: "bg-black",
       hoverBg: "hover:bg-zinc-900",
@@ -43,9 +53,13 @@ export default function Categories() {
       isCTA: false,
     },
     {
-      title: "Multicolor Printing Capabilities",
-      desc: "Vibrant, high-quality multi-material prints",
-      image: "https://loremflickr.com/600/400/3dprinting,colorful",
+      title: "Playables",
+      desc: "Interactive toys and engaging models",
+      images: [
+        "/photos/playables.jpeg",
+        "/photos/playables 1.jpeg",
+        "/photos/playables 3.jpeg"
+      ],
       borderColor: "border-purple-500",
       bgColor: "bg-black",
       hoverBg: "hover:bg-zinc-900",
@@ -63,10 +77,15 @@ export default function Categories() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 text-center"
+          className="mb-14 text-center w-full px-2 md:px-4"
         >
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">Our Collections</h2>
-          <p className="text-zinc-400 mt-2">Find exactly what you're looking for</p>
+          <div className="inline-block mb-8 w-full">
+            <span className="text-primary-500 font-black tracking-widest text-[clamp(6px,2.2vw,16px)] uppercase drop-shadow-lg whitespace-nowrap">
+              India’s First E-Commerce Store for Multi Colour 3D Printed Products with Custom Printing Options
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex justify-center">Our Collections</h2>
+          <p className="text-zinc-400 mt-2 flex justify-center">Find exactly what you're looking for</p>
         </motion.div>
 
         <div className="flex flex-col gap-5">
@@ -95,13 +114,27 @@ export default function Categories() {
                   </div>
                   
                   {/* Background Image */}
-                  {!cat.isCTA && cat.image && (
+                  {!cat.isCTA && cat.images && (
                     <div className="absolute right-0 top-0 bottom-0 w-2/3 md:w-[60%] overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_25%)] transition-all duration-700 -z-0">
-                      <img 
-                        src={cat.image} 
-                        alt={cat.title}
-                        className={`w-full h-full object-cover ${cat.objectPosition || 'object-center'} transition-all duration-700 group-hover:scale-125 opacity-60 group-hover:opacity-100 grayscale group-hover:grayscale-0`} 
-                      />
+                      {cat.images.length === 1 ? (
+                        <img 
+                          src={cat.images[0]} 
+                          alt={cat.title}
+                          className={`w-full h-full ${cat.objectFit || 'object-cover'} ${cat.objectPosition || 'object-center'} transition-all duration-700 group-hover:scale-125 opacity-80 group-hover:opacity-100`} 
+                        />
+                      ) : (
+                        <div className={`w-full h-full grid gap-1 ${cat.images.length >= 3 ? 'grid-cols-2 grid-rows-2' : 'grid-cols-2'}`}>
+                          {cat.images.map((img, idx) => (
+                            <div key={idx} className={`relative overflow-hidden ${cat.images.length === 3 && idx === 0 ? 'row-span-2' : ''}`}>
+                              <img 
+                                src={img} 
+                                alt={`${cat.title} ${idx}`}
+                                className={`absolute inset-0 w-full h-full ${cat.objectFit || 'object-cover'} ${cat.objectPosition || 'object-center'} transition-all duration-700 group-hover:scale-125 opacity-80 group-hover:opacity-100`} 
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

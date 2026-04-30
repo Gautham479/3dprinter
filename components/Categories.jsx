@@ -10,15 +10,19 @@ export default function Categories() {
     {
       title: "Idols",
       desc: "Collectible idols and premium figurines",
-      images: ["/photos/idols.jpeg"],
-      objectPosition: "object-center",
-      objectFit: "object-contain",
+      images: [
+        "/photos/idols.jpeg",
+        "/photos/idols 2.jpg",
+        "/photos/idols 3.jpg"
+      ],
+      objectPositions: ["object-center", "object-top", "object-top"],
       borderColor: "border-yellow-400",
       bgColor: "bg-black",
       hoverBg: "hover:bg-zinc-900",
       textColor: "text-white",
       accent: "text-yellow-500",
       isCTA: false,
+      link: "/category/Idols",
     },
     {
       title: "Action Figures",
@@ -36,6 +40,7 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-red-500",
       isCTA: false,
+      link: "/category/Action%20Figures",
     },
     {
       title: "Daily Accessories",
@@ -51,6 +56,7 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-orange-500",
       isCTA: false,
+      link: "/category/Daily%20Accessories",
     },
     {
       title: "Playables",
@@ -66,6 +72,7 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-purple-500",
       isCTA: false,
+      link: "/category/Playables",
     },
   ];
 
@@ -79,11 +86,16 @@ export default function Categories() {
           viewport={{ once: true }}
           className="mb-14 text-center w-full px-2 md:px-4"
         >
-          <div className="inline-block mb-8 w-full">
-            <span className="text-primary-500 font-black tracking-widest text-[clamp(6px,2.2vw,16px)] uppercase drop-shadow-lg whitespace-nowrap">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex justify-center mb-8 w-full"
+          >
+            <span className="text-primary-500 font-black tracking-widest text-[clamp(12px,3.5vw,22px)] md:text-xl uppercase drop-shadow-lg text-center leading-relaxed">
               India’s First E-Commerce Store for Multi Colour 3D Printed Products with Custom Printing Options
             </span>
-          </div>
+          </motion.div>
           <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex justify-center">Our Collections</h2>
           <p className="text-zinc-400 mt-2 flex justify-center">Find exactly what you're looking for</p>
         </motion.div>
@@ -129,7 +141,7 @@ export default function Categories() {
                               <img 
                                 src={img} 
                                 alt={`${cat.title} ${idx}`}
-                                className={`absolute inset-0 w-full h-full ${cat.objectFit || 'object-cover'} ${cat.objectPosition || 'object-center'} transition-all duration-700 group-hover:scale-125 opacity-80 group-hover:opacity-100`} 
+                                className={`absolute inset-0 w-full h-full ${cat.objectFit || 'object-cover'} ${cat.objectPositions?.[idx] || cat.objectPosition || 'object-center'} transition-all duration-700 group-hover:scale-125 opacity-80 group-hover:opacity-100`} 
                               />
                             </div>
                           ))}

@@ -78,6 +78,32 @@ function CategoryContent({ categoryName }) {
   );
 }
 
+function CategoryLoadingFallback() {
+  return (
+    <div className="w-full flex flex-col items-center">
+      <div className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden mt-16 bg-surface-muted">
+        <div className="text-center px-4 space-y-4">
+          <div className="h-16 w-64 bg-surface-border/40 animate-pulse rounded-sm mx-auto" />
+          <div className="h-1 w-24 bg-surface-border/40 animate-pulse rounded-sm mx-auto" />
+          <div className="h-4 w-80 bg-surface-border/40 animate-pulse rounded-sm mx-auto" />
+        </div>
+      </div>
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-2">
+              <div className="w-full aspect-[4/3] bg-surface-muted animate-pulse rounded-sm border border-surface-border/40" />
+              <div className="h-4 bg-surface-muted animate-pulse rounded-sm w-3/4" />
+              <div className="h-3 bg-surface-muted/60 animate-pulse rounded-sm w-full" />
+              <div className="h-8 bg-surface-muted animate-pulse rounded-sm mt-1" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CategoryPage({ params }) {
   const resolvedParams = use(params);
 
@@ -85,10 +111,11 @@ export default function CategoryPage({ params }) {
     <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">
       <Navbar />
       <CartDrawer />
-      <Suspense fallback={<div className="h-screen" />}>
+      <Suspense fallback={<CategoryLoadingFallback />}>
         <CategoryContent categoryName={resolvedParams.category} />
       </Suspense>
       <Footer />
     </div>
   );
 }
+

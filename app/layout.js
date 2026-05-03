@@ -1,6 +1,7 @@
 import { Chivo, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import NavigationLoader from "@/components/NavigationLoader";
 
 const chivo = Chivo({
   variable: "--font-heading",
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInit }}
         />
+        <NavigationLoader />
         {children}
       </body>
     </html>

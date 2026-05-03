@@ -21,6 +21,8 @@ export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState(false);
   const [imageHovered, setImageHovered] = useState(false);
@@ -47,17 +49,25 @@ export default function ProductPage() {
 
   useEffect(() => {
     const loadProduct = async () => {
-      const response = await fetch(`/api/products/${params.id}`);
-      if (!response.ok) { setProduct(null); return; }
-      const data = await response.json();
-      setProduct(data);
-      const imgs = getProductImages(data);
-      setSelectedImage(imgs[0] || '');
+      setIsLoading(true);
+      setNotFound(false);
+      try {
+        const response = await fetch(`/api/products/${params.id}`);
+        if (!response.ok) { setNotFound(true); setIsLoading(false); return; }
+        const data = await response.json();
+        setProduct(data);
+        const imgs = getProductImages(data);
+        setSelectedImage(imgs[0] || '');
 
-      const productsResponse = await fetch('/api/products?includeOutOfStock=1');
-      const allProducts = await productsResponse.json().catch(() => []);
-      if (Array.isArray(allProducts)) {
-        setRelatedProducts(allProducts.filter((item) => item.slug !== data.slug).slice(0, 3));
+        const productsResponse = await fetch('/api/products?includeOutOfStock=1');
+        const allProducts = await productsResponse.json().catch(() => []);
+        if (Array.isArray(allProducts)) {
+          setRelatedProducts(allProducts.filter((item) => item.slug !== data.slug).slice(0, 3));
+        }
+      } catch {
+        setNotFound(true);
+      } finally {
+        setIsLoading(false);
       }
     };
     if (params.id) loadProduct();
@@ -91,17 +101,71 @@ export default function ProductPage() {
     });
   };
 
-  if (!product) {
+  if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen bg-surface-bg">
         <Navbar />
         <CartDrawer />
-        <div className="flex-1 flex items-center justify-center">
-          <motion.div
-            className="w-12 h-12 rounded-sm border-2 border-primary-500/30 border-t-primary-500"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          />
+        <div className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
+          <div className="h-5 w-36 bg-surface-muted animate-pulse rounded-sm mb-8" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="flex flex-col gap-4">
+              <div className="w-full max-w-xl aspect-[4/3] bg-surface-muted animate-pulse rounded-sm border border-surface-border" />
+              <div className="flex gap-2 justify-center">
+                {[...Array(4)].map((_, i) => <div key={i} className="w-16 h-16 bg-surface-muted animate-pulse rounded-sm border border-surface-border" />)}
+              </div>
+            </div>
+            <div className="flex flex-col gap-5">
+              <div className="h-7 w-24 bg-surface-muted animate-pulse rounded-sm" />
+              <div className="h-10 w-3/4 bg-surface-muted animate-pulse rounded-sm" />
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-surface-muted/70 animate-pulse rounded-sm" />
+                <div className="h-4 w-5/6 bg-surface-muted/70 animate-pulse rounded-sm" />
+                <div className="h-4 w-4/6 bg-surface-muted/70 animate-pulse rounded-sm" />
+              </div>
+              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6">
+                <div className="h-4 w-28 bg-surface-muted animate-pulse rounded-sm mb-4" />
+                <div className="grid grid-cols-2 gap-4">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-surface-muted animate-pulse rounded-sm flex-shrink-0" />
+                      <div className="flex flex-col gap-1.5 flex-1">
+                        <div className="h-3 w-16 bg-surface-muted animate-pulse rounded-sm" />
+                        <div className="h-4 w-20 bg-surface-muted/70 animate-pulse rounded-sm" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6">
+                <div className="h-12 w-28 bg-surface-muted animate-pulse rounded-sm mb-5" />
+                <div className="h-14 w-full bg-surface-muted animate-pulse rounded-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (notFound || !product) {
+    return (
+      <div className="flex flex-col min-h-screen bg-surface-bg">
+        <Navbar />
+        <CartDrawer />
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 text-center px-4">
+          <div className="w-20 h-20 rounded-sm bg-surface-muted border border-surface-border flex items-center justify-center">
+            <Layers className="w-10 h-10 text-fg-subtle" />
+          </div>
+          <h2 className="text-2xl font-black text-fg">Product Not Found</h2>
+          <p className="text-fg-muted">This product doesn't exist or has been removed.</p>
+          <button
+            onClick={() => router.push('/products')}
+            className="mt-2 px-6 py-3 bg-primary-500 text-[var(--app-cta-contrast)] font-black rounded-sm hover:bg-primary-600 transition-colors"
+          >
+            Browse Products
+          </button>
         </div>
         <Footer />
       </div>

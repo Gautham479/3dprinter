@@ -43,8 +43,23 @@ export default function StorefrontGrid() {
 
   if (loading) {
     return (
-      <section className="w-full bg-black py-6 sm:py-8 font-sans min-h-[400px] flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-zinc-800 border-t-primary-500 rounded-full animate-spin"></div>
+      <section className="w-full bg-black py-6 sm:py-8 font-sans">
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
+          <div className="bg-[#111] border border-zinc-800 rounded-md shadow-sm p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="h-6 w-40 bg-zinc-800 animate-pulse rounded-md" />
+              <div className="h-4 w-28 bg-zinc-800 animate-pulse rounded-md hidden sm:block" />
+            </div>
+            <div className="flex gap-4 sm:gap-6 overflow-hidden">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex flex-col items-center w-[180px] sm:w-[220px] flex-shrink-0">
+                  <div className="w-full aspect-square rounded-md bg-zinc-800 animate-pulse mb-2" />
+                  <div className="h-4 w-3/4 bg-zinc-800 animate-pulse rounded-md" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
     );
   }

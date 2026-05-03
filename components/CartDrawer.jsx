@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Trash2, ShoppingCart, Rocket, Package } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useRouter } from 'next/navigation';
@@ -9,8 +9,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function CartDrawer() {
   const { isCartOpen, closeCart, cart, removeFromCart } = useStore();
   const router = useRouter();
+  const [checkingOut, setCheckingOut] = useState(false);
 
   const totalCost = cart.reduce((acc, item) => acc + item.price, 0);
+
+  const handleCheckout = () => {
+    setCheckingOut(true);
+    closeCart();
+    router.push('/checkout');
+  };
+
 
   return (
     <AnimatePresence>
@@ -140,13 +148,27 @@ export default function CartDrawer() {
                   </div>
 
                   <motion.button
-                    onClick={() => { closeCart(); router.push('/checkout'); }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black py-4 rounded-sm flex items-center justify-center gap-2 transition-all"
+                    onClick={handleCheckout}
+                    disabled={checkingOut}
+                    whileHover={!checkingOut ? { scale: 1.02 } : {}}
+                    whileTap={!checkingOut ? { scale: 0.98 } : {}}
+                    className="w-full btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black py-4 rounded-sm flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:pointer-events-none"
                   >
-                    <Rocket className="w-5 h-5" />
-                    Proceed to secure checkout
+                    {checkingOut ? (
+                      <>
+                        <motion.div
+                          className="w-5 h-5 border-2 border-white/30 border-t-white rounded-sm"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                        />
+                        Loading Checkout...
+                      </>
+                    ) : (
+                      <>
+                        <Rocket className="w-5 h-5" />
+                        Proceed to secure checkout
+                      </>
+                    )}
                   </motion.button>
                 </div>
               </motion.div>

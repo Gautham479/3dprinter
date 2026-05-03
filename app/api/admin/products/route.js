@@ -100,6 +100,7 @@ export async function POST(request) {
     uploadedImagePath = await saveProductImage(imageFile);
     uploadedImagePaths = await saveProductImages(imageFiles);
   } catch (error) {
+    console.error("Image upload error in POST /api/admin/products:", error);
     const details = error instanceof Error ? error.message : 'Unknown upload error';
     return NextResponse.json(
       { error: `Image upload failed. ${details}` },
@@ -134,6 +135,7 @@ export async function POST(request) {
 
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
+    console.error("Database write error in POST /api/admin/products:", error);
     const details = error instanceof Error ? error.message : 'Unknown write error';
     return NextResponse.json(
       { error: `Database write failed. ${details}` },
@@ -141,3 +143,4 @@ export async function POST(request) {
     );
   }
 }
+

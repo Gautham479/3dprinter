@@ -8,7 +8,6 @@ import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCir
 
 const EMPTY_FORM = {
   name: '',
-  slug: '',
   fullDescription: '',
   material: 'PLA',
   price: '',
@@ -76,6 +75,7 @@ export default function AdminDashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [productCategoryFilter, setProductCategoryFilter] = useState('ALL');
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   
   const [orderSearch, setOrderSearch] = useState('');
@@ -198,6 +198,7 @@ export default function AdminDashboardPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
+      if (productCategoryFilter !== 'ALL' && p.type !== productCategoryFilter) return false;
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
       return (p.name?.toLowerCase() || '').includes(q) ||
@@ -216,7 +217,7 @@ export default function AdminDashboardPage() {
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
-  }, [products, searchQuery, sortKey, sortOrder]);
+  }, [products, searchQuery, sortKey, sortOrder, productCategoryFilter]);
 
   const filteredOrders = useMemo(() => {
     return orders.filter(o => {
@@ -280,7 +281,6 @@ export default function AdminDashboardPage() {
 
     const payload = new FormData();
     payload.set('name', form.name);
-    payload.set('slug', form.slug);
     payload.set('fullDescription', form.fullDescription);
     payload.set('material', form.material);
     payload.set('price', String(Number(form.price)));
@@ -523,7 +523,6 @@ export default function AdminDashboardPage() {
                 </h2>
                 <form onSubmit={handleCreateProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input className={inputClass} placeholder="Name" value={form.name} onChange={(e) => updateField('name', e.target.value)} required />
-                  <input className={inputClass} placeholder="Slug (optional)" value={form.slug} onChange={(e) => updateField('slug', e.target.value)} />
                   <textarea className={`${inputClass} md:col-span-2 min-h-24 resize-none`} placeholder="Full description" value={form.fullDescription} onChange={(e) => updateField('fullDescription', e.target.value)} />
                   <select className={inputClass} value={form.type} onChange={(e) => updateField('type', e.target.value)}>
                     {PRODUCT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
@@ -594,6 +593,12 @@ export default function AdminDashboardPage() {
                         className={`${inputClass} pl-9 !w-auto min-w-[200px]`}
                       />
                     </div>
+                    <select value={productCategoryFilter} onChange={(e) => setProductCategoryFilter(e.target.value)} className={`${inputClass} !w-auto`}>
+                      <option value="ALL">All Categories</option>
+                      {PRODUCT_TYPES.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
                     <select value={sortKey} onChange={(e) => setSortKey(e.target.value)} className={`${inputClass} !w-auto`}>
                       <option value="createdAt">Date Added</option>
                       <option value="name">Name</option>
@@ -665,7 +670,7 @@ export default function AdminDashboardPage() {
                                 onChange={() => toggleSelect(product.id)}
                                 className="mt-1 w-4 h-4 cursor-pointer accent-primary-500"
                               />
-                              <div className="flex flex-col gap-1">
+                              <div className="flex flex-col gap-1 w-full md:w-auto flex-1">
                                 <input
                                   key={`name-${product.id}-${product.name}`}
                                   type="text"
@@ -681,7 +686,7 @@ export default function AdminDashboardPage() {
                                       fetchProducts();
                                     }
                                   }}
-                                  className="font-black text-fg bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all w-[250px]"
+                                  className="font-black text-fg bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all w-full max-w-[300px]"
                                 />
                                 <div className="text-sm text-fg-muted flex items-center gap-1">
                                   <span>{product.type} | {product.material} | ₹</span>
@@ -703,6 +708,23 @@ export default function AdminDashboardPage() {
                                     className="w-20 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all"
                                   />
                                 </div>
+                                <textarea
+                                  key={`desc-${product.id}-${product.fullDescription}`}
+                                  defaultValue={product.fullDescription || ''}
+                                  placeholder="Add a description..."
+                                  onBlur={async (e) => {
+                                    const val = e.target.value.trim();
+                                    if (val !== (product.fullDescription || '')) {
+                                      await fetch(`/api/admin/products/${product.id}`, {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ fullDescription: val }),
+                                      });
+                                      fetchProducts();
+                                    }
+                                  }}
+                                  className="text-xs text-fg-subtle bg-transparent border border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1.5 py-1 -ml-1.5 rounded-sm transition-all w-full max-w-[400px] min-h-[40px] resize-y mt-0.5"
+                                />
                               </div>
                             </div>
                             <div className="flex flex-wrap items-center gap-2">

@@ -22,7 +22,6 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-yellow-500",
       isCTA: false,
-      link: "/category/Idols",
     },
     {
       title: "Action Figures",
@@ -40,7 +39,6 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-red-500",
       isCTA: false,
-      link: "/category/Action%20Figures",
     },
     {
       title: "Daily Accessories",
@@ -56,7 +54,6 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-orange-500",
       isCTA: false,
-      link: "/category/Daily%20Accessories",
     },
     {
       title: "Playables",
@@ -72,7 +69,6 @@ export default function Categories() {
       textColor: "text-white",
       accent: "text-purple-500",
       isCTA: false,
-      link: "/category/Playables",
     },
   ];
 
@@ -81,23 +77,40 @@ export default function Categories() {
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
         
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { staggerChildren: 0.05, delayChildren: 0.1 }
+            }
+          }}
           className="mb-14 text-center w-full px-2 md:px-4"
         >
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex justify-center mb-8 w-full"
-          >
-            <span className="text-primary-500 font-black tracking-widest text-[clamp(12px,3.5vw,22px)] md:text-xl uppercase drop-shadow-lg text-center leading-relaxed">
-              India’s First E-Commerce Store for Multi Colour 3D Printed Products with Custom Printing Options
-            </span>
-          </motion.div>
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex justify-center">Our Collections</h2>
-          <p className="text-zinc-400 mt-2 flex justify-center">Find exactly what you're looking for</p>
+          <div className="flex justify-center flex-wrap gap-x-[0.4em] gap-y-2 mb-10 w-full max-w-5xl mx-auto">
+            {"India’s First E-Commerce Store for Multi Colour 3D Printed Products with Custom Printing Options".split(" ").map((word, i) => (
+              <motion.span 
+                key={i}
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.9 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1, 
+                    transition: { type: "spring", stiffness: 200, damping: 15 }
+                  }
+                }}
+                className="text-primary-500 font-black tracking-widest text-[clamp(16px,4vw,32px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_15px_rgba(249,115,22,0.4)]"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </div>
+          <motion.h2 variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="text-3xl md:text-4xl font-black text-white tracking-tight flex justify-center">Our Collections</motion.h2>
+          <motion.p variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="text-zinc-400 mt-2 flex justify-center">Find exactly what you're looking for</motion.p>
         </motion.div>
 
         <div className="flex flex-col gap-5">

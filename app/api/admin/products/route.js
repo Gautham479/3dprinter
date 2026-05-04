@@ -50,7 +50,6 @@ export async function POST(request) {
 
   const body = {
     name: String(formData.get('name') || '').trim(),
-    slug: String(formData.get('slug') || '').trim(),
     fullDescription: String(formData.get('fullDescription') || '').trim(),
     material: String(formData.get('material') || '').trim(),
     price: String(formData.get('price') || '').trim(),
@@ -86,7 +85,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid price' }, { status: 400 });
   }
 
-  const baseSlug = slugify(body.slug || body.name);
+  const baseSlug = slugify(body.name);
   let slug = baseSlug || `product-${Date.now()}`;
   let suffix = 1;
   while (await prisma.product.findUnique({ where: { slug } })) {

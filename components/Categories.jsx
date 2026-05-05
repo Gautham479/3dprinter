@@ -96,7 +96,7 @@ export default function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-full"
+              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-fit max-w-none"
             >
               India’s First E-Commerce Store for Multicolour
             </motion.h1>
@@ -105,7 +105,7 @@ export default function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.15 }}
-              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-full"
+              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-fit max-w-none"
             >
               3D Printed Products with Custom Printing Options
             </motion.h1>

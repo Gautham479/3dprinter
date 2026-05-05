@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Ruler, Weight, Clock } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Clock } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -173,9 +173,8 @@ export default function ProductPage() {
   }
 
   const specs = [
-    { icon: <Ruler className="w-4 h-4" />, label: 'Dimensions', value: product.dimensions },
-    { icon: <Weight className="w-4 h-4" />, label: 'Weight', value: product.weight },
-    { icon: <Clock className="w-4 h-4" />, label: 'Print Time', value: product.printTime },
+    { icon: <Weight className="w-4 h-4" />, label: 'Weight', value: product.weight ? `${product.weight} grams` : null },
+    { icon: <Clock className="w-4 h-4" />, label: 'Print Time', value: product.printTime ? `${product.printTime} hrs` : null },
     { icon: <Layers className="w-4 h-4" />, label: 'Material', value: product.material },
   ];
 

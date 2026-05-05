@@ -90,24 +90,25 @@ export default function Categories() {
           }}
           className="mb-14 text-center w-full px-2 md:px-4"
         >
-          <div className="flex justify-center flex-wrap gap-x-[0.4em] gap-y-2 mb-10 w-full max-w-5xl mx-auto">
-            {"India’s First E-Commerce Store for Multi Colour 3D Printed Products with Custom Printing Options".split(" ").map((word, i) => (
-              <motion.span 
-                key={i}
-                variants={{
-                  hidden: { opacity: 0, y: 20, scale: 0.9 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0, 
-                    scale: 1, 
-                    transition: { type: "spring", stiffness: 200, damping: 15 }
-                  }
-                }}
-                className="text-primary-500 font-black tracking-widest text-[clamp(16px,4vw,32px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_15px_rgba(249,115,22,0.4)]"
-              >
-                {word}
-              </motion.span>
-            ))}
+          <div className="flex flex-col items-center gap-y-1 md:gap-y-2 mb-10 w-full max-w-7xl mx-auto overflow-visible">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-full"
+            >
+              India’s First E-Commerce Store for Multicolour
+            </motion.h1>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 1.2, ease: "easeOut", delay: 0.15 }}
+              className="text-primary-500 font-black italic tracking-wide text-[clamp(11px,3vw,36px)] md:text-3xl lg:text-4xl uppercase text-center drop-shadow-[0_0_20px_rgba(249,115,22,0.6)] whitespace-nowrap w-full"
+            >
+              3D Printed Products with Custom Printing Options
+            </motion.h1>
           </div>
           <motion.h2 variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="text-3xl md:text-4xl font-black text-white tracking-tight flex justify-center">Our Collections</motion.h2>
           <motion.p variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="text-zinc-400 mt-2 flex justify-center">Find exactly what you're looking for</motion.p>

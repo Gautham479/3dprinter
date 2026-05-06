@@ -186,7 +186,12 @@ export default function ProductPage() {
       <Navbar />
       <CartDrawer />
 
-      <div className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 relative">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 relative"
+      >
         {/* Back */}
         <motion.button
           onClick={() => router.back()}
@@ -464,9 +469,10 @@ export default function ProductPage() {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       <Footer />
     </div>
   );
 }
+

@@ -8,6 +8,16 @@ import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AVAILABLE_COLORS, PRODUCT_TYPES } from '@/lib/catalog';
 
+const getCategoryTagline = (type) => {
+  if (!type || type === 'All') return null;
+  const t = type.toLowerCase();
+  if (t.includes('kit card')) return "Not just a card — a masterpiece in your hands.";
+  if (t.includes('playable')) return "Crafted for curious minds.";
+  if (t.includes('collect')) return "Crafted to be admired, shaped with precision.";
+  if (t.includes('home decor')) return "Where style meets everyday function.";
+  return null;
+};
+
 function ProductCard({ product, handleAddToCart, updateProductColorOption, productColorOptions }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -209,7 +219,7 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     <div>
       {/* Filter tabs */}
       {!hideFilters && (
-        <div className="mb-10 overflow-x-auto pb-2">
+        <div className="mb-6 overflow-x-auto pb-2">
           <div className="flex gap-2">
             {filters.map((type) => (
               <motion.button
@@ -228,6 +238,26 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
           </div>
         </div>
       )}
+
+      {/* Dynamic Category Tagline */}
+      <AnimatePresence mode="wait">
+        {!hideFilters && activeType !== 'All' && getCategoryTagline(activeType) && (
+          <motion.div
+            key={activeType}
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="mb-8 overflow-hidden"
+          >
+            <div className="py-4 border-l-4 border-primary-500 pl-5 rounded-r-sm bg-gradient-to-r from-surface-card/60 to-transparent shadow-sm border-y border-r border-surface-border/50">
+              <p className="text-xl md:text-2xl font-medium text-fg/90 tracking-wide leading-relaxed italic">
+                "{getCategoryTagline(activeType)}"
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Grid */}
       {loading ? (

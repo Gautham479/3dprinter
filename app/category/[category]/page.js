@@ -7,6 +7,16 @@ import CartDrawer from '@/components/CartDrawer';
 import ProductsGrid from '@/components/ProductsGrid';
 import { motion } from 'framer-motion';
 
+const getCategoryTagline = (type) => {
+  if (!type) return null;
+  const t = type.toLowerCase();
+  if (t.includes('kit card')) return "Not just a card — a masterpiece in your hands.";
+  if (t.includes('playable')) return "Crafted for curious minds.";
+  if (t.includes('collect')) return "Crafted to be admired, shaped with precision.";
+  if (t.includes('home decor')) return "Where style meets everyday function.";
+  return `Explore our premium selection of ${type.toLowerCase()}.`;
+};
+
 function CategoryHero({ category }) {
   const safeCategory = category || 'Category';
   
@@ -23,6 +33,8 @@ function CategoryHero({ category }) {
 
   const defaultImagePath = categoryImageMap[safeCategory.toLowerCase()] || `/photos/${safeCategory.toLowerCase()}.jpeg`;
   const [imgSrc, setImgSrc] = useState(defaultImagePath);
+
+  const tagline = getCategoryTagline(safeCategory);
 
   return (
     <div className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden mt-16 bg-black">
@@ -50,7 +62,7 @@ function CategoryHero({ category }) {
           </h1>
           <div className="h-[4px] w-24 bg-primary-500 mx-auto rounded-sm mb-6 shadow-[0_0_20px_rgba(255,153,0,0.6)]" />
           <p className="text-zinc-200 text-lg md:text-xl font-medium drop-shadow-lg">
-            Explore our premium selection of {safeCategory.toLowerCase()}.
+            {tagline}
           </p>
         </motion.div>
       </div>

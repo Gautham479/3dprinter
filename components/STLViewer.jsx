@@ -6,6 +6,38 @@ import { OrbitControls, Bounds, Html } from '@react-three/drei';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { useLoader } from '@react-three/fiber';
 import { Loader2 } from 'lucide-react';
+import { useStore } from '../store/useStore';
+
+function calculateVolume(geometry) {
+  const position = geometry.attributes.position;
+  if (!position) return 0;
+  
+  let volume = 0;
+  
+  if (geometry.index) {
+    const indices = geometry.index.array;
+    for (let i = 0; i < indices.length; i += 3) {
+      const a = indices[i];
+      const b = indices[i + 1];
+      const c = indices[i + 2];
+      
+      const x1 = position.getX(a), y1 = position.getY(a), z1 = position.getZ(a);
+      const x2 = position.getX(b), y2 = position.getY(b), z2 = position.getZ(b);
+      const x3 = position.getX(c), y3 = position.getY(c), z3 = position.getZ(c);
+      
+      volume += (-x3 * y2 * z1 + x2 * y3 * z1 + x3 * y1 * z2 - x1 * y3 * z2 - x2 * y1 * z3 + x1 * y2 * z3) / 6.0;
+    }
+  } else {
+    for (let i = 0; i < position.count; i += 3) {
+      const x1 = position.getX(i), y1 = position.getY(i), z1 = position.getZ(i);
+      const x2 = position.getX(i + 1), y2 = position.getY(i + 1), z2 = position.getZ(i + 1);
+      const x3 = position.getX(i + 2), y3 = position.getY(i + 2), z3 = position.getZ(i + 2);
+      
+      volume += (-x3 * y2 * z1 + x2 * y3 * z1 + x3 * y1 * z2 - x1 * y3 * z2 - x2 * y1 * z3 + x1 * y2 * z3) / 6.0;
+    }
+  }
+  return Math.abs(volume);
+}
 
 function STLModel({ fileUrl }) {
   const geometry = useLoader(STLLoader, fileUrl);
@@ -17,10 +49,24 @@ function STLModel({ fileUrl }) {
       geometry.center(); // Center the geometry's bounding box
       geometry.computeBoundingBox();
       
+      const boundingBox = geometry.boundingBox;
+      const x = Math.round(boundingBox.max.x - boundingBox.min.x);
+      const y = Math.round(boundingBox.max.y - boundingBox.min.y);
+      const z = Math.round(boundingBox.max.z - boundingBox.min.z);
+      const volume = calculateVolume(geometry);
+
+      // Save stats to store for price calculation and UI display
+      useStore.getState().setFileStats({
+        volume,
+        x,
+        y,
+        z
+      });
+
       // Because we rotate by -Math.PI/2 on X, the local Z axis becomes world Y.
       // After centering, local Z goes from -sizeZ/2 to +sizeZ/2.
       // Move it up by sizeZ/2 so the bottom sits perfectly at world Y=0.
-      const sizeZ = geometry.boundingBox.max.z - geometry.boundingBox.min.z;
+      const sizeZ = boundingBox.max.z - boundingBox.min.z;
       setOffsetY(sizeZ / 2);
     }
   }, [geometry]);

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShieldCheck, Truck, CreditCard, ChevronLeft, Package, MapPin, FileText, CheckCircle, Zap } from 'lucide-react';
-import { useStore } from '@/store/useStore';
+import { useStore, PRICING_SETTINGS } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Dynamically loads the Razorpay script — guarantees window.Razorpay
@@ -43,7 +43,8 @@ export default function CheckoutPage() {
   });
 
   const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
-  const deliveryFee = 0;
+  const hasCustomItems = cart.some(item => item.type === 'custom');
+  const deliveryFee = (hasCustomItems ? PRICING_SETTINGS.packingCharge : 0) + PRICING_SETTINGS.shippingCharge;
   const totalAmount = subtotal + deliveryFee;
   const canCheckout = true;
 

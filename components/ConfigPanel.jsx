@@ -15,8 +15,17 @@ const selectStyle = {
   paddingRight: '2.5rem',
 };
 
+const formatPrintTime = (hours) => {
+  if (!hours) return '';
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  if (h === 0) return `${m}m`;
+  if (m === 0) return `${h}h`;
+  return `${h}h ${m}m`;
+};
+
 export default function ConfigPanel() {
-  const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors } = useStore();
+  const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors, fileStats } = useStore();
   const strengthPercentage = ((config.strength - 10) / 90) * 100;
   const colorContainerRef = useRef(null);
 
@@ -205,22 +214,49 @@ export default function ConfigPanel() {
             : 'border-surface-border bg-surface-muted/30'
           }`}>
           {selectedFile ? (
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="space-y-1"
-            >
-              <p className="text-xs text-fg-subtle uppercase tracking-widest font-bold">Estimated Price</p>
-              <p className="text-5xl font-black text-primary-500">₹{mockPrice}</p>
-              <p className="text-xs text-fg-muted flex items-center justify-center gap-1 mt-1">
-                <motion.span
-                  className="w-1.5 h-1.5 rounded-sm bg-accent-500"
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                Includes material & processing
-              </p>
-            </motion.div>
+            !fileStats ? (
+              <div className="flex flex-col items-center justify-center py-4 gap-2">
+                <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs text-fg-muted font-bold uppercase tracking-wider">Analyzing 3D Model...</p>
+              </div>
+            ) : (
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="space-y-4"
+              >
+                {/* Stats grid */}
+                <div className="grid grid-cols-3 gap-2 py-2 border-b border-primary-500/20 text-left">
+                  <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
+                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Dimensions</p>
+                    <p className="text-xs font-black text-fg mt-1 line-clamp-1" title={`${fileStats.x} × ${fileStats.y} × ${fileStats.z} mm`}>
+                      {fileStats.x}×{fileStats.y}×{fileStats.z}mm
+                    </p>
+                  </div>
+                  <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
+                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Est. Weight</p>
+                    <p className="text-xs font-black text-fg mt-1">{fileStats.weight}g</p>
+                  </div>
+                  <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
+                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Print Time</p>
+                    <p className="text-xs font-black text-fg mt-1">{formatPrintTime(fileStats.printTime)}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs text-fg-subtle uppercase tracking-widest font-bold">Estimated Price</p>
+                  <p className="text-5xl font-black text-primary-500">₹{mockPrice}</p>
+                  <p className="text-xs text-fg-muted flex items-center justify-center gap-1 mt-1">
+                    <motion.span
+                      className="w-1.5 h-1.5 rounded-sm bg-accent-500"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                    Includes material & processing
+                  </p>
+                </div>
+              </motion.div>
+            )
           ) : (
             <div className="flex flex-col items-center gap-2 py-2">
               <UploadCloud className="w-8 h-8 text-fg-subtle" />

@@ -43,8 +43,7 @@ export default function CheckoutPage() {
   });
 
   const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
-  const hasCustomItems = cart.some(item => item.type === 'custom');
-  const deliveryFee = (hasCustomItems ? PRICING_SETTINGS.packingCharge : 0) + PRICING_SETTINGS.shippingCharge;
+  const deliveryFee = PRICING_SETTINGS.shippingCharge; // Shipping is added at checkout
   const totalAmount = subtotal + deliveryFee;
   const canCheckout = true;
 

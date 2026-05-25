@@ -7,9 +7,8 @@ export const PRICING_SETTINGS = {
   machinePrice: 100000, // Rs
   machineLifeYears: 2,
   workingDaysPerYear: 300,
-  averageHoursPerDay: 12,
-  setupFee: 15, // Rs
-  fixedProfitPercentage: 150, // % - Increased from 15% to realistically cover labor, maintenance, and failed prints
+  averagePrintsPerDay: 2,
+  fixedProfitPercentage: 15, // %
   packingCharge: 20, // Rs
   shippingCharge: 40, // Rs
   multicolorExtraCharge: 50, // Rs
@@ -18,31 +17,30 @@ export const PRICING_SETTINGS = {
 function calculatePrice(config, fileStats) {
   if (!fileStats) return 0;
 
-  // 1. Material Cost: Rs 1.30 per gram
+  // 1. Material Cost
   const materialPricePerGram = PRICING_SETTINGS.materialPricePerKg / 1000;
   const materialCost = fileStats.weight * materialPricePerGram;
 
-  // 2. Electricity Cost: Rs 8 per hour
+  // 2. Electricity Cost
   const electricityCost = fileStats.printTime * PRICING_SETTINGS.electricityCostPerHour;
 
-  // 3. Machine Depreciation Cost: Hourly rate
-  const totalMachineHoursLife = PRICING_SETTINGS.machineLifeYears * PRICING_SETTINGS.workingDaysPerYear * PRICING_SETTINGS.averageHoursPerDay;
-  const depreciationCostPerHour = PRICING_SETTINGS.machinePrice / totalMachineHoursLife;
-  const machineDepreciationCost = fileStats.printTime * depreciationCostPerHour;
+  // 3. Machine Depreciation Cost: Flat rate per print
+  const totalMachinePrintsLife = PRICING_SETTINGS.machineLifeYears * PRICING_SETTINGS.workingDaysPerYear * PRICING_SETTINGS.averagePrintsPerDay;
+  const machineDepreciationCost = PRICING_SETTINGS.machinePrice / totalMachinePrintsLife;
 
   // 4. Multicolor surcharge if selected
   const multicolorCharge = config.colorMode === 'Multicolor' ? PRICING_SETTINGS.multicolorExtraCharge : 0;
 
-  // 5. Total Manufacturing Cost
-  const manufacturingCost = materialCost + electricityCost + machineDepreciationCost + multicolorCharge + PRICING_SETTINGS.setupFee;
+  // 5. Total Manufacturing Cost (Excludes shipping, which is added at checkout)
+  const manufacturingCost = materialCost + electricityCost + machineDepreciationCost + PRICING_SETTINGS.packingCharge + multicolorCharge;
 
-  // 6. Apply Fixed Profit Percentage (15%)
+  // 6. Apply Fixed Profit Percentage
   const costWithProfit = manufacturingCost * (1 + PRICING_SETTINGS.fixedProfitPercentage / 100);
 
-  // 7. Base price without Packaging & Shipping (added at checkout)
-  const finalPrice = costWithProfit;
+  // 7. Final Price (Round up)
+  const finalPrice = Math.ceil(costWithProfit);
 
-  return Math.ceil(finalPrice);
+  return finalPrice;
 }
 
 export const useStore = create((set) => ({
@@ -117,20 +115,21 @@ export const useStore = create((set) => ({
     else if (state.config.material === 'ABS') density = 1.04;
     else if (state.config.material === 'TPU') density = 1.21;
 
-    // Weight calculation
+    // Weight calculation — calibrated from real slicer data (9 products)
+    // 0.435 = shell/walls/top-bottom base, 0.565 = infill-variable portion
     const volumeCm3 = volume / 1000;
-    const infillFactor = 0.25 + 0.75 * (state.config.strength / 100);
-    const weight = Math.max(0.1, Math.round(volumeCm3 * density * infillFactor * 10) / 10);
+    const infillFactor = 0.435 + 0.565 * (state.config.strength / 100);
+    const weight = Math.max(0.01, Math.round(volumeCm3 * density * infillFactor * 100) / 100);
 
-    // Print Time calculation
-    const baseSpeedGramsPerHour = 12;
+    // Print Time calculation — calibrated avg ~6 g/h from real prints
+    const baseSpeedGramsPerHour = 6;
     let qualityMultiplier = 1.0;
     if (state.config.quality.includes('Draft')) qualityMultiplier = 0.7;
     else if (state.config.quality.includes('High')) qualityMultiplier = 1.8;
 
     let printTime = (weight / baseSpeedGramsPerHour) * qualityMultiplier;
-    if (printTime < 0.5) printTime = 0.5;
-    printTime = Math.round(printTime * 10) / 10;
+    if (printTime < 0.1) printTime = 0.1;
+    printTime = Math.round(printTime * 100) / 100;
 
     const fileStats = {
       volume,
@@ -156,17 +155,17 @@ export const useStore = create((set) => ({
       else if (updatedConfig.material === 'TPU') density = 1.21;
 
       const volumeCm3 = state.fileStats.volume / 1000;
-      const infillFactor = 0.25 + 0.75 * (updatedConfig.strength / 100);
-      const weight = Math.max(0.1, Math.round(volumeCm3 * density * infillFactor * 10) / 10);
+      const infillFactor = 0.435 + 0.565 * (updatedConfig.strength / 100);
+      const weight = Math.max(0.01, Math.round(volumeCm3 * density * infillFactor * 100) / 100);
 
-      const baseSpeedGramsPerHour = 12;
+      const baseSpeedGramsPerHour = 6;
       let qualityMultiplier = 1.0;
       if (updatedConfig.quality.includes('Draft')) qualityMultiplier = 0.7;
       else if (updatedConfig.quality.includes('High')) qualityMultiplier = 1.8;
 
       let printTime = (weight / baseSpeedGramsPerHour) * qualityMultiplier;
-      if (printTime < 0.5) printTime = 0.5;
-      printTime = Math.round(printTime * 10) / 10;
+      if (printTime < 0.1) printTime = 0.1;
+      printTime = Math.round(printTime * 100) / 100;
 
       updatedFileStats = {
         ...state.fileStats,

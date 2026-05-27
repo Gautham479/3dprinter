@@ -24,10 +24,10 @@ function CategoryHero({ category }) {
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
-    'desk accessories': '/photos/daily acc 1.jpeg',
+    'desk accessories': '/pics/desk accesories.webp',
     'playables': '/photos/playables.jpeg',
     'collectibles': '/photos/action 2.jpeg',
-    'home decor': '/photos/idols 2.jpg',
+    'home decor': '/pics/home decor.webp',
     'kit cards': '/photos/playables 3.jpeg',
   };
 

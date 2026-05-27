@@ -80,7 +80,7 @@ function STLModel({ fileUrl }) {
       rotation={[-Math.PI / 2, 0, 0]}
     >
       <meshStandardMaterial 
-        color="#8a8d91" 
+        color="#D2B48C" 
         metalness={0.7} 
         roughness={0.3} 
       />
@@ -143,9 +143,14 @@ export default function STLViewer({ file }) {
       </Canvas>
 
       {/* UI Overlay */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-black/50 rounded-sm backdrop-blur-md border border-white/10 shadow-lg">
-        <span className="w-2 h-2 rounded-sm bg-accent-500 animate-pulse" />
-        <span className="text-white text-xs font-bold uppercase tracking-widest">3D Preview</span>
+      <div className="absolute top-4 left-4 flex flex-col gap-2">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-black/50 rounded-sm backdrop-blur-md border border-white/10 shadow-lg">
+          <span className="w-2 h-2 rounded-sm bg-accent-500 animate-pulse" />
+          <span className="text-white text-xs font-bold uppercase tracking-widest">3D Preview</span>
+        </div>
+        <div className="px-3 py-1.5 bg-black/50 rounded-sm backdrop-blur-md border border-white/10 shadow-lg">
+          <span className="text-fg-muted text-xs font-bold uppercase tracking-widest">Bed Size: 256×256×256</span>
+        </div>
       </div>
 
       <div className="absolute top-4 right-4 px-2.5 py-1 bg-surface-card border border-surface-border rounded-sm shadow-lg">

@@ -689,7 +689,27 @@ export default function AdminDashboardPage() {
                                   className="font-black text-fg bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all w-full max-w-[300px]"
                                 />
                                 <div className="text-sm text-fg-muted flex items-center gap-1">
-                                  <span>{product.type} | {product.material} | ₹</span>
+                                  <select
+                                    key={`type-${product.id}-${product.type}`}
+                                    defaultValue={product.type}
+                                    onChange={async (e) => {
+                                      const val = e.target.value;
+                                      if (val && val !== product.type) {
+                                        await fetch(`/api/admin/products/${product.id}`, {
+                                          method: 'PATCH',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ type: val }),
+                                        });
+                                        fetchProducts();
+                                      }
+                                    }}
+                                    className="bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all text-xs"
+                                  >
+                                    {PRODUCT_TYPES.map(type => (
+                                      <option key={type} value={type}>{type}</option>
+                                    ))}
+                                  </select>
+                                  <span> | {product.material} | ₹</span>
                                   <input
                                     key={`price-${product.id}-${product.price}`}
                                     type="number"

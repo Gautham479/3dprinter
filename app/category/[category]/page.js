@@ -25,16 +25,24 @@ function CategoryHero({ category }) {
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'desk accessories': '/pics/desk accesories.webp',
-    'playables': '/photos/playables.jpeg',
-    'collectibles': '/photos/action 2.jpeg',
+    'playables': '/pics/playables.webp',
+    'collectibles': '/pics/collectible.jpg',
     'home decor': '/pics/home decor.webp',
-    'kit cards': '/photos/playables 3.jpeg',
+    'kit cards': '/pics/kit cards.png',
   };
 
   const defaultImagePath = categoryImageMap[safeCategory.toLowerCase()] || `/photos/${safeCategory.toLowerCase()}.jpeg`;
   const [imgSrc, setImgSrc] = useState(defaultImagePath);
 
   const tagline = getCategoryTagline(safeCategory);
+
+  // Get object-position based on category
+  const getObjectPosition = (category) => {
+    const cat = category.toLowerCase();
+    if (cat.includes('collectible')) return 'center 20%';
+    if (cat.includes('playable')) return 'center';
+    return '';
+  };
 
   return (
     <div className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden mt-16 bg-black">
@@ -45,6 +53,7 @@ function CategoryHero({ category }) {
           alt={safeCategory}
           onError={() => setImgSrc('/hero-fallback.png')}
           className="w-full h-full object-cover opacity-50"
+          style={{objectPosition: getObjectPosition(safeCategory)}}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-surface-bg via-surface-bg/80 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-surface-bg/50 to-transparent" />

@@ -63,11 +63,11 @@ export default function Categories() {
         "/photos/playables 1.jpeg",
         "/photos/playables 3.jpeg"
       ],
-      borderColor: "border-purple-500",
+      borderColor: "border-amber-200",
       bgColor: "bg-black",
       hoverBg: "hover:bg-zinc-900",
       textColor: "text-white",
-      accent: "text-purple-500",
+      accent: "text-amber-200",
       isCTA: false,
     },
   ];

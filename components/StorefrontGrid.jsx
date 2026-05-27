@@ -33,13 +33,25 @@ export default function StorefrontGrid() {
   }));
 
   // Fallback to recent products if no featured products are set
-  const displayCollections = featured.length > 0 
+  const baseCollections = featured.length > 0 
     ? featured 
     : products.slice(0, 10).map(p => ({
         name: p.name,
         img: p.image || `https://placehold.co/400x400/111/333?text=${encodeURIComponent(p.name)}`,
         linkUrl: `/products/${p.slug}`
       }));
+
+  // Shuffle array randomly
+  const shuffle = (arr) => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const displayCollections = shuffle(baseCollections);
 
   if (loading) {
     return (

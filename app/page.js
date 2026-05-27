@@ -48,7 +48,7 @@ export default function Home() {
 
 
       {/* Cinematic Tagline Banner */}
-      <section className="w-full bg-gradient-to-b from-black to-[#030b1c] pt-32 pb-12 md:pt-40 md:pb-16 px-4 sm:px-6 flex justify-center text-center z-10 relative overflow-hidden border-b border-white/5">
+      <section className="w-full bg-black pt-32 pb-12 md:pt-40 md:pb-16 px-4 sm:px-6 flex justify-center text-center z-10 relative overflow-hidden border-b border-white/5">
         {/* Subtle Light Effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[80%] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#ff7a00]/10 via-transparent to-transparent pointer-events-none blur-[60px]" />

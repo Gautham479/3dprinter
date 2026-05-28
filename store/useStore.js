@@ -115,53 +115,25 @@ export const useStore = create((set) => ({
     const { volume, x, y, z } = rawStats;
     const isTooBig = x > 256 || y > 256 || z > 256;
 
-    let finalWeight = 0;
-    let finalPrintTime = 0;
+    // FALLBACK TO ESTIMATION FORMULA ONLY
+    let density = 1.24;
+    const config = useStore.getState().config;
+    if (config.material === 'PETG') density = 1.27;
+    else if (config.material === 'ABS') density = 1.04;
+    else if (config.material === 'TPU') density = 1.21;
 
-    // 1. TRY ORCA SLICER CLI BACKEND
-    let slicerSuccess = false;
-    const fileToSlice = fileObject || useStore.getState().selectedFile;
-    if (fileToSlice) {
-      try {
-        const formData = new FormData();
-        formData.append('file', fileToSlice);
-        formData.append('material', useStore.getState().config.material);
-
-        const res = await fetch('/api/slice', { method: 'POST', body: formData });
-        if (res.ok) {
-          const slicerData = await res.json();
-          if (slicerData.success && slicerData.weight > 0) {
-            finalWeight = slicerData.weight;
-            finalPrintTime = slicerData.printTimeHours;
-            slicerSuccess = true;
-          }
-        }
-      } catch (err) {
-        console.warn("OrcaSlicer backend not available or failed. Falling back to estimation.");
-      }
-    }
-
-    // 2. FALLBACK TO ESTIMATION FORMULA
-    if (!slicerSuccess) {
-      let density = 1.24;
-      const config = useStore.getState().config;
-      if (config.material === 'PETG') density = 1.27;
-      else if (config.material === 'ABS') density = 1.04;
-      else if (config.material === 'TPU') density = 1.21;
-
-      const volumeCm3 = volume / 1000;
-      const infill = config.strength || 20;
-      const shellVolumeCm3 = volumeCm3 * 0.3;
-      const innerVolumeCm3 = volumeCm3 * 0.7;
-      const actualVolumeToPrint = shellVolumeCm3 + innerVolumeCm3 * (infill / 100);
-      
-      finalWeight = Math.max(0.01, actualVolumeToPrint * density);
-      
-      // Bambu P2S prints fast, approx 1 hr per 20 grams
-      finalPrintTime = finalWeight / 20;
-      if (finalPrintTime < 0.1) finalPrintTime = 0.1;
-      finalPrintTime = Math.round(finalPrintTime * 100) / 100;
-    }
+    const volumeCm3 = volume / 1000;
+    const infill = config.strength || 20;
+    const shellVolumeCm3 = volumeCm3 * 0.3;
+    const innerVolumeCm3 = volumeCm3 * 0.7;
+    const actualVolumeToPrint = shellVolumeCm3 + innerVolumeCm3 * (infill / 100);
+    
+    let finalWeight = Math.max(0.01, actualVolumeToPrint * density);
+    
+    // Bambu P2S prints fast, approx 1 hr per 20 grams
+    let finalPrintTime = finalWeight / 20;
+    if (finalPrintTime < 0.1) finalPrintTime = 0.1;
+    finalPrintTime = Math.round(finalPrintTime * 100) / 100;
 
     const fileStats = {
       volume,
@@ -170,7 +142,7 @@ export const useStore = create((set) => ({
       z,
       weight: finalWeight,
       printTime: finalPrintTime,
-      isExact: slicerSuccess
+      isExact: false // Never exact since we removed OrcaSlicer
     };
 
     set((state) => {

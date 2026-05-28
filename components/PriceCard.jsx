@@ -14,8 +14,8 @@ export default function PriceCard() {
           {isCalculating ? (
             <div className="flex flex-col items-center justify-center animate-in fade-in duration-300">
               <Loader2 className="w-10 h-10 animate-spin text-primary-500 mb-4" />
-              <p className="text-sm text-fg-subtle font-medium tracking-wide">Slicing & Calculating...</p>
-              <p className="text-xs text-fg-muted mt-2">Running backend OrcaSlicer</p>
+              <p className="text-sm text-fg-subtle font-medium tracking-wide">Calculating...</p>
+              <p className="text-xs text-fg-muted mt-2">Analyzing model geometry</p>
             </div>
           ) : selectedFile && mockPrice ? (
             <div className="animate-in fade-in zoom-in duration-300">

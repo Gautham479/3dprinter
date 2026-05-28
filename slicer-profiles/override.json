@@ -1,0 +1,8 @@
+{
+    "type": "machine",
+    "name": "P2S Override",
+    "from": "system",
+    "instantiation": "true",
+    "inherits": "Bambu Lab P2S 0.4 nozzle",
+    "layer_change_gcode": "G92 E0\n; layer num/total_layer_count: {layer_num+1}/[total_layer_count]\nM73 L{layer_num+1}\nM991 S0 P{layer_num} ;notify layer change"
+}

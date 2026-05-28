@@ -43,9 +43,9 @@ export default function CheckoutPage() {
   });
 
   const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
-  const deliveryFee = PRICING_SETTINGS.shippingCharge; // Shipping is added at checkout
+  const deliveryFee = subtotal >= PRICING_SETTINGS.freeShippingAbove ? 0 : PRICING_SETTINGS.shippingCharge;
   const totalAmount = subtotal + deliveryFee;
-  const canCheckout = true;
+  const canCheckout = subtotal >= PRICING_SETTINGS.minimumOrderValue;
 
   useEffect(() => {
     if (cart.length === 0 && !isSuccess) {
@@ -397,6 +397,16 @@ export default function CheckoutPage() {
                     <span className="text-fg font-bold">₹{deliveryFee}</span>
                   )}
                 </div>
+                {deliveryFee > 0 && (
+                  <p className="text-[10px] text-accent-500 font-semibold">
+                    Add ₹{PRICING_SETTINGS.freeShippingAbove - subtotal} more for FREE shipping!
+                  </p>
+                )}
+                {deliveryFee === 0 && subtotal >= PRICING_SETTINGS.freeShippingAbove && (
+                  <p className="text-[10px] text-accent-500 font-semibold">
+                    🎉 You've unlocked FREE shipping!
+                  </p>
+                )}
               </div>
 
               <div className="pt-4 border-t border-surface-border/50 flex justify-between items-end">
@@ -432,6 +442,12 @@ export default function CheckoutPage() {
                   </>
                 )}
               </motion.button>
+              
+              {!canCheckout && (
+                <div className="text-red-400 text-xs font-bold text-center bg-red-500/10 border border-red-500/30 p-2 rounded-sm mt-2">
+                  Minimum order value is ₹{PRICING_SETTINGS.minimumOrderValue}. Add ₹{PRICING_SETTINGS.minimumOrderValue - subtotal} more to place this order.
+                </div>
+              )}
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-fg-subtle">
                 <ShieldCheck className="w-3 h-3" />

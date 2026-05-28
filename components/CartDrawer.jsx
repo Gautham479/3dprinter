@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Trash2, ShoppingCart, Rocket, Package } from 'lucide-react';
-import { useStore } from '../store/useStore';
+import { useStore, PRICING_SETTINGS } from '../store/useStore';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,8 +12,10 @@ export default function CartDrawer() {
   const [checkingOut, setCheckingOut] = useState(false);
 
   const totalCost = cart.reduce((acc, item) => acc + item.price, 0);
+  const canCheckout = totalCost >= PRICING_SETTINGS.minimumOrderValue;
 
   const handleCheckout = () => {
+    if (!canCheckout) return;
     setCheckingOut(true);
     closeCart();
     router.push('/checkout');
@@ -149,9 +151,9 @@ export default function CartDrawer() {
 
                   <motion.button
                     onClick={handleCheckout}
-                    disabled={checkingOut}
-                    whileHover={!checkingOut ? { scale: 1.02 } : {}}
-                    whileTap={!checkingOut ? { scale: 0.98 } : {}}
+                    disabled={checkingOut || !canCheckout}
+                    whileHover={!checkingOut && canCheckout ? { scale: 1.02 } : {}}
+                    whileTap={!checkingOut && canCheckout ? { scale: 0.98 } : {}}
                     className="w-full btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black py-4 rounded-sm flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:pointer-events-none"
                   >
                     {checkingOut ? (
@@ -170,6 +172,11 @@ export default function CartDrawer() {
                       </>
                     )}
                   </motion.button>
+                  {!canCheckout && (
+                    <div className="text-red-400 text-xs font-bold text-center bg-red-500/10 border border-red-500/30 p-2 rounded-sm mt-2">
+                      Minimum order value is ₹{PRICING_SETTINGS.minimumOrderValue}. Add ₹{PRICING_SETTINGS.minimumOrderValue - totalCost} more to checkout.
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}

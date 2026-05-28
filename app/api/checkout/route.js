@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import Razorpay from 'razorpay';
 import { NextResponse } from 'next/server';
+import { PRICING_SETTINGS } from '@/store/useStore';
 
 const prisma = new PrismaClient();
 
@@ -19,7 +20,12 @@ export async function POST(req) {
 
     // Calculate totals securely
     const subtotal = items.reduce((acc, item) => acc + item.price, 0);
-    const deliveryFee = PRICING_SETTINGS.shippingCharge; // Applied to entire order
+    
+    if (subtotal < PRICING_SETTINGS.minimumOrderValue) {
+      return NextResponse.json({ error: `Minimum order value is ₹${PRICING_SETTINGS.minimumOrderValue}.` }, { status: 400 });
+    }
+
+    const deliveryFee = subtotal >= PRICING_SETTINGS.freeShippingAbove ? 0 : PRICING_SETTINGS.shippingCharge;
     const totalAmount = subtotal + deliveryFee;
 
     // Generate readable order ID

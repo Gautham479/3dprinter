@@ -1,17 +1,23 @@
 "use client";
 
 import React from 'react';
-import { ShoppingCart, UploadCloud } from 'lucide-react';
+import { ShoppingCart, UploadCloud, Loader2 } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 export default function PriceCard() {
-  const { selectedFile, mockPrice } = useStore();
+  const { selectedFile, mockPrice, isCalculating } = useStore();
 
   return (
     <div className="bg-surface-card rounded-sm border border-surface-border overflow-hidden shadow-xl mt-6">
       <div className="p-6">
         <div className="flex flex-col items-center justify-center p-8 bg-surface-bg rounded-sm border border-surface-border text-center mb-6 min-h-[160px] transition-all">
-          {selectedFile ? (
+          {isCalculating ? (
+            <div className="flex flex-col items-center justify-center animate-in fade-in duration-300">
+              <Loader2 className="w-10 h-10 animate-spin text-primary-500 mb-4" />
+              <p className="text-sm text-fg-subtle font-medium tracking-wide">Slicing & Calculating...</p>
+              <p className="text-xs text-fg-muted mt-2">Running backend OrcaSlicer</p>
+            </div>
+          ) : selectedFile && mockPrice ? (
             <div className="animate-in fade-in zoom-in duration-300">
               <p className="text-sm text-fg-subtle font-medium tracking-wide uppercase mb-2">Estimated Price</p>
               <h2 className="text-4xl sm:text-5xl font-black text-fg tracking-tight">
@@ -35,9 +41,10 @@ export default function PriceCard() {
 
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <button 
-            disabled={!selectedFile}
+          <button 
+            disabled={!selectedFile || isCalculating}
             className={`flex items-center justify-center gap-2 py-4 px-6 rounded-sm font-bold transition-all
-              ${selectedFile 
+              ${selectedFile && !isCalculating
                 ? 'bg-cta text-cta-contrast hover:opacity-90 hover:shadow-lg shadow-black/10 dark:shadow-black/40 active:scale-95' 
                 : 'bg-surface-border text-fg-subtle cursor-not-allowed'
               }
@@ -47,9 +54,10 @@ export default function PriceCard() {
             Add to Cart
           </button>
           <button 
-            disabled={!selectedFile}
+          <button 
+            disabled={!selectedFile || isCalculating}
             className={`py-4 px-6 rounded-sm font-bold transition-all
-              ${selectedFile 
+              ${selectedFile && !isCalculating
                 ? 'bg-surface-muted border border-surface-border text-fg hover:border-primary-500 hover:text-primary-500 active:scale-95' 
                 : 'bg-surface-muted border border-surface-border/50 text-fg-subtle cursor-not-allowed'
               }

@@ -25,7 +25,7 @@ const formatPrintTime = (hours) => {
 };
 
 export default function ConfigPanel() {
-  const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors, fileStats } = useStore();
+  const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors, fileStats, isTooBig } = useStore();
   const strengthPercentage = ((config.strength - 10) / 90) * 100;
   const colorContainerRef = useRef(null);
 
@@ -225,21 +225,22 @@ export default function ConfigPanel() {
                 animate={{ scale: 1, opacity: 1 }}
                 className="space-y-4"
               >
+                {isTooBig && (
+                  <div className="bg-red-500/10 border border-red-500/50 rounded-sm p-3 text-red-400 text-xs font-bold text-center">
+                    Warning: Model exceeds maximum build volume (256×256×256mm)
+                  </div>
+                )}
                 {/* Stats grid */}
-                <div className="grid grid-cols-3 gap-2 py-2 border-b border-primary-500/20 text-left">
+                <div className="grid grid-cols-2 gap-2 py-2 border-b border-primary-500/20 text-left">
                   <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
                     <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Dimensions</p>
-                    <p className="text-xs font-black text-fg mt-1 line-clamp-1" title={`${fileStats.x} × ${fileStats.y} × ${fileStats.z} mm`}>
-                      {fileStats.x}×{fileStats.y}×{fileStats.z}mm
+                    <p className="text-xs font-black text-fg mt-1 line-clamp-1" title={`${Number(fileStats.x).toFixed(2)} × ${Number(fileStats.y).toFixed(2)} × ${Number(fileStats.z).toFixed(2)} mm`}>
+                      {Number(fileStats.x).toFixed(2)}×{Number(fileStats.y).toFixed(2)}×{Number(fileStats.z).toFixed(2)}mm
                     </p>
                   </div>
                   <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
-                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Est. Weight</p>
-                    <p className="text-xs font-black text-fg mt-1">{fileStats.weight}g</p>
-                  </div>
-                  <div className="p-2 bg-surface-muted/40 rounded-sm border border-surface-border/50 text-center">
-                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Print Time</p>
-                    <p className="text-xs font-black text-fg mt-1">{formatPrintTime(fileStats.printTime)}</p>
+                    <p className="text-[10px] text-fg-subtle uppercase tracking-wider font-bold">Est. Volume</p>
+                    <p className="text-xs font-black text-fg mt-1">{(fileStats.volume / 1000).toFixed(2)} cm³</p>
                   </div>
                 </div>
 
@@ -268,11 +269,11 @@ export default function ConfigPanel() {
 
         {/* Add to Cart */}
         <motion.button
-          disabled={!selectedFile}
+          disabled={!selectedFile || isTooBig}
           onClick={addToCart}
-          whileHover={selectedFile ? { scale: 1.02 } : {}}
-          whileTap={selectedFile ? { scale: 0.98 } : {}}
-          className={`add-to-cart-btn w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 transition-all ${selectedFile
+          whileHover={selectedFile && !isTooBig ? { scale: 1.02 } : {}}
+          whileTap={selectedFile && !isTooBig ? { scale: 0.98 } : {}}
+          className={`add-to-cart-btn w-full py-4 rounded-sm font-black text-base flex items-center justify-center gap-2 transition-all ${selectedFile && !isTooBig
               ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
               : 'bg-surface-muted border border-surface-border text-fg-subtle cursor-not-allowed'
             }`}

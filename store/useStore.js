@@ -1,46 +1,44 @@
 import { create } from 'zustand';
 
-// Pricing settings based on your spreadsheet
+// Pricing settings
 export const PRICING_SETTINGS = {
-  materialPricePerKg: 1300, // Rs
-  electricityCostPerHour: 8, // Rs
-  machinePrice: 100000, // Rs
+  materialPricePerKg: 1300,
+  electricityCostPerHour: 8,
+  machinePrice: 100000,
   machineLifeYears: 2,
   workingDaysPerYear: 300,
-  averagePrintsPerDay: 2,
-  fixedProfitPercentage: 15, // %
-  packingCharge: 20, // Rs
-  shippingCharge: 40, // Rs
-  multicolorExtraCharge: 50, // Rs
+  profitPercent: 97,          // Matched to Blaster 3D pricing scale
+  multicolorExtra: 50,
+  setupFee: 0,                // Removed flat setup fee
+  shippingCharge: 60,         // Rs — flat shipping fee
+  freeShippingAbove: 999,     // Rs — free shipping threshold
+  minimumPrice: 50,           // Lowered minimum price for small parts
+  minimumOrderValue: 500,     // Rs — minimum order value to checkout
 };
 
 function calculatePrice(config, fileStats) {
   if (!fileStats) return 0;
 
-  // 1. Material Cost
-  const materialPricePerGram = PRICING_SETTINGS.materialPricePerKg / 1000;
-  const materialCost = fileStats.weight * materialPricePerGram;
+  const totalLifeHours = PRICING_SETTINGS.machineLifeYears * PRICING_SETTINGS.workingDaysPerYear * 8;
+  const deprPerHr = PRICING_SETTINGS.machinePrice / totalLifeHours;
 
-  // 2. Electricity Cost
+  const materialCost = (fileStats.weight / 1000) * PRICING_SETTINGS.materialPricePerKg;
   const electricityCost = fileStats.printTime * PRICING_SETTINGS.electricityCostPerHour;
+  const depreciationCost = fileStats.printTime * deprPerHr;
 
-  // 3. Machine Depreciation Cost: Flat rate per print
-  const totalMachinePrintsLife = PRICING_SETTINGS.machineLifeYears * PRICING_SETTINGS.workingDaysPerYear * PRICING_SETTINGS.averagePrintsPerDay;
-  const machineDepreciationCost = PRICING_SETTINGS.machinePrice / totalMachinePrintsLife;
+  const subtotal = materialCost + electricityCost + depreciationCost;
+  const profitAmount = subtotal * (PRICING_SETTINGS.profitPercent / 100);
 
-  // 4. Multicolor surcharge if selected
-  const multicolorCharge = config.colorMode === 'Multicolor' ? PRICING_SETTINGS.multicolorExtraCharge : 0;
+  const isMulticolor = config.colorMode === 'Multicolor' || config.colorMode === 'Multi Color';
+  const multicolorCharge = isMulticolor ? PRICING_SETTINGS.multicolorExtra : 0;
 
-  // 5. Total Manufacturing Cost (Excludes shipping, which is added at checkout)
-  const manufacturingCost = materialCost + electricityCost + machineDepreciationCost + PRICING_SETTINGS.packingCharge + multicolorCharge;
+  let materialMultiplier = 1.0;
+  if (config.material === 'PETG') materialMultiplier = 1.2;
+  else if (config.material === 'ABS') materialMultiplier = 1.4;
+  else if (config.material === 'TPU') materialMultiplier = 1.8;
 
-  // 6. Apply Fixed Profit Percentage
-  const costWithProfit = manufacturingCost * (1 + PRICING_SETTINGS.fixedProfitPercentage / 100);
-
-  // 7. Final Price (Round up)
-  const finalPrice = Math.ceil(costWithProfit);
-
-  return finalPrice;
+  const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier;
+  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));
 }
 
 export const useStore = create((set) => ({
@@ -55,6 +53,8 @@ export const useStore = create((set) => ({
   },
   mockPrice: null,
   fileStats: null, // { volume, x, y, z, weight, printTime }
+  isTooBig: false,
+  isCalculating: false,
   cart: [],
   isCartOpen: false,
   searchQuery: '',
@@ -101,69 +101,104 @@ export const useStore = create((set) => ({
 
   setSelectedFile: (file) => set((state) => {
     // Reset fileStats and price when a new file is uploaded
-    return { selectedFile: file, mockPrice: null, fileStats: null };
+    return { selectedFile: file, mockPrice: null, fileStats: null, isTooBig: false, isCalculating: false };
   }),
 
-  setFileStats: (rawStats) => set((state) => {
-    if (!rawStats) return { fileStats: null, mockPrice: null };
+  setFileStats: async (rawStats, fileObject = null) => {
+    if (!rawStats) {
+      set({ fileStats: null, mockPrice: null, isTooBig: false, isCalculating: false });
+      return;
+    }
+
+    set({ isCalculating: true });
 
     const { volume, x, y, z } = rawStats;
+    const isTooBig = x > 256 || y > 256 || z > 256;
 
-    // Density of selected material
-    let density = 1.24;
-    if (state.config.material === 'PETG') density = 1.27;
-    else if (state.config.material === 'ABS') density = 1.04;
-    else if (state.config.material === 'TPU') density = 1.21;
+    let finalWeight = 0;
+    let finalPrintTime = 0;
 
-    // Weight calculation — calibrated from real slicer data (9 products)
-    // 0.435 = shell/walls/top-bottom base, 0.565 = infill-variable portion
-    const volumeCm3 = volume / 1000;
-    const infillFactor = 0.435 + 0.565 * (state.config.strength / 100);
-    const weight = Math.max(0.01, Math.round(volumeCm3 * density * infillFactor * 100) / 100);
+    // 1. TRY ORCA SLICER CLI BACKEND
+    let slicerSuccess = false;
+    const fileToSlice = fileObject || useStore.getState().selectedFile;
+    if (fileToSlice) {
+      try {
+        const formData = new FormData();
+        formData.append('file', fileToSlice);
+        formData.append('material', useStore.getState().config.material);
 
-    // Print Time calculation — calibrated avg ~6 g/h from real prints
-    const baseSpeedGramsPerHour = 6;
-    let qualityMultiplier = 1.0;
-    if (state.config.quality.includes('Draft')) qualityMultiplier = 0.7;
-    else if (state.config.quality.includes('High')) qualityMultiplier = 1.8;
+        const res = await fetch('/api/slice', { method: 'POST', body: formData });
+        if (res.ok) {
+          const slicerData = await res.json();
+          if (slicerData.success && slicerData.weight > 0) {
+            finalWeight = slicerData.weight;
+            finalPrintTime = slicerData.printTimeHours;
+            slicerSuccess = true;
+          }
+        }
+      } catch (err) {
+        console.warn("OrcaSlicer backend not available or failed. Falling back to estimation.");
+      }
+    }
 
-    let printTime = (weight / baseSpeedGramsPerHour) * qualityMultiplier;
-    if (printTime < 0.1) printTime = 0.1;
-    printTime = Math.round(printTime * 100) / 100;
+    // 2. FALLBACK TO ESTIMATION FORMULA
+    if (!slicerSuccess) {
+      let density = 1.24;
+      const config = useStore.getState().config;
+      if (config.material === 'PETG') density = 1.27;
+      else if (config.material === 'ABS') density = 1.04;
+      else if (config.material === 'TPU') density = 1.21;
+
+      const volumeCm3 = volume / 1000;
+      const infill = config.strength || 20;
+      const shellVolumeCm3 = volumeCm3 * 0.3;
+      const innerVolumeCm3 = volumeCm3 * 0.7;
+      const actualVolumeToPrint = shellVolumeCm3 + innerVolumeCm3 * (infill / 100);
+      
+      finalWeight = Math.max(0.01, actualVolumeToPrint * density);
+      
+      // Bambu P2S prints fast, approx 1 hr per 20 grams
+      finalPrintTime = finalWeight / 20;
+      if (finalPrintTime < 0.1) finalPrintTime = 0.1;
+      finalPrintTime = Math.round(finalPrintTime * 100) / 100;
+    }
 
     const fileStats = {
       volume,
       x,
       y,
       z,
-      weight,
-      printTime
+      weight: finalWeight,
+      printTime: finalPrintTime,
+      isExact: slicerSuccess
     };
 
-    const price = calculatePrice(state.config, fileStats);
-    return { fileStats, mockPrice: price };
-  }),
+    set((state) => {
+      const price = calculatePrice(state.config, fileStats);
+      return { fileStats, mockPrice: price, isTooBig, isCalculating: false };
+    });
+  },
 
   setConfig: (newConfig) => set((state) => {
     const updatedConfig = { ...state.config, ...newConfig };
 
     let updatedFileStats = state.fileStats;
-    if (state.fileStats) {
+    if (state.fileStats && !state.fileStats.isExact) {
+      // Only use the estimation fallback if we don't have exact OrcaSlicer data
       let density = 1.24;
       if (updatedConfig.material === 'PETG') density = 1.27;
       else if (updatedConfig.material === 'ABS') density = 1.04;
       else if (updatedConfig.material === 'TPU') density = 1.21;
 
       const volumeCm3 = state.fileStats.volume / 1000;
-      const infillFactor = 0.435 + 0.565 * (updatedConfig.strength / 100);
-      const weight = Math.max(0.01, Math.round(volumeCm3 * density * infillFactor * 100) / 100);
+      const infill = updatedConfig.strength || 20;
+      const shellVolumeCm3 = volumeCm3 * 0.3;
+      const innerVolumeCm3 = volumeCm3 * 0.7;
+      const actualVolumeToPrint = shellVolumeCm3 + innerVolumeCm3 * (infill / 100);
+      
+      const weight = Math.max(0.01, actualVolumeToPrint * density);
 
-      const baseSpeedGramsPerHour = 6;
-      let qualityMultiplier = 1.0;
-      if (updatedConfig.quality.includes('Draft')) qualityMultiplier = 0.7;
-      else if (updatedConfig.quality.includes('High')) qualityMultiplier = 1.8;
-
-      let printTime = (weight / baseSpeedGramsPerHour) * qualityMultiplier;
+      let printTime = weight / 20;
       if (printTime < 0.1) printTime = 0.1;
       printTime = Math.round(printTime * 100) / 100;
 
@@ -178,7 +213,7 @@ export const useStore = create((set) => ({
     return { config: updatedConfig, mockPrice: price, fileStats: updatedFileStats };
   }),
 
-  clearFile: () => set({ selectedFile: null, mockPrice: null, fileStats: null }),
+  clearFile: () => set({ selectedFile: null, mockPrice: null, fileStats: null, isTooBig: false, isCalculating: false }),
 
   addToCart: () => set((state) => {
     if (!state.selectedFile || !state.mockPrice) return state;
@@ -201,7 +236,8 @@ export const useStore = create((set) => ({
       cart: [...state.cart, newItem],
       selectedFile: null,
       mockPrice: null,
-      fileStats: null
+      fileStats: null,
+      isTooBig: false
     };
   }),
 

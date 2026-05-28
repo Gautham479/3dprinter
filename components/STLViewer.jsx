@@ -1,25 +1,25 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, Bounds, Html } from '@react-three/drei';
+import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
-import { useLoader } from '@react-three/fiber';
-import { Loader2 } from 'lucide-react';
+import { ThreeMFLoader } from 'three/examples/jsm/loaders/3MFLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 function calculateVolume(geometry) {
-  const position = geometry.attributes.position;
-  if (!position) return 0;
-  
   let volume = 0;
+  const position = geometry.attributes.position;
   
   if (geometry.index) {
-    const indices = geometry.index.array;
-    for (let i = 0; i < indices.length; i += 3) {
-      const a = indices[i];
-      const b = indices[i + 1];
-      const c = indices[i + 2];
+    for (let i = 0; i < geometry.index.count; i += 3) {
+      const a = geometry.index.getX(i);
+      const b = geometry.index.getX(i + 1);
+      const c = geometry.index.getX(i + 2);
       
       const x1 = position.getX(a), y1 = position.getY(a), z1 = position.getZ(a);
       const x2 = position.getX(b), y2 = position.getY(b), z2 = position.getZ(b);
@@ -39,37 +39,125 @@ function calculateVolume(geometry) {
   return Math.abs(volume);
 }
 
-function STLModel({ fileUrl }) {
-  const geometry = useLoader(STLLoader, fileUrl);
+function STLModel({ fileUrl, fileName, plateIndex, setTotalPlates }) {
+  const ext = fileName ? fileName.split('.').pop().toLowerCase() : 'stl';
+  let LoaderClass = STLLoader;
+  if (ext === '3mf') LoaderClass = ThreeMFLoader;
+  if (ext === 'obj') LoaderClass = OBJLoader;
+
+  const result = useLoader(LoaderClass, fileUrl);
+  const [geometry, setGeometry] = useState(null);
   const [offsetY, setOffsetY] = useState(0);
+  const [childrenRef, setChildrenRef] = useState([]);
+  const [actualTotalPlates, setActualTotalPlates] = useState(1);
 
+  // --- EFFECT 1: Runs ONCE per file load. Calculates total pricing and plate count. ---
   useEffect(() => {
-    if (geometry) {
-      geometry.computeVertexNormals();
-      geometry.center(); // Center the geometry's bounding box
-      geometry.computeBoundingBox();
-      
-      const boundingBox = geometry.boundingBox;
-      const x = Math.round(boundingBox.max.x - boundingBox.min.x);
-      const y = Math.round(boundingBox.max.y - boundingBox.min.y);
-      const z = Math.round(boundingBox.max.z - boundingBox.min.z);
-      const volume = calculateVolume(geometry);
+    if (!result) return;
 
-      // Save stats to store for price calculation and UI display
-      useStore.getState().setFileStats({
-        volume,
-        x,
-        y,
-        z
+    if (result.isBufferGeometry) {
+      // Single STL mesh
+      const g = result.clone();
+      g.computeVertexNormals();
+      g.computeBoundingBox();
+      const b = g.boundingBox;
+      if (b && b.max.x !== Infinity) {
+        useStore.getState().setFileStats({
+          volume: calculateVolume(g),
+          x: Math.round(b.max.x - b.min.x),
+          y: Math.round(b.max.y - b.min.y),
+          z: Math.round(b.max.z - b.min.z)
+        });
+      }
+      if (setTotalPlates) setTotalPlates(1);
+      setActualTotalPlates(1);
+      setChildrenRef([]);
+    } else {
+      // 3MF / OBJ Group — compute TOTAL bounding box for pricing
+      result.updateMatrixWorld(true);
+      const children = result.children || [];
+
+      const allGeometries = [];
+      children.forEach((child) => {
+        child.traverse((node) => {
+          if (node.isMesh && node.geometry) {
+            const geom = node.geometry.clone();
+            geom.applyMatrix4(node.matrixWorld);
+            allGeometries.push(geom);
+          }
+        });
       });
 
-      // Because we rotate by -Math.PI/2 on X, the local Z axis becomes world Y.
-      // After centering, local Z goes from -sizeZ/2 to +sizeZ/2.
-      // Move it up by sizeZ/2 so the bottom sits perfectly at world Y=0.
-      const sizeZ = boundingBox.max.z - boundingBox.min.z;
-      setOffsetY(sizeZ / 2);
+      if (allGeometries.length > 0) {
+        const totalGeometry = BufferGeometryUtils.mergeGeometries(allGeometries, false);
+        totalGeometry.computeVertexNormals();
+        totalGeometry.computeBoundingBox();
+        const totalBBox = totalGeometry.boundingBox;
+
+        if (totalBBox && totalBBox.max.x !== Infinity) {
+          const tx = Math.round(totalBBox.max.x - totalBBox.min.x);
+          const ty = Math.round(totalBBox.max.y - totalBBox.min.y);
+          const tz = Math.round(totalBBox.max.z - totalBBox.min.z);
+
+          // Price is ALWAYS based on total geometry — set once and never again
+          useStore.getState().setFileStats({
+            volume: calculateVolume(totalGeometry),
+            x: tx,
+            y: ty,
+            z: tz
+          });
+
+          const fits = tx <= 256 && ty <= 256 && tz <= 256;
+          const plates = fits ? 1 : Math.max(1, children.length);
+          if (setTotalPlates) setTotalPlates(plates);
+          setActualTotalPlates(plates);
+          setChildrenRef(children);
+        }
+      }
     }
-  }, [geometry]);
+  }, [result]); // <-- Only re-runs when a NEW file is loaded
+
+  // --- EFFECT 2: Runs when plateIndex changes. Only updates the VISIBLE geometry. ---
+  useEffect(() => {
+    if (!result) return;
+
+    let finalGeometry;
+
+    if (result.isBufferGeometry) {
+      finalGeometry = result.clone();
+    } else {
+      const children = childrenRef.length > 0 ? childrenRef : (result.children || []);
+      const objectsToRender = (actualTotalPlates > 1 && plateIndex >= 0 && plateIndex < children.length)
+        ? [children[plateIndex]]
+        : children;
+
+      const geometries = [];
+      objectsToRender.forEach((child) => {
+        child.traverse((node) => {
+          if (node.isMesh && node.geometry) {
+            const geom = node.geometry.clone();
+            geom.applyMatrix4(node.matrixWorld);
+            geometries.push(geom);
+          }
+        });
+      });
+
+      finalGeometry = geometries.length > 0
+        ? BufferGeometryUtils.mergeGeometries(geometries, false)
+        : new THREE.BufferGeometry();
+    }
+
+    finalGeometry.computeVertexNormals();
+    finalGeometry.center();
+    finalGeometry.computeBoundingBox();
+
+    const bbox = finalGeometry.boundingBox;
+    const sizeZ = bbox ? (bbox.max.z - bbox.min.z) : 0;
+    setOffsetY(sizeZ / 2);
+    setGeometry(finalGeometry);
+  }, [result, plateIndex, childrenRef, actualTotalPlates]); // <-- Only updates visuals
+
+  if (!geometry) return null;
 
   return (
     <mesh 
@@ -91,9 +179,9 @@ function STLModel({ fileUrl }) {
 function Loader() {
   return (
     <Html center>
-      <div className="flex flex-col items-center justify-center text-white/80 whitespace-nowrap bg-black/60 px-6 py-4 rounded-xl backdrop-blur-md">
-        <Loader2 className="w-8 h-8 animate-spin mb-3 text-primary-500 mx-auto" />
-        <span className="text-sm font-bold tracking-widest uppercase">Processing Model...</span>
+      <div className="flex flex-col items-center gap-2">
+        <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
+        <span className="text-white text-sm font-medium tracking-wide">Loading 3D Engine...</span>
       </div>
     </Html>
   );
@@ -101,17 +189,20 @@ function Loader() {
 
 export default function STLViewer({ file }) {
   const [fileUrl, setFileUrl] = useState(null);
+  const [plateIndex, setPlateIndex] = useState(0);
+  const [totalPlates, setTotalPlates] = useState(1);
 
   useEffect(() => {
     if (file) {
       const url = URL.createObjectURL(file);
       setFileUrl(url);
-
-      return () => {
-        URL.revokeObjectURL(url);
-      };
+      setPlateIndex(0);
+      return () => URL.revokeObjectURL(url);
     }
   }, [file]);
+
+  const handleNext = () => setPlateIndex((p) => (p + 1) % totalPlates);
+  const handlePrev = () => setPlateIndex((p) => (p - 1 + totalPlates) % totalPlates);
 
   if (!fileUrl) return null;
 
@@ -135,7 +226,12 @@ export default function STLViewer({ file }) {
 
         <Suspense fallback={<Loader />}>
           <Bounds fit clip observe margin={1.2}>
-            <STLModel fileUrl={fileUrl} />
+            <STLModel 
+              fileUrl={fileUrl} 
+              fileName={file.name} 
+              plateIndex={plateIndex} 
+              setTotalPlates={setTotalPlates} 
+            />
           </Bounds>
         </Suspense>
 
@@ -154,10 +250,25 @@ export default function STLViewer({ file }) {
       </div>
 
       <div className="absolute top-4 right-4 px-2.5 py-1 bg-surface-card border border-surface-border rounded-sm shadow-lg">
-        <span className="text-fg-muted text-xs font-bold uppercase">STL</span>
+        <span className="text-fg-muted text-xs font-bold uppercase">{file?.name?.split('.').pop() || 'STL'}</span>
       </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/60 text-white/70 text-xs rounded-full backdrop-blur-md pointer-events-none shadow-lg">
+      {totalPlates > 1 && (
+        <>
+          <button onClick={handlePrev} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/60 text-white rounded-full hover:bg-primary-500 transition shadow-lg backdrop-blur-md border border-white/10 z-10">
+            <ChevronLeft size={20} />
+          </button>
+          <button onClick={handleNext} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/60 text-white rounded-full hover:bg-primary-500 transition shadow-lg backdrop-blur-md border border-white/10 z-10">
+            <ChevronRight size={20} />
+          </button>
+          
+          <div className="absolute bottom-4 right-4 px-4 py-2 bg-black/80 text-white text-xs font-bold rounded-full backdrop-blur-md shadow-lg border border-white/10 z-10">
+            Plate {plateIndex + 1} of {totalPlates}
+          </div>
+        </>
+      )}
+
+      <div className="absolute bottom-4 left-4 px-4 py-2 bg-black/60 text-white/70 text-xs rounded-full backdrop-blur-md pointer-events-none shadow-lg z-10">
         Drag to rotate • Scroll to zoom
       </div>
     </div>

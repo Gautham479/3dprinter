@@ -20,17 +20,18 @@ export default function UploadBox() {
     onDrop,
     accept: {
       'model/stl': ['.stl'],
+      'model/3mf': ['.3mf'],
       'text/plain': ['.obj']
     },
     maxFiles: 1
   });
 
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col h-full w-full relative">
       {/* Drop zone */}
       <div
         {...getRootProps()}
-        className={`flex-1 flex flex-col items-center justify-center w-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[400px] h-[400px] lg:h-[450px] max-h-[500px] ${
+        className={`flex-1 flex flex-col items-center justify-center w-full h-full rounded-sm border-2 border-dashed transition-all duration-300 cursor-pointer relative overflow-hidden ${
           isDragActive
             ? 'border-primary-500 bg-primary-500/10 shadow-lg'
             : 'border-surface-border hover:border-primary-500/50 hover:bg-primary-50/50 bg-surface-card/60'
@@ -90,9 +91,9 @@ export default function UploadBox() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-black text-fg tracking-tight">Drop Your STL File Here</h3>
+                <h3 className="text-2xl font-black text-fg tracking-tight">Drop Your 3D Model File Here</h3>
                 <p className="text-base text-fg-muted mt-2">or click to browse files</p>
-                <p className="text-xs text-fg-subtle mt-2 uppercase tracking-widest font-bold">STL files only, up to 100MB</p>
+                <p className="text-xs text-fg-subtle mt-2 uppercase tracking-widest font-bold">STL, 3MF, OBJ files only, up to 100MB</p>
               </div>
 
 

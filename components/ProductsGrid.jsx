@@ -239,26 +239,6 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
         </div>
       )}
 
-      {/* Dynamic Category Tagline */}
-      <AnimatePresence mode="wait">
-        {!hideFilters && activeType !== 'All' && getCategoryTagline(activeType) && (
-          <motion.div
-            key={activeType}
-            initial={{ opacity: 0, y: -10, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -10, height: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="mb-8 overflow-hidden"
-          >
-            <div className="py-4 border-l-4 border-primary-500 pl-5 rounded-r-sm bg-gradient-to-r from-surface-card/60 to-transparent shadow-sm border-y border-r border-surface-border/50">
-              <p className="text-xl md:text-2xl font-medium text-fg/90 tracking-wide leading-relaxed italic">
-                "{getCategoryTagline(activeType)}"
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Grid */}
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

@@ -25,10 +25,10 @@ function CategoryHero({ category }) {
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'desk accessories': '/pics/desk accesories.webp',
-    'playables': '/pics/playables.webp',
+    'playables': '/pics/playables.jpg',
     'collectibles': '/pics/collectible.jpg',
     'home decor': '/pics/home decor.webp',
-    'kit cards': '/pics/kit cards.png',
+    'kit cards': '/pics/kit cards.webp',
   };
 
   const defaultImagePath = categoryImageMap[safeCategory.toLowerCase()] || `/photos/${safeCategory.toLowerCase()}.jpeg`;
@@ -70,9 +70,6 @@ function CategoryHero({ category }) {
             {safeCategory}
           </h1>
           <div className="h-[4px] w-24 bg-primary-500 mx-auto rounded-sm mb-6 shadow-[0_0_20px_rgba(255,153,0,0.6)]" />
-          <p className="text-zinc-200 text-lg md:text-xl font-medium drop-shadow-lg">
-            {tagline}
-          </p>
         </motion.div>
       </div>
     </div>

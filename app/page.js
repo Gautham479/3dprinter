@@ -60,8 +60,8 @@ export default function Home() {
           className="max-w-5xl mx-auto relative z-10"
         >
           <h1 className="text-3xl md:text-5xl lg:text-[4rem] font-black tracking-tight leading-tight md:leading-[1.1] drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
-            <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">Where Your Ideas </span>
-            <span className="text-[#ff7a00] drop-shadow-[0_0_25px_rgba(255,122,0,0.5)]">Become Reality</span>
+            <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">WHERE YOUR IDEAS </span>
+            <span className="text-[#ff7a00] drop-shadow-[0_0_25px_rgba(255,122,0,0.5)]">BECOME REALITY</span>
           </h1>
         </motion.div>
       </section>

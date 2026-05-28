@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function StorefrontGrid() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -52,6 +54,17 @@ export default function StorefrontGrid() {
   };
 
   const displayCollections = shuffle(baseCollections);
+
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300; // pixels to scroll
+      if (direction === 'left') {
+        scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -99,8 +112,27 @@ export default function StorefrontGrid() {
               </Link>
             </div>
             
-            <div className="relative w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              <div className="flex gap-4 sm:gap-6 min-w-max">
+            <div className="relative w-full">
+              {/* Left Arrow */}
+              <button
+                onClick={() => scroll('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all duration-200 hover:scale-110"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              {/* Right Arrow */}
+              <button
+                onClick={() => scroll('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all duration-200 hover:scale-110"
+                aria-label="Scroll right"
+              >
+                <ChevronRight size={24} />
+              </button>
+
+              <div ref={scrollContainerRef} className="overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="flex gap-4 sm:gap-6 min-w-max">
                 {displayCollections.map((item, idx) => (
                   <Link href={item.linkUrl} key={idx} className="flex flex-col items-center w-[180px] sm:w-[220px] group cursor-pointer">
                     <div className="w-full aspect-square rounded-md overflow-hidden bg-zinc-900 mb-2 shadow-sm">
@@ -115,6 +147,7 @@ export default function StorefrontGrid() {
                     </span>
                   </Link>
                 ))}
+                </div>
               </div>
             </div>
           </motion.div>

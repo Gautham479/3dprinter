@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ShoppingCart, Layers } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AVAILABLE_COLORS, PRODUCT_TYPES } from '@/lib/catalog';
+import { PRODUCT_TYPES } from '@/lib/catalog';
 
 const getCategoryTagline = (type) => {
   if (!type || type === 'All') return null;
@@ -18,7 +18,7 @@ const getCategoryTagline = (type) => {
   return null;
 };
 
-function ProductCard({ product, handleAddToCart, updateProductColorOption, productColorOptions }) {
+function ProductCard({ product, handleAddToCart, updateProductColorOption, productColorOptions, activeColors }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const allImages = [product.image, ...(product.images || [])].filter(Boolean);
@@ -109,12 +109,12 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {/* Color options */}
             <div className="space-y-2 mt-auto">
                 <select
-                  value={productColorOptions[product.id]?.color || AVAILABLE_COLORS[0].name}
+                  value={productColorOptions[product.id]?.color || activeColors[0]?.name}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  onChange={(e) => updateProductColorOption(product.id, { colorMode: 'Single Color', color: e.target.value })}
+                  onChange={(e) => updateProductColorOption(product.id, { colorMode: 'Single Color', color: e.target.value }, activeColors[0]?.name)}
                   className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-2 py-1.5 text-xs text-fg focus:outline-none focus:border-primary-500/50 transition-colors"
                 >
-                  {AVAILABLE_COLORS.map((color) => (
+                  {activeColors.map((color) => (
                     <option key={color.name} value={color.name}>{color.name}</option>
                   ))}
                 </select>
@@ -189,10 +189,30 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     return typeMatches && queryMatches;
   });
 
+  const colors = useStore((state) => state.colors);
+  const fetchColors = useStore((state) => state.fetchColors);
+
+  useEffect(() => {
+    fetchColors();
+  }, [fetchColors]);
+
+  const getProductColors = (product) => {
+    const productColors = colors.filter(c => c.material === product.material);
+    return productColors.length > 0 ? productColors : [
+      { name: 'Black', hex: '#111111' },
+      { name: 'Gray', hex: '#6b7280' },
+      { name: 'Beige', hex: '#d6c4a8' },
+      { name: 'Latte Brown', hex: '#8b6b4a' },
+      { name: 'Ivory White', hex: '#f8f5e9' },
+    ];
+  };
+
   const handleAddToCart = (product) => {
+    const activeColors = getProductColors(product);
+    const defaultColor = activeColors[0]?.name || 'Black';
     const productOption = productColorOptions[product.id] || {
       colorMode: 'Single Color',
-      color: AVAILABLE_COLORS[0].name,
+      color: defaultColor,
     };
     addDirectItemToCart({
       fileName: product.name,
@@ -208,9 +228,9 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     openCart();
   };
 
-  const updateProductColorOption = (productId, updates) => {
+  const updateProductColorOption = (productId, updates, defaultColor) => {
     setProductColorOptions((prev) => {
-      const current = prev[productId] || { colorMode: 'Single Color', color: AVAILABLE_COLORS[0].name };
+      const current = prev[productId] || { colorMode: 'Single Color', color: defaultColor };
       return { ...prev, [productId]: { ...current, ...updates } };
     });
   };
@@ -249,22 +269,26 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           <AnimatePresence>
-            {filteredProducts.map((product, idx) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, delay: idx * 0.05 }}
-              >
-                <ProductCard
-                  product={product}
-                  handleAddToCart={handleAddToCart}
-                  updateProductColorOption={updateProductColorOption}
-                  productColorOptions={productColorOptions}
-                />
-              </motion.div>
-            ))}
+            {filteredProducts.map((product, idx) => {
+              const activeColors = getProductColors(product);
+              return (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                >
+                  <ProductCard
+                    product={product}
+                    handleAddToCart={handleAddToCart}
+                    updateProductColorOption={updateProductColorOption}
+                    productColorOptions={productColorOptions}
+                    activeColors={activeColors}
+                  />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
 
           {filteredProducts.length === 0 && !loading && (

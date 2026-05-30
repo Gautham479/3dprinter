@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Clock } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
-import { AVAILABLE_COLORS } from '@/lib/catalog';
+
 
 const getProductImages = (product) => {
   if (!product) return [];
@@ -29,8 +29,32 @@ export default function ProductPage() {
   const [zoom, setZoom] = useState({ x: 0, y: 0 });
   const [selectedImage, setSelectedImage] = useState('');
   const [singleColor, setSingleColor] = useState('Black');
+  const colors = useStore((state) => state.colors);
+  const fetchColors = useStore((state) => state.fetchColors);
   const addDirectItemToCart = useStore((state) => state.addDirectItemToCart);
   const openCart = useStore((state) => state.openCart);
+
+  const productColors = colors.filter(c => c.material === product?.material);
+  const activeColors = productColors.length > 0 ? productColors : [
+    { name: 'Black', hex: '#111111' },
+    { name: 'Gray', hex: '#6b7280' },
+    { name: 'Beige', hex: '#d6c4a8' },
+    { name: 'Latte Brown', hex: '#8b6b4a' },
+    { name: 'Ivory White', hex: '#f8f5e9' },
+  ];
+
+  useEffect(() => {
+    fetchColors();
+  }, [fetchColors]);
+
+  useEffect(() => {
+    if (activeColors.length > 0) {
+      const names = activeColors.map(c => c.name);
+      if (!names.includes(singleColor)) {
+        setSingleColor(activeColors[0].name);
+      }
+    }
+  }, [activeColors, singleColor]);
 
   const images = getProductImages(product);
   const currentImageIndex = images.indexOf(selectedImage);
@@ -174,7 +198,6 @@ export default function ProductPage() {
 
   const specs = [
     { icon: <Weight className="w-4 h-4" />, label: 'Weight', value: product.weight ? `${product.weight} grams` : null },
-    { icon: <Clock className="w-4 h-4" />, label: 'Print Time', value: product.printTime ? `${product.printTime} hrs` : null },
     { icon: <Layers className="w-4 h-4" />, label: 'Material', value: product.material },
   ];
 
@@ -359,7 +382,7 @@ export default function ProductPage() {
                     className="space-y-2 mt-2"
                   >
                     <div className="flex gap-2 flex-wrap">
-                      {AVAILABLE_COLORS.map((color) => (
+                      {activeColors.map((color) => (
                         <button
                           key={color.name}
                           type="button"

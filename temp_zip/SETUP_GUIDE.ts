@@ -6,12 +6,11 @@
 //    app/api/calculate-price/route.ts <- Backend API
 //    components/PriceCalculator.tsx    <- React component
 
-// 2. In your page.tsx or layout, import and use:
-import PriceCalculator from '@/components/PriceCalculator';
-
-export default function Home() {
-  return <PriceCalculator />;
-}
+// import PriceCalculator from '@/components/PriceCalculator';
+// 
+// export default function Home() {
+//   return <PriceCalculator />;
+// }
 
 // 3. That's it! No additional dependencies needed.
 

@@ -41,11 +41,10 @@ export default function PriceCard() {
 
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <button 
-          <button 
             disabled={!selectedFile || isCalculating}
             className={`flex items-center justify-center gap-2 py-4 px-6 rounded-sm font-bold transition-all
               ${selectedFile && !isCalculating
-                ? 'bg-cta text-cta-contrast hover:opacity-90 hover:shadow-lg shadow-black/10 dark:shadow-black/40 active:scale-95' 
+                ? 'bg-cta text-cta-contrast hover:opacity-90 hover:shadow-lg shadow-black/40 active:scale-95' 
                 : 'bg-surface-border text-fg-subtle cursor-not-allowed'
               }
             `}
@@ -53,7 +52,6 @@ export default function PriceCard() {
             <ShoppingCart size={20} />
             Add to Cart
           </button>
-          <button 
           <button 
             disabled={!selectedFile || isCalculating}
             className={`py-4 px-6 rounded-sm font-bold transition-all

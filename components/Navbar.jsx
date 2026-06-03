@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCT_TYPES } from '../lib/catalog';
 
@@ -224,8 +223,6 @@ export default function Navbar() {
                 aria-label="Search products"
               />
             </div>
-
-            <ThemeToggle />
 
             {/* Cart */}
             <motion.button

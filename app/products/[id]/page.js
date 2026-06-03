@@ -344,7 +344,7 @@ export default function ProductPage() {
                   {product.type}
                 </span>
                 {!product.inStock && (
-                  <span className="px-3 py-1 rounded-sm text-sm font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                  <span className="px-3 py-1 rounded-sm text-sm font-black bg-amber-500/15 text-amber-400 border border-amber-500/30">
                     Currently out of stock
                   </span>
                 )}

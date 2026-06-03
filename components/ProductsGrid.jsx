@@ -81,7 +81,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {/* Out of stock overlay */}
             {!product.inStock && (
               <div className="absolute inset-0 bg-surface-bg/60 flex items-center justify-center">
-                <span className="px-3 py-1.5 rounded-sm bg-amber-500/20 border border-amber-500/40 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-wider">
+                <span className="px-3 py-1.5 rounded-sm bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-black uppercase tracking-wider">
                   Out of Stock
                 </span>
               </div>

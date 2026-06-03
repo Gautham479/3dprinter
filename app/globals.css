@@ -1,40 +1,7 @@
 @import "tailwindcss";
 
-/* ── SCREENSHOT MATCH THEME (LIGHT & DARK INCLUDED) ── */
+/* ── SCREENSHOT MATCH THEME (DARK MODE ONLY) ── */
 :root {
-  /* LIGHT MODE SURFACES */
-  --app-surface-bg: #FFFFFF;
-  --app-surface-card: #F9FAFB;
-  --app-surface-muted: #F3F4F6;
-  --app-surface-border: #E5E7EB;
-
-  /* LIGHT MODE TEXT */
-  --app-fg: #111827; 
-  --app-fg-muted: #4B5563; 
-  --app-fg-subtle: #9CA3AF; 
-
-  /* PRIMARY - BLACK BUTTONS IN LIGHT MODE */
-  --app-primary-50: #f3f4f6;
-  --app-primary-100: #e5e7eb;
-  --app-primary-500: #111827; /* Hard Black */
-  --app-primary-600: #000000; 
-  --app-primary-900: #000000;
-
-  /* ACCENT */
-  --app-accent-400: #fde047;
-  --app-accent-500: #F97316; /* Keep the orange accent for minor dots */
-  --app-accent-600: #EA580C;
-
-  /* CTA */
-  --app-cta: #111827;
-  --app-cta-contrast: #FFFFFF;
-
-  --app-banner: #F9FAFB;
-  --app-overlay: rgba(255, 255, 255, 0.85); 
-}
-
-/* ── DARK MODE (SCREENSHOT MATTE CHARCOAL) ── */
-.dark {
   /* DARK MODE SURFACES */
   --app-surface-bg: #111111; /* Matte Charcoal Black */
   --app-surface-card: #1C1C1C; /* Soft Dark Gray for cards */

@@ -255,7 +255,7 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="px-4 py-3 bg-red-500/10 border border-red-500/30 text-red-500 dark:text-red-400 rounded-sm font-semibold text-sm"
+                  className="px-4 py-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-sm font-semibold text-sm"
                 >
                   {error}
                 </motion.div>

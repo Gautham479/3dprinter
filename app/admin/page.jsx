@@ -89,13 +89,15 @@ export default function AdminDashboardPage() {
     const response = await fetch('/api/admin/products');
     if (!response.ok) {
       let message = 'Failed to load products.';
+      const text = await response.text().catch(() => '');
       try {
-        const data = await response.json();
+        const data = text ? JSON.parse(text) : null;
         if (data?.error) {
           message = data.error;
+        } else if (text) {
+          message = text.slice(0, 160);
         }
       } catch {
-        const text = await response.text().catch(() => '');
         if (text) {
           message = text.slice(0, 160);
         }
@@ -305,13 +307,15 @@ export default function AdminDashboardPage() {
 
     if (!response.ok) {
       let message = 'Failed to create product.';
+      const text = await response.text().catch(() => '');
       try {
-        const data = await response.json();
+        const data = text ? JSON.parse(text) : null;
         if (data?.error) {
           message = data.error;
+        } else if (text) {
+          message = text.slice(0, 160);
         }
       } catch {
-        const text = await response.text().catch(() => '');
         if (text) {
           message = text.slice(0, 160);
         }

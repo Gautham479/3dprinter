@@ -21,6 +21,51 @@ const EMPTY_FORM = {
   isFeatured: false,
 };
 
+const compressImage = async (file) => {
+  return new Promise((resolve) => {
+    if (!file || !file.type.startsWith('image/')) return resolve(file);
+    if (file.type === 'image/svg+xml' || file.type === 'image/gif') return resolve(file);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let { width, height } = img;
+        const MAX_SIZE = 1600;
+        
+        if (width > MAX_SIZE || height > MAX_SIZE) {
+          if (width > height) {
+            height = Math.round((height * MAX_SIZE) / width);
+            width = MAX_SIZE;
+          } else {
+            width = Math.round((width * MAX_SIZE) / height);
+            height = MAX_SIZE;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (!blob) return resolve(file);
+          const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
+            type: 'image/webp',
+            lastModified: Date.now(),
+          });
+          resolve(newFile);
+        }, 'image/webp', 0.8);
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
+};
+
 const COLOR_PRESETS = [
   // Grayscale
   { name: 'Pure White', hex: '#ffffff' }, { name: 'Off White', hex: '#f8fafc' },
@@ -294,11 +339,9 @@ export default function AdminDashboardPage() {
     payload.set('inStock', String(form.inStock));
     payload.set('isFeatured', String(form.isFeatured));
     if (imageFile) {
-      payload.set('imageFile', imageFile);
+      payload.set('imageFile', await compressImage(imageFile));
     }
-    for (const file of imageFiles) {
-      payload.append('imageFiles', file);
-    }
+    // We do NOT append imageFiles here. We will upload them one by one after creation.
 
     const response = await fetch('/api/admin/products', {
       method: 'POST',
@@ -325,6 +368,20 @@ export default function AdminDashboardPage() {
       return;
     }
 
+    const createdProduct = await response.json();
+
+    // Upload additional images one by one to avoid Vercel 4.5MB payload limits
+    if (imageFiles.length > 0) {
+      for (const file of imageFiles) {
+        const imgPayload = new FormData();
+        imgPayload.append('imageFiles', await compressImage(file));
+        await fetch(`/api/admin/products/${createdProduct.id}/images`, {
+          method: 'POST',
+          body: imgPayload,
+        });
+      }
+    }
+
     setForm(EMPTY_FORM);
     setImageFile(null);
     setImageFiles([]);
@@ -339,19 +396,22 @@ export default function AdminDashboardPage() {
     setUploadingProductId(productId);
     setError('');
 
-    const payload = new FormData();
-    files.forEach((file) => payload.append('imageFiles', file));
+    // Upload one by one to avoid payload limits
+    for (let i = 0; i < files.length; i++) {
+      const payload = new FormData();
+      payload.append('imageFiles', await compressImage(files[i]));
+      
+      const response = await fetch(`/api/admin/products/${productId}/images`, {
+        method: 'POST',
+        body: payload,
+      });
 
-    const response = await fetch(`/api/admin/products/${productId}/images`, {
-      method: 'POST',
-      body: payload,
-    });
-
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      setError(data?.error || 'Failed to add images.');
-      setUploadingProductId('');
-      return;
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setError(data?.error || `Failed to add image ${i + 1}.`);
+        setUploadingProductId('');
+        return; // Stop if one fails
+      }
     }
 
     setAdditionalImagesByProduct((prev) => ({ ...prev, [productId]: [] }));

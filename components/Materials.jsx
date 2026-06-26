@@ -1,20 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function Materials() {
-  const [activeCard, setActiveCard] = useState(null);
-
   const materials = [
     {
       name: "PLA (Basic & Lightweight)",
       image: "/images/materials/home-lifestyle.png",
-      color: "bg-primary-500/10",
-      borderColor: "border-primary-500",
-      accentColor: "text-primary-500",
       points: [
         { content: <><strong className="text-fg">Smooth finish</strong> with a clean look</>, type: "normal" },
         { content: <>Great for <strong className="text-fg">prototypes</strong>, models, and display items</>, type: "normal" },
@@ -25,9 +20,6 @@ export default function Materials() {
     {
       name: "PETG (All-Rounder Choice)",
       image: "/images/materials/industrial-precision.png",
-      color: "bg-primary-500/10",
-      borderColor: "border-primary-500",
-      accentColor: "text-primary-500",
       points: [
         { content: <>Strong and <strong className="text-fg">durable</strong> for everyday use</>, type: "normal" },
         { content: <><strong className="text-fg">Water-resistant</strong> and long-lasting</>, type: "positive" },
@@ -38,9 +30,6 @@ export default function Materials() {
     {
       name: "ABS (High Strength & Heat Resistant)",
       image: "/images/materials/technical-enclosure.png",
-      color: "bg-primary-500/10",
-      borderColor: "border-primary-500",
-      accentColor: "text-primary-500",
       points: [
         { content: <>Tough and <strong className="text-fg">impact-resistant</strong></>, type: "positive" },
         { content: <>Handles <strong className="text-fg">high temperatures</strong></>, type: "positive" },
@@ -51,84 +40,39 @@ export default function Materials() {
     {
       name: "TPU (Flexible & Shock Absorbing)",
       image: "/images/materials/flexible-tpu.png",
-      color: "bg-primary-500/10",
-      borderColor: "border-primary-500",
-      accentColor: "text-primary-500",
       points: [
         { content: <>Flexible with a <strong className="text-fg">rubber-like</strong> feel</>, type: "normal" },
         { content: <>Absorbs <strong className="text-fg">shock</strong> and vibration</>, type: "positive" },
-        { content: <>Ideal for <strong className="text-fg">seals</strong>, <strong className="text-fg">gaskets</strong>, <strong className="text-fg">bushings</strong>, and similar parts</>, type: "normal" },
-        { content: <>Great for <strong className="text-fg">grips</strong>, <strong className="text-fg">covers</strong>, and <strong className="text-fg">protective parts</strong></>, type: "tip" }
+        { content: <>Ideal for <strong className="text-fg">seals</strong>, <strong className="text-fg">gaskets</strong>, <strong className="text-fg">bushings</strong></>, type: "normal" },
+        { content: <>Great for <strong className="text-fg">grips</strong>, <strong className="text-fg">covers</strong>, and protective parts</>, type: "tip" }
       ]
     }
   ];
 
   const quickGuide = [
-    { question: "☀️ Outdoor / Sun use?", answer: "PETG or ABS", theme: "yellow" },
-    { question: "🔥 High heat?", answer: "ABS", theme: "red" },
-    { question: "⚡ Electrical use?", answer: "PETG or ABS", theme: "blue" },
-    { question: "🛡️ Flexible part?", answer: "TPU", theme: "indigo" },
-    { question: "💰 Budget / basic use?", answer: "PLA", theme: "emerald" }
+    { question: "Outdoor / Sun use?", answer: "PETG or ABS" },
+    { question: "High heat?", answer: "ABS" },
+    { question: "Electrical use?", answer: "PETG or ABS" },
+    { question: "Flexible part?", answer: "TPU" },
+    { question: "Budget / basic use?", answer: "PLA" }
   ];
 
-  const colorMap = {
-    yellow: {
-      wrapper: "hover:bg-amber-500/20 hover:shadow-amber-500/20 hover:border-amber-500",
-      title: "group-hover:text-amber-500",
-      line: "group-hover:bg-amber-500/80",
-      answer: "group-hover:text-amber-400"
-    },
-    red: {
-      wrapper: "hover:bg-red-500/20 hover:shadow-red-500/20 hover:border-red-500",
-      title: "group-hover:text-red-500",
-      line: "group-hover:bg-red-500/80",
-      answer: "group-hover:text-red-400"
-    },
-    blue: {
-      wrapper: "hover:bg-blue-500/20 hover:shadow-blue-500/20 hover:border-blue-500",
-      title: "group-hover:text-blue-500",
-      line: "group-hover:bg-blue-500/80",
-      answer: "group-hover:text-blue-400"
-    },
-    indigo: {
-      wrapper: "hover:bg-indigo-500/20 hover:shadow-indigo-500/20 hover:border-indigo-500",
-      title: "group-hover:text-indigo-500",
-      line: "group-hover:bg-indigo-500/80",
-      answer: "group-hover:text-indigo-400"
-    },
-    emerald: {
-      wrapper: "hover:bg-emerald-500/20 hover:shadow-emerald-500/20 hover:border-emerald-500",
-      title: "group-hover:text-emerald-500",
-      line: "group-hover:bg-emerald-500/80",
-      answer: "group-hover:text-emerald-400"
-    }
-  };
-
-  const getBullet = (type) => {
-    const base = "mt-1.5 flex-shrink-0 leading-none";
-    return (
-      <span className={`${base} text-[10px] text-white/35`} aria-hidden="true">
-        ⬢
-      </span>
-    );
-  };
+  const getBullet = () => (
+    <span className="mt-1.5 flex-shrink-0 leading-none text-[10px] text-fg-subtle" aria-hidden="true">
+      ⬢
+    </span>
+  );
 
   return (
-    <section id="materials" className="w-full py-24 overflow-hidden relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-primary-500/20" />
-
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <section id="materials" className="w-full py-20 bg-surface-bg border-b border-surface-border">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-sm border border-primary-500/30 bg-primary-500/10 text-sm text-primary-500 font-bold mb-6">
-            <Zap className="w-3.5 h-3.5" />
-            Material Science
-          </div>
           <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">
             Materials Guide
           </h2>
@@ -142,47 +86,34 @@ export default function Materials() {
           {materials.map((material, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              onHoverStart={() => setActiveCard(i)}
-              onHoverEnd={() => setActiveCard(null)}
-              className={`relative rounded-sm border ${material.borderColor} bg-surface-card/80 p-0 flex flex-col md:flex-row cursor-default overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary-500/20 hover:border-primary-500 group`}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="rounded-lg border border-surface-border bg-white shadow-sm flex flex-col md:flex-row overflow-hidden"
             >
-              <div className={`absolute inset-0 bg-primary-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
-              
-              {/* Material Image */}
-              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted overflow-hidden">
+              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted">
                 <Image 
                   src={material.image} 
                   alt={material.name} 
                   fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
               </div>
 
-              {/* Material Details */}
-              <div className="md:w-3/5 p-7 relative">
-                <h3 className="text-xl font-black text-fg mb-5 flex items-center gap-3">
-                  <span>{material.name}</span>
+              <div className="md:w-3/5 p-8 flex flex-col justify-center">
+                <h3 className="text-xl font-bold text-fg mb-5">
+                  {material.name}
                 </h3>
                 <ul className="space-y-3">
                   {material.points.map((point, j) => (
-                    <motion.li
-                      key={j}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ delay: i * 0.1 + j * 0.05 }}
-                      className="flex gap-3 items-start"
-                    >
-                      {getBullet(point.type)}
-                      <span className={`text-fg-muted leading-relaxed text-sm ${point.type === 'negative' ? 'opacity-60' : ''} ${point.type === 'tip' ? 'font-semibold text-fg' : ''}`}>
-                        {point.content ?? point.text}
+                    <li key={j} className="flex gap-3 items-start">
+                      {getBullet()}
+                      <span className="text-fg-muted leading-relaxed text-sm">
+                        {point.content}
                       </span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -191,32 +122,24 @@ export default function Materials() {
         </div>
 
         {/* Quick Guide */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative rounded-sm border border-surface-border bg-surface-card/80 p-8 overflow-hidden"
+          className="rounded-lg border border-surface-border bg-white shadow-sm p-8"
         >
-          <h3 className="text-2xl font-black text-fg mb-6 flex items-center gap-2 relative">
-            <span>Quick Reference Guide</span>
+          <h3 className="text-2xl font-bold text-fg mb-6 text-center lg:text-left">
+            Quick Reference Guide
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 text-center lg:text-left">
             {quickGuide.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false }}
-                transition={{ delay: 0.3 + i * 0.07 }}
-                whileHover={{ scale: 1.05, y: -4 }}
-                className={`bg-surface-muted/60 hover:shadow-xl p-5 rounded-sm border border-surface-border transition-all duration-300 cursor-default group ${colorMap[item.theme].wrapper}`}
-              >
-                <p className={`text-sm font-bold text-fg mb-2 transition-colors uppercase tracking-wider ${colorMap[item.theme].title}`}>{item.question}</p>
-                <div className={`h-0.5 w-10 bg-surface-border mb-3 transition-colors ${colorMap[item.theme].line}`} />
-                <p className={`text-primary-500 font-black text-lg transition-colors ${colorMap[item.theme].answer}`}>{item.answer}</p>
-              </motion.div>
+              <div key={i} className="flex flex-col items-center lg:items-start">
+                <p className="text-sm font-semibold text-fg-muted mb-2 uppercase tracking-wider">{item.question}</p>
+                <div className="h-px w-full max-w-[80px] lg:max-w-full bg-surface-border mb-3" />
+                <p className="text-fg font-bold">{item.answer}</p>
+              </div>
             ))}
           </div>
         </motion.div>

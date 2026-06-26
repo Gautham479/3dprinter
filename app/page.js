@@ -47,25 +47,6 @@ export default function Home() {
       
 
 
-      {/* Cinematic Tagline Banner */}
-      <section className="w-full bg-black pt-32 pb-12 md:pt-40 md:pb-16 px-4 sm:px-6 flex justify-center text-center z-10 relative overflow-hidden border-b border-white/5">
-        {/* Subtle Light Effects */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[80%] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#ff7a00]/10 via-transparent to-transparent pointer-events-none blur-[60px]" />
-        
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="max-w-5xl mx-auto relative z-10"
-        >
-          <h1 className="text-3xl md:text-5xl lg:text-[4rem] font-black tracking-tight leading-tight md:leading-[1.1] drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
-            <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">WHERE YOUR IDEAS </span>
-            <span className="text-[#ff7a00] drop-shadow-[0_0_25px_rgba(255,122,0,0.5)]">BECOME REALITY</span>
-          </h1>
-        </motion.div>
-      </section>
-
       {/* Hero Section */}
       <section id="hero" className="w-full">
         <Hero />

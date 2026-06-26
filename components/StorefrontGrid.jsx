@@ -68,14 +68,14 @@ export default function StorefrontGrid() {
 
   if (loading) {
     return (
-      <section className="w-full bg-black py-6 sm:py-8 font-sans">
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
-          <div className="bg-[#111] border border-zinc-800 rounded-md shadow-sm p-5">
-            <div className="flex items-center justify-between mb-4">
+      <section className="w-full bg-surface-bg py-6 sm:py-8 font-sans">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 text-center">
+          <div className="bg-surface-card border border-surface-border rounded-md shadow-sm p-5 flex flex-col items-center">
+            <div className="flex items-center justify-between mb-4 w-full">
               <div className="h-6 w-40 bg-zinc-800 animate-pulse rounded-md" />
               <div className="h-4 w-28 bg-zinc-800 animate-pulse rounded-md hidden sm:block" />
             </div>
-            <div className="flex gap-4 sm:gap-6 overflow-hidden">
+            <div className="flex justify-center gap-4 sm:gap-6 overflow-hidden w-full">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="flex flex-col items-center w-[180px] sm:w-[220px] flex-shrink-0">
                   <div className="w-full aspect-square rounded-md bg-zinc-800 animate-pulse mb-2" />
@@ -94,29 +94,30 @@ export default function StorefrontGrid() {
   }
 
   return (
-    <section className="w-full bg-black py-6 sm:py-8 font-sans">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
+    <section className="w-full bg-surface-bg py-6 sm:py-8 font-sans">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
         
         {/* Curated Collections Horizontal Scroll */}
         {displayCollections.length > 0 && (
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-[#111] border border-zinc-800 rounded-md shadow-sm p-5"
+            transition={{ duration: 0.6 }}
+            className="bg-surface-card border border-surface-border rounded-md shadow-sm p-5 w-full flex flex-col items-center"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[21px] leading-[27px] font-bold text-white tracking-tight">Featured Products</h2>
-              <Link href="/products" className="text-[#00A8E1] hover:text-[#FF9900] hover:underline text-[13px] font-medium hidden sm:block">
+            <div className="flex items-center justify-between w-full mb-6">
+              <h2 className="text-[21px] leading-[27px] font-bold text-fg tracking-tight text-center w-full sm:text-left sm:w-auto">Featured Products</h2>
+              <Link href="/products" className="text-primary-600 hover:text-primary-500 hover:underline text-[13px] font-medium hidden sm:block">
                 See all products
               </Link>
             </div>
             
-            <div className="relative w-full">
+            <div className="relative w-full flex justify-center">
               {/* Left Arrow */}
               <button
                 onClick={() => scroll('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all duration-200 hover:scale-110"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-surface-bg/80 hover:bg-surface-muted text-fg transition-colors shadow-sm"
                 aria-label="Scroll left"
               >
                 <ChevronLeft size={24} />
@@ -125,24 +126,24 @@ export default function StorefrontGrid() {
               {/* Right Arrow */}
               <button
                 onClick={() => scroll('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all duration-200 hover:scale-110"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-surface-bg/80 hover:bg-surface-muted text-fg transition-colors shadow-sm"
                 aria-label="Scroll right"
               >
                 <ChevronRight size={24} />
               </button>
 
-              <div ref={scrollContainerRef} className="overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <div className="flex gap-4 sm:gap-6 min-w-max">
+              <div ref={scrollContainerRef} className="overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full flex justify-center">
+                <div className="flex gap-4 sm:gap-6">
                 {displayCollections.map((item, idx) => (
                   <Link href={item.linkUrl} key={idx} className="flex flex-col items-center w-[180px] sm:w-[220px] group cursor-pointer">
-                    <div className="w-full aspect-square rounded-md overflow-hidden bg-zinc-900 mb-2 shadow-sm">
+                    <div className="w-full aspect-square rounded-md overflow-hidden bg-surface-muted mb-2 border border-surface-border">
                       <img 
                         src={item.img} 
                         alt={item.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
+                        className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="text-[14px] sm:text-[15px] text-zinc-300 font-medium text-center line-clamp-2 leading-snug group-hover:text-[#FF9900] transition-colors">
+                    <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
                       {item.name}
                     </span>
                   </Link>

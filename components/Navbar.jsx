@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCT_TYPES } from '../lib/catalog';
 
 export default function Navbar() {
@@ -111,67 +110,53 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`w-full sticky top-0 z-50 transition-all duration-500 ${scrolled
-          ? 'bg-surface-bg/85 backdrop-blur-xl border-b border-surface-border/60 shadow-sm'
-          : 'bg-transparent border-b border-transparent'
+      className={`w-full sticky top-0 z-50 transition-all duration-300 ${scrolled
+          ? 'bg-surface-bg/95 backdrop-blur-md border-b border-surface-border shadow-sm'
+          : 'bg-surface-bg border-b border-surface-border'
         }`}
     >
-      {/* Top accent line */}
-      <div className="h-[1px] w-full bg-primary-500/20" />
-
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <motion.div
-              className="flex items-center gap-2.5 cursor-pointer group"
+            <div
+              className="flex items-center gap-2.5 cursor-pointer group hover:opacity-80 transition-opacity"
               onClick={handleLogoClick}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
             >
               <div className="relative flex items-center justify-center p-1">
-                {/* Custom 3D Printer Logo */}
-                <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9 text-primary-500">
-                  {/* Bed Plate */}
+                <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 text-fg">
                   <rect x="48" y="416" width="416" height="48" rx="24" />
-                  
-                  {/* Letter 3 */}
                   <path d="M120 200 A 50 50 0 0 1 160 260 A 50 50 0 0 1 120 320" />
                   <path d="M100 200 H160" />
-                  
-                  {/* Letter D */}
                   <path d="M256 200 v120" />
                   <path d="M256 200 C360 200 360 320 256 320" />
-                  
-                  {/* Printer Rail and Extruder */}
                   <path d="M80 80 h350" />
                   <rect x="200" y="48" width="112" height="64" rx="12" />
                   <path d="M256 112 v40 L 256 200" strokeDasharray="16 16" />
                 </svg>
               </div>
               <span className="font-black text-xl tracking-tight text-fg">
-                Mahashri<span className="text-primary-500">Lab</span>
+                MahashriLab
               </span>
-            </motion.div>
+            </div>
 
             {/* Nav Links */}
             <div className="hidden lg:flex items-center gap-1 text-sm font-semibold">
               <div
                 className="relative group/dropdown"
-                onMouseEnter={() => setScrolled(window.scrollY > 20)}
+                onMouseEnter={() => setScrolled(true)}
               >
                 <button
-                  className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted/50 flex items-center gap-1.5 cursor-default"
+                  className="relative px-4 py-2 rounded-sm transition-all duration-200 text-fg-muted hover:text-fg hover:bg-surface-muted flex items-center gap-1.5 cursor-default"
                 >
                   <span className="relative z-10">Products</span>
                   <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover/dropdown:rotate-180" />
                 </button>
                 <div className="absolute top-full left-0 mt-0 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:-mt-0 pt-2 transition-all duration-200 z-50 min-w-[200px]">
-                  <div className="bg-surface-card border border-surface-border/60 rounded-lg shadow-lg overflow-hidden flex flex-col">
-
+                  <div className="bg-surface-card border border-surface-border rounded-md shadow-lg overflow-hidden flex flex-col">
                     {PRODUCT_TYPES.map(type => (
-                      <button key={type} onClick={() => router.push(`/category/${encodeURIComponent(type)}`)} className="px-4 py-2.5 text-sm text-left text-fg-muted hover:text-fg hover:bg-surface-muted/60 border-b border-surface-border/30 last:border-b-0 transition-colors">
+                      <button key={type} onClick={() => router.push(`/category/${encodeURIComponent(type)}`)} className="px-4 py-2.5 text-sm text-left text-fg-muted hover:text-fg hover:bg-surface-muted border-b border-surface-border last:border-b-0 transition-colors">
                         {type}
                       </button>
                     ))}
@@ -189,18 +174,10 @@ export default function Navbar() {
                     key={link.id}
                     onClick={() => link.path ? router.push(link.path) : scrollTo(link.id)}
                     className={`relative px-4 py-2 rounded-sm transition-all duration-200 ${isActive
-                        ? 'text-primary-500'
-                        : 'text-fg-muted hover:text-fg hover:bg-surface-muted/50'
+                        ? 'text-fg bg-surface-muted'
+                        : 'text-fg-muted hover:text-fg hover:bg-surface-muted'
                       }`}
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="navActive"
-                        className="absolute inset-0 rounded-sm bg-primary-500/10 border border-primary-500/20"
-                        initial={false}
-                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                      />
-                    )}
                     <span className="relative z-10">{link.label}</span>
                   </button>
                 );
@@ -212,7 +189,7 @@ export default function Navbar() {
           {/* Right Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Search */}
-            <div className="hidden md:flex items-center gap-2 bg-surface-card/60 border border-surface-border rounded-sm px-3 py-2 w-64 hover:border-primary-500/40 focus-within:border-primary-500/60 focus-within:bg-surface-card transition-all">
+            <div className="hidden md:flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-64 focus-within:border-fg transition-all">
               <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
               <input
                 type="text"
@@ -225,27 +202,17 @@ export default function Navbar() {
             </div>
 
             {/* Cart */}
-            <motion.button
-              className="relative p-2 rounded-sm border border-surface-border/60 bg-surface-card/50 hover:border-primary-500/40 hover:bg-primary-500/5 transition-all"
+            <button
+              className="relative p-2 rounded-sm border border-surface-border bg-surface-muted hover:border-fg transition-all"
               onClick={openCart}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
-              <ShoppingCart className="w-5 h-5 text-fg-muted" />
-              <AnimatePresence>
-                {cart.length > 0 && (
-                  <motion.span
-                    key="badge"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="absolute -top-1.5 -right-1.5 bg-primary-500 text-[var(--app-cta-contrast)] text-[10px] font-black w-4.5 h-4.5 min-w-[18px] min-h-[18px] rounded-sm flex items-center justify-center shadow-md"
-                  >
-                    {cart.length}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              <ShoppingCart className="w-5 h-5 text-fg" />
+              {cart.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-fg text-surface-bg text-[10px] font-black w-4.5 h-4.5 min-w-[18px] min-h-[18px] rounded-sm flex items-center justify-center shadow-sm">
+                  {cart.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </div>

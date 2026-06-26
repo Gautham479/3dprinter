@@ -1,17 +1,18 @@
-import { Chivo, DM_Sans } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import NavigationLoader from "@/components/NavigationLoader";
 
-const chivo = Chivo({
+const playfair = Playfair_Display({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["400", "500", "600", "700"],
+  style: ['normal', 'italic'],
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${chivo.variable} ${dmSans.variable} h-full antialiased dark`}
+      className={`${playfair.variable} ${inter.variable} h-full antialiased light`}
     >
       <body className="min-h-full flex flex-col font-body bg-surface-bg text-fg">
         <NavigationLoader />

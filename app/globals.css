@@ -1,36 +1,35 @@
 @import "tailwindcss";
 
-/* ── SCREENSHOT MATCH THEME (DARK MODE ONLY) ── */
+/* ── PREMIUM SLATE-GOLD ENGINEERING THEME ── */
 :root {
-  /* DARK MODE SURFACES */
-  --app-surface-bg: #111111; /* Matte Charcoal Black */
-  --app-surface-card: #1C1C1C; /* Soft Dark Gray for cards */
-  --app-surface-muted: #222222; /* Hover areas */
-  --app-surface-border: #2A2A2A; /* Lines */
+  /* BACKGROUNDS */
+  --app-surface-bg: #E8EDF2; /* Light cool grayish-blue */
+  --app-surface-card: rgba(255, 255, 255, 0.5); /* Frosted contrast for cards */
+  --app-surface-muted: rgba(44, 57, 71, 0.05); /* Very subtle navy tint */
+  --app-surface-border: rgba(44, 57, 71, 0.15); /* Soft structural navy border */
 
-  /* DARK MODE TEXT */
-  --app-fg: #FFFFFF; /* Pure White */
-  --app-fg-muted: #A3A3A3; /* Dim Gray */
-  --app-fg-subtle: #737373; /* Subtle Gray */
+  /* TYPOGRAPHY */
+  --app-fg: #2C3947; /* Dark slate/navy blue for headings */
+  --app-fg-muted: #547A95; /* Muted steel blue for body */
+  --app-fg-subtle: rgba(44, 57, 71, 0.5); /* Muted slate */
 
-  /* PRIMARY - WHITE BUTTONS IN DARK MODE */
-  --app-primary-50: #222222;
-  --app-primary-100: #333333;
-  --app-primary-500: #FFFFFF; /* White Buttons/Highlights */
-  --app-primary-600: #E5E5E5; /* Slightly dimmer on hover */
-  --app-primary-900: #737373;
+  /* ACTION ACCENT (MUTED GOLD) */
+  --app-primary-50: rgba(194, 165, 109, 0.1);
+  --app-primary-100: rgba(194, 165, 109, 0.2);
+  --app-primary-500: #C2A56D; /* Muted gold/sand */
+  --app-primary-600: #AA8F5D; /* Hover state gold */
+  --app-primary-900: #2C3947;
 
-  /* ACCENT */
-  --app-accent-400: #fde047;
-  --app-accent-500: #F97316;
-  --app-accent-600: #EA580C;
+  --app-accent-400: #547A95;
+  --app-accent-500: #C2A56D;
+  --app-accent-600: #2C3947;
 
   /* CTA */
-  --app-cta: #FFFFFF;
-  --app-cta-contrast: #000000; /* Black text on white button */
+  --app-cta: #C2A56D; 
+  --app-cta-contrast: #FFFFFF; 
 
-  --app-banner: #222222;
-  --app-overlay: rgba(0, 0, 0, 0.85);
+  --app-banner: rgba(44, 57, 71, 0.1);
+  --app-overlay: rgba(232, 237, 242, 0.95);
 }
 
 @theme {

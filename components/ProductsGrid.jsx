@@ -60,12 +60,12 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
                 src={displayImage}
                 alt={product.name}
                 fill
-                className={`object-contain w-full h-full p-3 transition-all duration-500 ${isHovered ? 'scale-105' : 'scale-100'}`}
+                className={`object-cover w-full h-full transition-all duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
               <div className="w-full h-full bg-primary-50 flex items-center justify-center">
-                <span className="text-white/60 font-bold tracking-widest uppercase text-sm">3D Model</span>
+                <span className="text-primary-500/60 font-bold tracking-widest uppercase text-sm">3D Model</span>
               </div>
             )}
 
@@ -73,7 +73,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {uniqueImages.length > 1 && isHovered && (
               <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
                 {uniqueImages.map((_, i) => (
-                  <div key={i} className={`h-1.5 rounded-sm transition-all ${i === currentImageIndex ? 'bg-primary-500 w-4' : 'bg-white/40 w-1.5'}`} />
+                  <div key={i} className={`h-1.5 rounded-sm transition-all ${i === currentImageIndex ? 'bg-primary-500 w-4' : 'bg-surface-border w-1.5'}`} />
                 ))}
               </div>
             )}

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Lock, Rocket, Search, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { PRODUCT_TYPES } from '../lib/catalog';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const router = useRouter();
@@ -201,6 +202,8 @@ export default function Navbar() {
                 aria-label="Search products"
               />
             </div>
+            
+            <ThemeToggle />
 
             {/* Cart */}
             <button

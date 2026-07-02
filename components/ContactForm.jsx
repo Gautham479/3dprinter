@@ -67,7 +67,7 @@ export default function ContactForm() {
     }
   };
 
-  const labelClass = "absolute left-4 top-4 text-fg-muted transition-all pointer-events-none peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary-500 peer-focus:bg-background peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:bg-background peer-[&:not(:placeholder-shown)]:px-1 peer-[&:not(:placeholder-shown)]:text-primary-500";
+  const labelClass = "absolute left-4 top-4 text-fg-muted transition-all pointer-events-none peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary-500 peer-focus:bg-surface-bg peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2.5 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:bg-surface-bg peer-[&:not(:placeholder-shown)]:px-1 peer-[&:not(:placeholder-shown)]:text-primary-500";
   const inputClass = "peer w-full bg-surface-card rounded-xl px-4 py-4 outline-none border border-surface-border focus:border-primary-500/50 text-fg placeholder-transparent shadow-lg transition-all";
 
   return (

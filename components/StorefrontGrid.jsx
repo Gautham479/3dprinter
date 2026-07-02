@@ -72,14 +72,14 @@ export default function StorefrontGrid() {
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 text-center">
           <div className="bg-surface-card border border-surface-border rounded-md shadow-sm p-5 flex flex-col items-center">
             <div className="flex items-center justify-between mb-4 w-full">
-              <div className="h-6 w-40 bg-zinc-800 animate-pulse rounded-md" />
-              <div className="h-4 w-28 bg-zinc-800 animate-pulse rounded-md hidden sm:block" />
+              <div className="h-6 w-40 bg-surface-muted animate-pulse rounded-md" />
+              <div className="h-4 w-28 bg-surface-muted animate-pulse rounded-md hidden sm:block" />
             </div>
             <div className="flex justify-center gap-4 sm:gap-6 overflow-hidden w-full">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="flex flex-col items-center w-[180px] sm:w-[220px] flex-shrink-0">
-                  <div className="w-full aspect-square rounded-md bg-zinc-800 animate-pulse mb-2" />
-                  <div className="h-4 w-3/4 bg-zinc-800 animate-pulse rounded-md" />
+                  <div className="w-full aspect-square rounded-md bg-surface-muted animate-pulse mb-2" />
+                  <div className="h-4 w-3/4 bg-surface-muted animate-pulse rounded-md" />
                 </div>
               ))}
             </div>

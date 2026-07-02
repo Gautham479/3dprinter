@@ -90,7 +90,7 @@ export default function Materials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="rounded-lg border border-surface-border bg-white shadow-sm flex flex-col md:flex-row overflow-hidden"
+              className="rounded-lg border border-surface-border bg-surface-card shadow-sm flex flex-col md:flex-row overflow-hidden"
             >
               <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted">
                 <Image 
@@ -127,7 +127,7 @@ export default function Materials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-lg border border-surface-border bg-white shadow-sm p-8"
+          className="rounded-lg border border-surface-border bg-surface-card shadow-sm p-8"
         >
           <h3 className="text-2xl font-bold text-fg mb-6 text-center lg:text-left">
             Quick Reference Guide

@@ -28,13 +28,13 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link 
               href="/custom" 
-              className="px-8 py-3.5 rounded-sm bg-[#C2A56D] hover:bg-[#AA8F5D] text-white font-bold transition-colors shadow-sm hover:shadow"
+              className="px-8 py-3.5 rounded-sm bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-bold transition-colors shadow-sm hover:shadow"
             >
               Get Instant Quote
             </Link>
             <Link 
               href="/products" 
-              className="px-8 py-3.5 rounded-sm bg-transparent border border-[#2C3947] text-[#2C3947] hover:bg-[#2C3947]/5 font-bold transition-colors"
+              className="px-8 py-3.5 rounded-sm bg-transparent border border-fg text-fg hover:bg-surface-muted font-bold transition-colors"
             >
               Browse Catalog
             </Link>

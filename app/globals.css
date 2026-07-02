@@ -32,6 +32,37 @@
   --app-overlay: rgba(232, 237, 242, 0.95);
 }
 
+/* DARK THEME */
+.dark {
+  /* BACKGROUNDS */
+  --app-surface-bg: #0F172A; /* Deep dark slate */
+  --app-surface-card: #1E293B; /* Slightly lighter slate */
+  --app-surface-muted: rgba(51, 65, 85, 0.5); 
+  --app-surface-border: rgba(148, 163, 184, 0.2); 
+
+  /* TYPOGRAPHY */
+  --app-fg: #F8FAFC; 
+  --app-fg-muted: #94A3B8; 
+  --app-fg-subtle: rgba(148, 163, 184, 0.5); 
+
+  /* ACTION ACCENT */
+  --app-primary-50: rgba(212, 175, 55, 0.1);
+  --app-primary-100: rgba(212, 175, 55, 0.2);
+  --app-primary-500: #D4AF37; /* Brighter gold */
+  --app-primary-600: #C2A56D; 
+  --app-primary-900: #1E293B;
+
+  --app-accent-400: #38BDF8;
+  --app-accent-500: #D4AF37;
+  --app-accent-600: #F8FAFC;
+
+  --app-cta: #D4AF37; 
+  --app-cta-contrast: #0F172A; 
+
+  --app-banner: rgba(51, 65, 85, 0.5);
+  --app-overlay: rgba(15, 23, 42, 0.95);
+}
+
 @theme {
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;

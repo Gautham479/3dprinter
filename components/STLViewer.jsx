@@ -207,9 +207,8 @@ export default function STLViewer({ file }) {
   if (!fileUrl) return null;
 
   return (
-    <div className="w-full h-full relative rounded-sm overflow-hidden border border-surface-border bg-[#111111]">
+    <div className="w-full h-full relative rounded-sm overflow-hidden border border-surface-border bg-surface-muted">
       <Canvas camera={{ position: [0, 100, 200], fov: 45 }} shadows>
-        <color attach="background" args={['#1a1a1a']} />
         
         <ambientLight intensity={0.5} />
         <directionalLight position={[50, 50, 50]} intensity={1.5} castShadow />

@@ -251,7 +251,7 @@ export default function ProductPage() {
                         src={selectedImage}
                         alt={product.name}
                         fill
-                        className="object-contain w-full h-full p-4"
+                        className="object-cover w-full h-full"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         priority
                       />
@@ -291,8 +291,8 @@ export default function ProductPage() {
               {/* Zoom panel */}
               {imageHovered && selectedImage && (
                 <div
-                  className="absolute top-0 rounded-sm shadow-xl overflow-hidden border-2 border-primary-500/30 pointer-events-none z-50 w-[480px] h-[480px] hidden lg:block"
-                  style={{ left: 'calc(100% + 2rem)' }}
+                  className="absolute top-0 rounded-sm shadow-xl overflow-hidden border-2 border-primary-500/30 pointer-events-none z-50 w-[700px] h-[500px] hidden lg:block bg-surface-bg"
+                  style={{ left: 'calc(100% + 3rem)' }}
                 >
                   <Image
                     src={selectedImage}
@@ -304,7 +304,7 @@ export default function ProductPage() {
                       transformOrigin: `${zoom.x}% ${zoom.y}%`,
                       transition: 'transform 0.05s ease-out'
                     }}
-                    sizes="480px"
+                    sizes="700px"
                   />
                   <div className="absolute top-4 right-4 bg-primary-500 text-[var(--app-cta-contrast)] text-xs font-black px-3 py-1.5 rounded-sm shadow-md">
                     2.5x Zoom
@@ -476,7 +476,7 @@ export default function ProductPage() {
                         src={p.image || p.images?.[0]}
                         alt={p.name}
                         fill
-                        className="object-contain w-full h-full p-2 group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     ) : (

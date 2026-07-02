@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Lock, Rocket, Search, ShoppingCart, ChevronDown } from 'lucide-react';
+import { Lock, Rocket, Search, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { PRODUCT_TYPES } from '../lib/catalog';
 
@@ -11,6 +11,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('quote');
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cart = useStore((state) => state.cart);
   const openCart = useStore((state) => state.openCart);
   const searchQuery = useStore((state) => state.searchQuery);
@@ -213,9 +214,73 @@ export default function Navbar() {
                 </span>
               )}
             </button>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              className="lg:hidden relative p-2 rounded-sm border border-surface-border bg-surface-muted hover:border-fg transition-all text-fg"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-surface-bg border-b border-surface-border px-4 py-4 space-y-4 shadow-lg absolute w-full left-0">
+          {/* Mobile Search */}
+          <div className="flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-full focus-within:border-fg transition-all">
+            <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search products..."
+              className="w-full bg-transparent text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
+              aria-label="Search products"
+            />
+          </div>
+          
+          <div className="flex flex-col space-y-2">
+            <div className="font-semibold text-fg-muted mb-1 px-2 text-sm uppercase tracking-wider">Products</div>
+            {PRODUCT_TYPES.map(type => (
+              <button 
+                key={type} 
+                onClick={() => { router.push(`/category/${encodeURIComponent(type)}`); setMobileMenuOpen(false); }} 
+                className="px-4 py-2 text-sm text-left text-fg hover:bg-surface-muted rounded-sm transition-colors"
+              >
+                {type}
+              </button>
+            ))}
+            
+            <div className="h-px bg-surface-border my-2"></div>
+            
+            {navLinks.map((link) => {
+              const isActive = link.path 
+                ? pathname === link.path || pathname.startsWith(`${link.path}/`) 
+                : pathname === '/' && activeSection === link.id;
+
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => { 
+                    link.path ? router.push(link.path) : scrollTo(link.id); 
+                    setMobileMenuOpen(false); 
+                  }}
+                  className={`px-4 py-2 text-left rounded-sm transition-all duration-200 ${isActive
+                      ? 'text-fg bg-surface-muted font-semibold'
+                      : 'text-fg-muted hover:text-fg hover:bg-surface-muted font-medium'
+                    }`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

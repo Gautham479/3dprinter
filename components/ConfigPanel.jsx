@@ -83,7 +83,7 @@ export default function ConfigPanel() {
           <label className="flex items-center gap-2 text-sm font-black text-fg">
             <Box className="w-4 h-4 text-primary-500" /> Material
           </label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {['PLA', 'PETG', 'ABS', 'TPU'].map((mat) => (
               <button
                 key={mat}
@@ -158,7 +158,7 @@ export default function ConfigPanel() {
           <label className="flex items-center gap-2 text-sm font-black text-fg">
             <Layers className="w-4 h-4 text-primary-500" /> Quality
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
               { id: 'Draft (0.3mm)', label: 'Draft', detail: '0.3mm' },
               { id: 'Standard (0.2mm)', label: 'Standard', detail: '0.2mm' },

@@ -118,12 +118,22 @@ export default function Navbar() {
         }`}
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 relative">
 
-          {/* Logo */}
-          <div className="flex items-center gap-8">
+          {/* Left Section: Mobile Menu & Desktop Logo + Nav */}
+          <div className="flex items-center gap-4 lg:gap-8 flex-1">
+            {/* Mobile Menu Toggle */}
+            <button
+              className="lg:hidden relative p-2 rounded-sm border border-surface-border bg-surface-muted hover:border-fg transition-all text-fg"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            {/* Desktop Logo */}
             <div
-              className="flex items-center gap-2.5 cursor-pointer group hover:opacity-80 transition-opacity"
+              className="hidden lg:flex items-center gap-2.5 cursor-pointer group hover:opacity-80 transition-opacity"
               onClick={handleLogoClick}
             >
               <div className="relative flex items-center justify-center p-1">
@@ -184,12 +194,35 @@ export default function Navbar() {
                   </button>
                 );
               })}
+            </div>
+          </div>
 
+          {/* Mobile Center Logo */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex lg:hidden items-center justify-center pointer-events-none">
+            <div
+              className="flex items-center gap-2.5 cursor-pointer group hover:opacity-80 transition-opacity pointer-events-auto"
+              onClick={handleLogoClick}
+            >
+              <div className="relative flex items-center justify-center p-1">
+                <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 text-fg">
+                  <rect x="48" y="416" width="416" height="48" rx="24" />
+                  <path d="M120 200 A 50 50 0 0 1 160 260 A 50 50 0 0 1 120 320" />
+                  <path d="M100 200 H160" />
+                  <path d="M256 200 v120" />
+                  <path d="M256 200 C360 200 360 320 256 320" />
+                  <path d="M80 80 h350" />
+                  <rect x="200" y="48" width="112" height="64" rx="12" />
+                  <path d="M256 112 v40 L 256 200" strokeDasharray="16 16" />
+                </svg>
+              </div>
+              <span className="font-black text-xl tracking-tight text-fg">
+                MahashriLab
+              </span>
             </div>
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end">
             {/* Search */}
             <div className="hidden md:flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-64 focus-within:border-fg transition-all">
               <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
@@ -216,15 +249,6 @@ export default function Navbar() {
                   {cart.length}
                 </span>
               )}
-            </button>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              className="lg:hidden relative p-2 rounded-sm border border-surface-border bg-surface-muted hover:border-fg transition-all text-fg"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>

@@ -90,12 +90,10 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
 
           {/* Content */}
           <div className="p-5 flex flex-col flex-grow">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-fg font-bold text-base line-clamp-1 group-hover:text-primary-500 transition-colors">{product.name}</h3>
-              <span className="text-primary-500 font-black ml-3 text-sm">₹{product.price}</span>
+            <div className="flex justify-between items-start mb-4 gap-2 flex-grow">
+              <h3 className="text-fg font-bold text-base group-hover:text-primary-500 transition-colors break-words flex-1">{product.name}</h3>
+              <span className="text-primary-500 font-black text-sm whitespace-nowrap flex-shrink-0">₹{product.price}</span>
             </div>
-
-            <p className="text-fg-muted text-sm mb-4 flex-grow line-clamp-2 leading-relaxed">{product.fullDescription}</p>
 
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="px-2 py-1 bg-primary-500/10 rounded-sm text-xs text-primary-500 font-bold border border-primary-500/20">

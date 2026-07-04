@@ -143,7 +143,7 @@ export default function StorefrontGrid() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
+                    <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center leading-snug group-hover:text-primary-600 transition-colors break-words">
                       {item.name}
                     </span>
                   </Link>

@@ -363,7 +363,7 @@ export default function CheckoutPage() {
                 {cart.map((item, idx) => (
                   <div key={`${item.id}-${idx}`} className="bg-surface-muted/40 border border-surface-border/60 p-4 rounded-sm">
                     <div className="flex justify-between items-start mb-2">
-                      <p className="font-bold text-sm text-fg truncate pr-4">{item.fileName}</p>
+                      <p className="font-bold text-sm text-fg break-words pr-4">{item.fileName}</p>
                       <p className="text-primary-500 font-black text-sm whitespace-nowrap">₹{item.price}</p>
                     </div>
                     <div className="flex gap-2 flex-wrap">

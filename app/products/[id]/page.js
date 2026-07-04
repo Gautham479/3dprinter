@@ -351,6 +351,12 @@ export default function ProductPage() {
               </div>
 
               <h1 className="text-4xl font-black text-fg mb-3">{product.name}</h1>
+              
+              <div className="mb-6">
+                <p className="text-5xl font-black text-primary-500">₹{product.price}</p>
+                <p className="text-xs text-fg-subtle font-bold mt-1">Shipping charges additional at checkout</p>
+              </div>
+
               <p className="text-fg-muted text-base mb-8 leading-relaxed">{product.fullDescription}</p>
 
               {/* Specs */}
@@ -404,16 +410,11 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Price & CTA */}
-            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg">
+            {/* CTA */}
+            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg mt-6">
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
-              <div className="flex items-end justify-between mb-5">
-                <div>
-                  <p className="text-fg-subtle text-xs font-bold uppercase tracking-wider mb-1">Price</p>
-                  <p className="text-5xl font-black text-primary-500">₹{product.price}</p>
-                </div>
-                {product.inStock && (
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-xs font-black">
+              {product.inStock && (
+                  <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-5 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-xs font-black">
                     <motion.span
                       className="w-2 h-2 rounded-sm bg-accent-500"
                       animate={{ opacity: [1, 0.3, 1] }}
@@ -422,7 +423,6 @@ export default function ProductPage() {
                     In Stock
                   </div>
                 )}
-              </div>
 
               <motion.button
                 disabled={!product.inStock}

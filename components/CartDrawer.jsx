@@ -103,7 +103,7 @@ export default function CartDrawer() {
                         <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary-500 rounded--sm" />
 
                         <div className="flex justify-between items-start mb-2 pr-8 pl-2">
-                          <p className="text-fg font-black truncate max-w-[220px] text-sm">{item.fileName}</p>
+                          <p className="text-fg font-black text-sm break-words pr-2">{item.fileName}</p>
                           <p className="text-primary-500 font-black whitespace-nowrap text-sm">₹{item.price}</p>
                         </div>
 

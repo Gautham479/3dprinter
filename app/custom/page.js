@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 const DEFAULT_CONFIG = {
   printerBedSize: "256mm x 256mm x 256mm",
-  collageImages: ["/pics/collectible.jpg", "/pics/desk accesories.webp", "/pics/home decor.webp", "/pics/playables.jpg"]
+  collageImages: ["/pics/collectibles.png", "/pics/desk_organizers.png", "/pics/home decor.webp", "/pics/playables.jpg"]
 };
 
 export default function CustomPrintPage() {

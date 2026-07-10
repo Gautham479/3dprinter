@@ -24,11 +24,11 @@ function CategoryHero({ category }) {
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
-    'desk organizers': '/pics/desk accesories.webp',
+    'desk organizers': '/pics/desk_organizers.png',
     'playables': '/pics/playables.jpg',
-    'collectibles': '/pics/collectible.jpg',
+    'collectibles': '/pics/collectibles.png',
     'home decor': '/pics/home decor.webp',
-    'kit cards': '/pics/kit cards.webp',
+    'kit cards': '/pics/kit_cards.png',
   };
 
   const defaultImagePath = categoryImageMap[safeCategory.toLowerCase()] || `/photos/${safeCategory.toLowerCase()}.jpeg`;
@@ -45,31 +45,29 @@ function CategoryHero({ category }) {
   };
 
   return (
-    <div className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden mt-16 bg-black">
-      {/* Background Image */}
+    <div className="relative w-full h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden mt-16 bg-black border-b border-surface-border">
+      {/* Background Image - fully visible, fills the container size */}
       <div className="absolute inset-0 z-0">
         <img 
           src={imgSrc} 
           alt={safeCategory}
           onError={() => setImgSrc('/hero-fallback.png')}
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-100"
           style={{objectPosition: getObjectPosition(safeCategory)}}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-bg via-surface-bg/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-surface-bg/50 to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-3xl mx-auto pt-10">
+      {/* Content Overlay */}
+      <div className="relative z-10 text-center px-6 py-5 max-w-xl mx-auto rounded-md bg-black/55 backdrop-blur-[4px] border border-white/10 shadow-xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter uppercase drop-shadow-2xl">
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-2xl">
             {safeCategory}
           </h1>
-          <div className="h-[4px] w-24 bg-primary-500 mx-auto rounded-sm mb-6 shadow-[0_0_20px_rgba(255,153,0,0.6)]" />
+          <div className="h-[4px] w-24 bg-primary-500 mx-auto rounded-sm shadow-[0_0_20px_rgba(255,153,0,0.6)]" />
         </motion.div>
       </div>
     </div>

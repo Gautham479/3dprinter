@@ -112,10 +112,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`w-full sticky top-0 z-50 transition-all duration-300 ${scrolled
-          ? 'bg-surface-bg/95 backdrop-blur-md border-b border-surface-border shadow-sm'
-          : 'bg-surface-bg border-b border-surface-border'
-        }`}
+      className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 bg-surface-bg border-b border-surface-border ${scrolled ? 'shadow-sm' : ''}`}
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">

@@ -6,6 +6,15 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 export default function Hero() {
+  const [config, setConfig] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(data => setConfig(data))
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="w-full bg-surface-bg border-b border-surface-border">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 flex flex-col items-center justify-center text-center">
@@ -18,11 +27,10 @@ export default function Hero() {
           className="w-full flex flex-col items-center"
         >
           <h1 className="text-4xl md:text-6xl font-black text-fg leading-tight tracking-tight mb-6">
-            Industrial Grade 3D Printing, <br />
-            <span className="text-primary-600">Simplified.</span>
+            {config?.heroHeading || "Industrial Grade 3D Printing, Simplified."}
           </h1>
           <p className="text-lg md:text-xl text-fg-muted mb-10 leading-relaxed max-w-2xl">
-            Get instant quotes and upload your 3D models. We deliver precision parts with absolute accuracy, ensuring fault-proof prints for engineering and design.
+            {config?.heroSubheading || "Get instant quotes and upload your 3D models. We deliver precision parts with absolute accuracy, ensuring fault-proof prints for engineering and design."}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">

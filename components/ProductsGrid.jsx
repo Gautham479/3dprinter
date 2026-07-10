@@ -165,6 +165,13 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
       const response = await fetch(url);
       const data = await response.json().catch(() => []);
       const productsArray = Array.isArray(data) ? data : [];
+      
+      // Randomize the product order on every page load
+      for (let i = productsArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [productsArray[i], productsArray[j]] = [productsArray[j], productsArray[i]];
+      }
+
       setLocalProducts(productsArray);
       if (!featuredOnly) {
         setProducts(productsArray);
@@ -259,13 +266,13 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
 
       {/* Grid */}
       {loading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 lg:gap-6">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="w-full aspect-[3/4] bg-surface-muted/60 animate-pulse rounded-sm border border-surface-border/40" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 lg:gap-6">
           <AnimatePresence>
             {filteredProducts.map((product, idx) => {
               const activeColors = getProductColors(product);

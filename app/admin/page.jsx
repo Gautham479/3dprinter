@@ -106,6 +106,8 @@ export default function AdminDashboardPage() {
   const [colors, setColors] = useState([]);
   const [colorForm, setColorForm] = useState({ name: '', hex: '#111111', material: 'PLA', colorType: 'Basic' });
   const [savingColor, setSavingColor] = useState(false);
+  const [siteConfig, setSiteConfig] = useState({ heroHeading: '', heroSubheading: '', printerBedSize: '', contactNotice: '' });
+  const [savingConfig, setSavingConfig] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [imageFile, setImageFile] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
@@ -170,6 +172,35 @@ export default function AdminDashboardPage() {
       const data = await response.json();
       setColors(data);
     }
+  };
+
+  const fetchSiteConfig = async () => {
+    const response = await fetch('/api/config');
+    if (response.ok) {
+      const data = await response.json();
+      setSiteConfig(data);
+    }
+  };
+
+  const handleSaveConfig = async (e) => {
+    e.preventDefault();
+    setSavingConfig(true);
+    setError('');
+    setSuccessMessage('');
+    
+    const response = await fetch('/api/config', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(siteConfig),
+    });
+
+    if (response.ok) {
+      setSuccessMessage('Site configuration saved successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } else {
+      setError('Failed to save configuration.');
+    }
+    setSavingConfig(false);
   };
 
   const handleCreateColor = async (e) => {
@@ -239,6 +270,7 @@ export default function AdminDashboardPage() {
     fetchProducts();
     fetchOrders();
     fetchColors();
+    fetchSiteConfig();
   }, []);
 
   const inStockCount = useMemo(() => products.filter((product) => product.inStock).length, [products]);
@@ -548,6 +580,7 @@ export default function AdminDashboardPage() {
             { id: 'products', label: 'Products Manager', icon: <Package className="w-4 h-4" /> },
             { id: 'orders', label: 'Orders Manager', icon: <ShoppingBag className="w-4 h-4" /> },
             { id: 'colors', label: 'Colors Manager', icon: <Palette className="w-4 h-4" /> },
+            { id: 'settings', label: 'Site Settings', icon: <Zap className="w-4 h-4" /> },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -570,7 +603,45 @@ export default function AdminDashboardPage() {
         </div>
 
         <AnimatePresence mode="wait">
-          {activeTab === 'products' ? (
+          {activeTab === 'settings' ? (
+            <motion.div
+              key="settings"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              <section className="rounded-sm border border-primary-500/20 bg-surface-card/60 backdrop-blur-xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
+                <h2 className="text-xl font-black text-fg mb-5">Global Site Settings</h2>
+                <form onSubmit={handleSaveConfig} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Hero Section Heading</label>
+                    <input className={inputClass} value={siteConfig.heroHeading} onChange={e => setSiteConfig({...siteConfig, heroHeading: e.target.value})} />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Hero Section Subheading</label>
+                    <textarea className={`${inputClass} min-h-24`} value={siteConfig.heroSubheading} onChange={e => setSiteConfig({...siteConfig, heroSubheading: e.target.value})} />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Printer Bed Size (Custom Printing Page)</label>
+                    <input className={inputClass} value={siteConfig.printerBedSize} onChange={e => setSiteConfig({...siteConfig, printerBedSize: e.target.value})} />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Contact Page Notice</label>
+                    <input className={inputClass} value={siteConfig.contactNotice} onChange={e => setSiteConfig({...siteConfig, contactNotice: e.target.value})} />
+                  </div>
+                  <div className="md:col-span-2 mt-4">
+                    {error ? <p className="text-red-400 text-sm mb-3 bg-red-500/10 border border-red-500/20 rounded-sm px-3 py-2">{error}</p> : null}
+                    {successMessage ? <p className="text-green-400 text-sm mb-3 bg-green-500/10 border border-green-500/20 rounded-sm px-3 py-2">{successMessage}</p> : null}
+                    <button type="submit" disabled={savingConfig} className="btn-glow bg-primary-500 text-[var(--app-cta-contrast)] px-6 py-2.5 rounded-sm font-black disabled:opacity-60">
+                      {savingConfig ? 'Saving...' : 'Save Settings'}
+                    </button>
+                  </div>
+                </form>
+              </section>
+            </motion.div>
+          ) : activeTab === 'products' ? (
             <motion.div
               key="products"
               initial={{ opacity: 0, y: 10 }}

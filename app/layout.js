@@ -1,12 +1,11 @@
-import { Playfair_Display, Inter } from "next/font/google";
+import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import NavigationLoader from "@/components/NavigationLoader";
 
-const playfair = Playfair_Display({
+const outfit = Outfit({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ['normal', 'italic'],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 const inter = Inter({
@@ -24,7 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${inter.variable} h-full antialiased`}
+      className={`${outfit.variable} ${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-body bg-surface-bg text-fg">

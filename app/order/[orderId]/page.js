@@ -11,8 +11,10 @@ export default function OrderConfirmationPage(props) {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [siteConfig, setSiteConfig] = useState(null);
 
   useEffect(() => {
+    fetch('/api/config').then(res => res.json()).then(data => setSiteConfig(data)).catch(console.error);
     const fetchOrder = async () => {
       try {
         const response = await fetch(`/api/orders/${orderId}`);
@@ -276,6 +278,9 @@ export default function OrderConfirmationPage(props) {
           transition={{ delay: 0.4 }}
           className="pt-4 text-center pb-12"
         >
+          <div className="max-w-2xl mx-auto bg-primary-500/10 border border-primary-500/30 text-primary-500 px-6 py-4 rounded-sm text-center mb-8 font-bold text-sm">
+            {siteConfig?.contactNotice || "Note: You can update order notes within 1 hour of placing your order using your Order Number. Please contact us via the Contact page."}
+          </div>
           <Link
             href="/"
             className="inline-flex items-center gap-2 btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)] font-black px-8 py-4 rounded-sm transition-all"

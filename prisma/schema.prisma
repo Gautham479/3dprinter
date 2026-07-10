@@ -89,3 +89,13 @@ model FilamentColor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model SiteConfig {
+  id              String   @id @default("global")
+  heroHeading     String   @default("Industrial Grade 3D Printing, Simplified.")
+  heroSubheading  String   @default("Get instant quotes and upload your 3D models. We deliver precision parts with absolute accuracy, ensuring fault-proof prints for engineering and design.")
+  printerBedSize  String   @default("256mm x 256mm x 256mm")
+  contactNotice   String   @default("Note: You can update order notes within 1 hour of placing your order using your Order Number.")
+  collageImages   String[] @default(["/pics/collectible.jpg", "/pics/desk accesories.webp", "/pics/home decor.webp", "/pics/playables.jpg"])
+  updatedAt       DateTime @updatedAt
+}

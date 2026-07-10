@@ -301,12 +301,12 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
               <div className="w-16 h-16 rounded-sm bg-surface-muted/60 border border-surface-border flex items-center justify-center mx-auto mb-4">
                 <Layers className="w-8 h-8 text-fg-subtle" />
               </div>
-              <p className="text-fg-muted text-lg font-semibold">No products found matching your criteria.</p>
+              <p className="text-fg-muted text-lg font-semibold">No matches found</p>
               <button
                 onClick={() => { setSelectedType('All'); useStore.getState().setSearchQuery(''); }}
                 className="mt-4 px-5 py-2 bg-primary-500/10 border border-primary-500/30 rounded-sm text-primary-500 font-bold hover:bg-primary-500/20 transition-colors"
               >
-                Clear Filters
+                Clear Search & Filters
               </button>
             </div>
           )}

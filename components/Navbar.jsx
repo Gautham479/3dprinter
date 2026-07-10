@@ -92,14 +92,8 @@ export default function Navbar() {
   const handleSearchChange = (event) => {
     const nextQuery = event.target.value;
     setSearchQuery(nextQuery);
-    if (pathname !== '/') {
-      router.push('/?section=content');
-      return;
-    }
-    const contentSection = document.getElementById('content');
-    if (contentSection) {
-      const y = contentSection.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+    if (pathname !== '/products') {
+      router.push('/products');
     }
   };
 

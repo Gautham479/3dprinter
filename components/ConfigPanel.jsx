@@ -160,20 +160,19 @@ export default function ConfigPanel() {
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'Draft (0.3mm)', label: 'Draft', detail: '0.3mm' },
-              { id: 'Standard (0.2mm)', label: 'Standard', detail: '0.2mm' },
-              { id: 'High (0.1mm)', label: 'High', detail: '0.1mm' }
+              { id: 'Draft', label: 'Draft' },
+              { id: 'Standard', label: 'Standard' },
+              { id: 'High', label: 'High' }
             ].map((q) => (
               <button
                 key={q.id}
                 onClick={() => setConfig({ quality: q.id })}
-                className={`py-2 px-1 rounded-sm border transition-all flex flex-col items-center justify-center gap-0.5 ${config.quality === q.id
+                className={`py-3 px-1 rounded-sm border transition-all flex items-center justify-center ${config.quality === q.id
                     ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
                     : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
                   }`}
               >
                 <span className="text-sm font-bold">{q.label}</span>
-                <span className="text-[10px] opacity-70 font-semibold">{q.detail}</span>
               </button>
             ))}
           </div>

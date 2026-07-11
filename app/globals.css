@@ -4,7 +4,7 @@
 :root {
   /* BACKGROUNDS */
   --app-surface-bg: #E8EDF2; /* Light cool grayish-blue */
-  --app-surface-card: rgba(255, 255, 255, 0.5); /* Frosted contrast for cards */
+  --app-surface-card: #FFFFFF; /* Solid contrast for cards */
   --app-surface-muted: rgba(44, 57, 71, 0.05); /* Very subtle navy tint */
   --app-surface-border: rgba(44, 57, 71, 0.15); /* Soft structural navy border */
 

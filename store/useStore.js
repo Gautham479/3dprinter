@@ -48,7 +48,7 @@ export const useStore = create((set) => ({
     plaFinish: 'Basic',
     color: 'Black',
     colorMode: 'Single Color',
-    quality: 'Standard (0.2mm)',
+    quality: 'Standard',
     strength: 20,
   },
   mockPrice: null,

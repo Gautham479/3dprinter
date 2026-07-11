@@ -36,12 +36,12 @@ function CategoryHero({ category }) {
 
   const tagline = getCategoryTagline(safeCategory);
 
-  // Get object-position based on category
   const getObjectPosition = (category) => {
     const cat = category.toLowerCase();
     if (cat.includes('collectible')) return 'center 20%';
-    if (cat.includes('playable')) return 'center';
-    return '';
+    if (cat.includes('playable')) return 'bottom';
+    if (cat.includes('action figure')) return 'top';
+    return 'center';
   };
 
   return (

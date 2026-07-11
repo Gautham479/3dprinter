@@ -42,7 +42,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
     <div className="flex flex-col h-full group">
       <Link href={`/products/${product.slug}`} className="flex-grow flex flex-col cursor-pointer">
         <motion.div
-          className="relative rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden flex flex-col h-full transition-all duration-300"
+          className="relative rounded-sm border border-surface-border bg-surface-card overflow-hidden flex flex-col h-full transition-all duration-300"
           whileHover={{ y: -4 }}
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
@@ -254,7 +254,7 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
                 whileTap={{ scale: 0.97 }}
                 className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
                     ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
-                    : 'bg-surface-card/80 text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
+                    : 'bg-surface-card text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
                   }`}
               >
                 {type}

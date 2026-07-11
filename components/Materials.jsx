@@ -50,11 +50,11 @@ export default function Materials() {
   ];
 
   const quickGuide = [
-    { question: "Outdoor / Sun use?", answer: "PETG or ABS" },
-    { question: "High heat?", answer: "ABS" },
-    { question: "Electrical use?", answer: "PETG or ABS" },
-    { question: "Flexible part?", answer: "TPU" },
-    { question: "Budget / basic use?", answer: "PLA" }
+    { question: "Outdoor / Sun use?", answer: "PETG or ABS", emoji: "☀️" },
+    { question: "High heat?", answer: "ABS", emoji: "🔥" },
+    { question: "Electrical use?", answer: "PETG or ABS", emoji: "⚡" },
+    { question: "Flexible part?", answer: "TPU", emoji: "🌀" },
+    { question: "Budget / basic use?", answer: "PLA", emoji: "🏷️" }
   ];
 
   const getBullet = () => (
@@ -133,14 +133,67 @@ export default function Materials() {
             Quick Reference Guide
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 text-center lg:text-left">
-            {quickGuide.map((item, i) => (
-              <div key={i} className="flex flex-col items-center lg:items-start">
-                <p className="text-sm font-semibold text-fg-muted mb-2 uppercase tracking-wider">{item.question}</p>
-                <div className="h-px w-full max-w-[80px] lg:max-w-full bg-surface-border mb-3" />
-                <p className="text-fg font-bold">{item.answer}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {quickGuide.map((item, i) => {
+              const themes = [
+                {
+                  bg: "bg-amber-500/5 dark:bg-amber-500/10",
+                  border: "border-amber-500/20 dark:border-amber-500/30",
+                  accent: "bg-amber-500",
+                },
+                {
+                  bg: "bg-rose-500/5 dark:bg-rose-500/10",
+                  border: "border-rose-500/20 dark:border-rose-500/30",
+                  accent: "bg-rose-500",
+                },
+                {
+                  bg: "bg-sky-500/5 dark:bg-sky-500/10",
+                  border: "border-sky-500/20 dark:border-sky-500/30",
+                  accent: "bg-sky-500",
+                },
+                {
+                  bg: "bg-emerald-500/5 dark:bg-emerald-500/10",
+                  border: "border-emerald-500/20 dark:border-emerald-500/30",
+                  accent: "bg-emerald-500",
+                },
+                {
+                  bg: "bg-primary-500/5 dark:bg-primary-500/10",
+                  border: "border-primary-500/20 dark:border-primary-500/30",
+                  accent: "bg-primary-500",
+                }
+              ];
+              
+              const theme = themes[i] || themes[4];
+
+              return (
+                <div 
+                  key={i} 
+                  className={`flex flex-col p-5 rounded-sm border ${theme.border} ${theme.bg} relative overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5`}
+                >
+                  <div className={`absolute top-0 left-0 right-0 h-1 ${theme.accent}`} />
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xl leading-none">{item.emoji}</span>
+                    <p className="text-xs font-black text-fg-muted uppercase tracking-widest leading-normal">{item.question}</p>
+                  </div>
+                  
+                  <div className="mt-auto flex flex-wrap gap-1.5">
+                    {item.answer.split(' or ').map((ans) => {
+                      let matBadge = "";
+                      if (ans === 'PLA') matBadge = "bg-primary-500/10 text-primary-500 border border-primary-500/20 font-black";
+                      else if (ans === 'PETG') matBadge = "bg-blue-500/10 text-blue-500 border border-blue-500/20 font-black";
+                      else if (ans === 'ABS') matBadge = "bg-rose-500/10 text-rose-500 border border-rose-500/20 font-black";
+                      else if (ans === 'TPU') matBadge = "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-black";
+
+                      return (
+                        <span key={ans} className={`px-2.5 py-1 text-xs rounded-sm ${matBadge}`}>
+                          {ans}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
       </div>

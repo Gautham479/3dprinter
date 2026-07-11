@@ -9,6 +9,7 @@ import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCir
 const EMPTY_FORM = {
   name: '',
   fullDescription: '',
+  note: '',
   material: 'PLA',
   price: '',
   image: '',
@@ -16,7 +17,6 @@ const EMPTY_FORM = {
   type: PRODUCT_TYPES[0],
   dimensions: '',
   weight: '',
-  printTime: '',
   inStock: true,
   isFeatured: false,
 };
@@ -367,7 +367,7 @@ export default function AdminDashboardPage() {
     payload.set('imageColor', form.imageColor);
     payload.set('dimensions', form.dimensions);
     payload.set('weight', form.weight);
-    payload.set('printTime', form.printTime);
+    payload.set('note', form.note);
     payload.set('inStock', String(form.inStock));
     payload.set('isFeatured', String(form.isFeatured));
     if (imageFile) {
@@ -677,7 +677,7 @@ export default function AdminDashboardPage() {
                   <input className={inputClass} placeholder="Image gradient classes" value={form.imageColor} onChange={(e) => updateField('imageColor', e.target.value)} />
                   <input className={inputClass} placeholder="Dimensions" value={form.dimensions} onChange={(e) => updateField('dimensions', e.target.value)} />
                   <input className={inputClass} placeholder="Weight" value={form.weight} onChange={(e) => updateField('weight', e.target.value)} />
-                  <input className={inputClass} placeholder="Print time" value={form.printTime} onChange={(e) => updateField('printTime', e.target.value)} />
+                  <input className={inputClass} placeholder="Note (Optional)" value={form.note} onChange={(e) => updateField('note', e.target.value)} />
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
                       <input type="checkbox" checked={form.inStock} onChange={(e) => updateField('inStock', e.target.checked)} className="w-4 h-4 accent-primary-500" />
@@ -879,6 +879,23 @@ export default function AdminDashboardPage() {
                                     }
                                   }}
                                   className="text-xs text-fg-subtle bg-transparent border border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1.5 py-1 -ml-1.5 rounded-sm transition-all w-full max-w-[400px] min-h-[40px] resize-y mt-0.5"
+                                />
+                                <textarea
+                                  key={`note-${product.id}-${product.note}`}
+                                  defaultValue={product.note || ''}
+                                  placeholder="Add an internal note (optional)..."
+                                  onBlur={async (e) => {
+                                    const val = e.target.value.trim();
+                                    if (val !== (product.note || '')) {
+                                      await fetch(`/api/admin/products/${product.id}`, {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ note: val }),
+                                      });
+                                      fetchProducts();
+                                    }
+                                  }}
+                                  className="text-xs text-amber-600/80 dark:text-amber-500/80 bg-transparent border border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1.5 py-1 -ml-1.5 rounded-sm transition-all w-full max-w-[400px] min-h-[35px] resize-y mt-1 font-semibold placeholder:text-amber-600/40 dark:placeholder:text-amber-500/40"
                                 />
                               </div>
                             </div>

@@ -47,7 +47,7 @@ function ProductsContent() {
         transition={{ duration: 0.4 }}
       >
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <h1 className="text-4xl font-black text-fg mb-3">Product Catalog</h1>
+          <h1 className="text-4xl font-black text-fg mb-3">Product Catalogue</h1>
           <div className="h-[2px] w-20 bg-primary-500 mx-auto rounded-sm mb-4" />
           <p className="text-fg-muted">
             Browse our complete collection of high-quality 3D printed accessories.

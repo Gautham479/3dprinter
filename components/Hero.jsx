@@ -44,7 +44,7 @@ export default function Hero() {
               href="/products" 
               className="px-8 py-3.5 rounded-sm bg-transparent border border-fg text-fg hover:bg-surface-muted font-bold transition-colors"
             >
-              Browse Catalog
+              Browse Catalogue
             </Link>
           </div>
 

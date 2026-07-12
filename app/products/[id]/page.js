@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Ruler, Package, Truck } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -86,7 +86,9 @@ export default function ProductPage() {
         const productsResponse = await fetch('/api/products?includeOutOfStock=1');
         const allProducts = await productsResponse.json().catch(() => []);
         if (Array.isArray(allProducts)) {
-          setRelatedProducts(allProducts.filter((item) => item.slug !== data.slug).slice(0, 3));
+          const filtered = allProducts.filter((item) => item.slug !== data.slug);
+          const shuffled = filtered.sort(() => 0.5 - Math.random());
+          setRelatedProducts(shuffled.slice(0, 3));
         }
       } catch {
         setNotFound(true);
@@ -130,7 +132,7 @@ export default function ProductPage() {
       <div className="flex flex-col min-h-screen bg-surface-bg">
         <Navbar />
         <CartDrawer />
-        <div className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12">
           <div className="h-5 w-36 bg-surface-muted animate-pulse rounded-sm mb-8" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="flex flex-col gap-4">
@@ -199,6 +201,7 @@ export default function ProductPage() {
   const specs = [
     { icon: <Weight className="w-4 h-4" />, label: 'Weight', value: product.weight ? `${product.weight} grams` : null },
     { icon: <Layers className="w-4 h-4" />, label: 'Material', value: product.material },
+    { icon: <Ruler className="w-4 h-4" />, label: 'Dimensions', value: product.dimensions },
   ];
 
   return (
@@ -209,11 +212,11 @@ export default function ProductPage() {
       <Navbar />
       <CartDrawer />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 relative"
+        className="flex-1 max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-28 pb-12 relative"
       >
         {/* Back */}
         <motion.button
@@ -251,7 +254,7 @@ export default function ProductPage() {
                         src={selectedImage}
                         alt={product.name}
                         fill
-                        className="object-cover w-full h-full"
+                        className="object-contain w-full h-full"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         priority
                       />
@@ -324,8 +327,8 @@ export default function ProductPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={`w-16 h-16 rounded-sm border-2 overflow-hidden relative transition-all ${selectedImage === imageUrl
-                        ? 'border-primary-500 shadow-md'
-                        : 'border-surface-border opacity-60 hover:opacity-100 hover:border-primary-500/50'
+                      ? 'border-primary-500 shadow-md'
+                      : 'border-surface-border opacity-60 hover:opacity-100 hover:border-primary-500/50'
                       }`}
                   >
                     <Image src={imageUrl} alt="Product thumbnail" fill className="object-cover" sizes="64px" />
@@ -344,17 +347,26 @@ export default function ProductPage() {
                   {product.type}
                 </span>
                 {!product.inStock && (
-                  <span className="px-3 py-1 rounded-sm text-sm font-black bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                  <span className="px-3 py-1 rounded-sm text-sm font-black bg-red-500/15 text-red-500 border border-red-500/30">
                     Currently out of stock
                   </span>
                 )}
               </div>
 
               <h1 className="text-4xl font-black text-fg mb-3">{product.name}</h1>
-              
+
               <div className="mb-6">
-                <p className="text-5xl font-black text-primary-500">₹{product.price}</p>
-                <p className="text-xs text-fg-subtle font-bold mt-1">Shipping charges additional at checkout</p>
+                <p className="text-5xl font-black text-primary-500 mb-4">₹{product.price}</p>
+                <div className="flex flex-col gap-2 p-3.5 rounded-sm bg-primary-500/10 border border-primary-500/20">
+                  <div className="flex items-start gap-2.5">
+                    <Truck className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-bold">Shipping charges additional at checkout</p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Package className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
+                  </div>
+                </div>
               </div>
 
               <p className="text-fg-muted text-base mb-8 leading-relaxed">{product.fullDescription}</p>
@@ -382,31 +394,31 @@ export default function ProductPage() {
               <div className="mb-6">
                 <p className="text-fg-muted text-sm font-bold mb-3 uppercase tracking-wider">Color Option</p>
 
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="space-y-2 mt-2"
-                  >
-                    <div className="flex gap-2 flex-wrap">
-                      {activeColors.map((color) => (
-                        <button
-                          key={color.name}
-                          type="button"
-                          title={color.name}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSingleColor(color.name);
-                          }}
-                          className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
-                              ? 'border-primary-500 scale-110 shadow-md'
-                              : 'border-surface-border hover:border-primary-500/50'
-                            }`}
-                          style={{ backgroundColor: color.hex }}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
-                  </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="space-y-2 mt-2"
+                >
+                  <div className="flex gap-2 flex-wrap">
+                    {activeColors.map((color) => (
+                      <button
+                        key={color.name}
+                        type="button"
+                        title={color.name}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSingleColor(color.name);
+                        }}
+                        className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
+                          ? 'border-primary-500 scale-110 shadow-md'
+                          : 'border-surface-border hover:border-primary-500/50'
+                          }`}
+                        style={{ backgroundColor: color.hex }}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
+                </motion.div>
               </div>
             </div>
 
@@ -414,15 +426,15 @@ export default function ProductPage() {
             <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg mt-6">
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
               {product.inStock && (
-                  <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-5 rounded-sm bg-accent-500/10 border border-accent-500/20 text-accent-500 text-xs font-black">
-                    <motion.span
-                      className="w-2 h-2 rounded-sm bg-accent-500"
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                    In Stock
-                  </div>
-                )}
+                <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-5 rounded-sm bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-black">
+                  <motion.span
+                    className="w-2 h-2 rounded-sm bg-green-500"
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                  In Stock
+                </div>
+              )}
 
               <motion.button
                 disabled={!product.inStock}
@@ -430,10 +442,10 @@ export default function ProductPage() {
                 whileHover={product.inStock ? { scale: 1.02 } : {}}
                 whileTap={product.inStock ? { scale: 0.98 } : {}}
                 className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
-                    ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
-                    : addedToCart
-                      ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
-                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
+                  ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
+                  : addedToCart
+                    ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
+                    : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
                   }`}
               >
                 {!product.inStock ? (
@@ -464,7 +476,7 @@ export default function ProductPage() {
                   key={p.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
+                  viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => router.push(`/products/${p.slug}`)}
                   whileHover={{ y: -4 }}

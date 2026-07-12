@@ -35,13 +35,13 @@ export default function StorefrontGrid() {
   }));
 
   // Fallback to recent products if no featured products are set
-  const baseCollections = featured.length > 0 
-    ? featured 
+  const baseCollections = featured.length > 0
+    ? featured
     : products.slice(0, 10).map(p => ({
-        name: p.name,
-        img: p.image || `https://placehold.co/400x400/111/333?text=${encodeURIComponent(p.name)}`,
-        linkUrl: `/products/${p.slug}`
-      }));
+      name: p.name,
+      img: p.image || `https://placehold.co/400x400/111/333?text=${encodeURIComponent(p.name)}`,
+      linkUrl: `/products/${p.slug}`
+    }));
 
   // Shuffle array randomly
   const shuffle = (arr) => {
@@ -96,10 +96,10 @@ export default function StorefrontGrid() {
   return (
     <section className="w-full bg-surface-bg py-6 sm:py-8 font-sans">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
-        
+
         {/* Curated Collections Horizontal Scroll */}
         {displayCollections.length > 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -112,7 +112,7 @@ export default function StorefrontGrid() {
                 See all products
               </Link>
             </div>
-            
+
             <div className="relative w-full flex justify-center">
               {/* Left Arrow */}
               <button
@@ -134,26 +134,26 @@ export default function StorefrontGrid() {
 
               <div ref={scrollContainerRef} className="overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full flex justify-center">
                 <div className="flex gap-4 sm:gap-6">
-                {displayCollections.map((item, idx) => (
-                  <Link href={item.linkUrl} key={idx} className="flex flex-col items-center w-[180px] sm:w-[220px] group cursor-pointer">
-                    <div className="w-full aspect-square rounded-md overflow-hidden bg-surface-muted mb-2 border border-surface-border">
-                      <img 
-                        src={item.img} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center leading-snug group-hover:text-primary-600 transition-colors break-words">
-                      {item.name}
-                    </span>
-                  </Link>
-                ))}
+                  {displayCollections.map((item, idx) => (
+                    <Link href={item.linkUrl} key={idx} className="flex flex-col items-center w-[180px] sm:w-[220px] group cursor-pointer">
+                      <div className="w-full aspect-square rounded-md overflow-hidden bg-surface-muted mb-2 border border-surface-border">
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center leading-snug group-hover:text-primary-600 transition-colors break-words">
+                        {item.name}
+                      </span>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
           </motion.div>
         )}
-        
+
       </div>
     </section>
   );

@@ -81,7 +81,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
             {/* Out of stock overlay */}
             {!product.inStock && (
               <div className="absolute inset-0 bg-surface-bg/60 flex items-center justify-center">
-                <span className="px-3 py-1.5 rounded-sm bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-black uppercase tracking-wider">
+                <span className="px-3 py-1.5 rounded-sm bg-red-500/20 border border-red-500/40 text-red-500 text-xs font-black uppercase tracking-wider">
                   Out of Stock
                 </span>
               </div>
@@ -102,20 +102,25 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
               <span className="px-2 py-1 bg-surface-muted rounded-sm text-xs text-fg-muted font-bold border border-surface-border">
                 {product.type}
               </span>
+              {product.dimensions && (
+                <span className="px-2 py-1 bg-surface-muted rounded-sm text-xs text-fg-muted font-bold border border-surface-border">
+                  {product.dimensions}
+                </span>
+              )}
             </div>
 
             {/* Color options */}
             <div className="space-y-2 mt-auto">
-                <select
-                  value={productColorOptions[product.id]?.color || activeColors[0]?.name}
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  onChange={(e) => updateProductColorOption(product.id, { colorMode: 'Single Color', color: e.target.value }, activeColors[0]?.name)}
-                  className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-2 py-1.5 text-xs text-fg focus:outline-none focus:border-primary-500/50 transition-colors"
-                >
-                  {activeColors.map((color) => (
-                    <option key={color.name} value={color.name}>{color.name}</option>
-                  ))}
-                </select>
+              <select
+                value={productColorOptions[product.id]?.color || activeColors[0]?.name}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onChange={(e) => updateProductColorOption(product.id, { colorMode: 'Single Color', color: e.target.value }, activeColors[0]?.name)}
+                className="w-full bg-surface-muted/60 border border-surface-border rounded-sm px-2 py-1.5 text-xs text-fg focus:outline-none focus:border-primary-500/50 transition-colors"
+              >
+                {activeColors.map((color) => (
+                  <option key={color.name} value={color.name}>{color.name}</option>
+                ))}
+              </select>
             </div>
           </div>
         </motion.div>
@@ -128,8 +133,8 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
         whileHover={product.inStock ? { scale: 1.02 } : {}}
         whileTap={product.inStock ? { scale: 0.98 } : {}}
         className={`w-full py-2.5 rounded-sm font-bold transition-all flex items-center justify-center gap-2 text-sm mt-3 ${product.inStock
-            ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
-            : 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
+          ? 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
+          : 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
           }`}
       >
         <ShoppingCart className="w-4 h-4" />
@@ -141,7 +146,7 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
 
 export default function ProductsGrid({ featuredOnly = false, hideFilters = false, initialCategory = 'All' }) {
   const [selectedType, setSelectedType] = useState(initialCategory);
-  
+
   useEffect(() => {
     // If the prop changes dynamically via router, update the selected type
     setSelectedType(initialCategory);
@@ -159,13 +164,13 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
-      const url = featuredOnly 
+      const url = featuredOnly
         ? '/api/products?includeOutOfStock=1&featured=1'
         : '/api/products?includeOutOfStock=1';
       const response = await fetch(url);
       const data = await response.json().catch(() => []);
       const productsArray = Array.isArray(data) ? data : [];
-      
+
       // Randomize the product order on every page load
       for (let i = productsArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -253,8 +258,8 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className={`px-4 py-2 rounded-sm font-bold whitespace-nowrap transition-all text-sm ${activeType === type
-                    ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
-                    : 'bg-surface-card text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
+                  ? 'bg-primary-500 text-[var(--app-cta-contrast)] shadow-md'
+                  : 'bg-surface-card text-fg-muted hover:text-fg border border-surface-border hover:border-primary-500/30'
                   }`}
               >
                 {type}

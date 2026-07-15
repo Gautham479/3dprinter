@@ -22,6 +22,8 @@ export default function Navbar() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
 
   useEffect(() => {
+    if (!supabase) return;
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user || null);
     });

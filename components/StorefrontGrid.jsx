@@ -3,157 +3,155 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+
+function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const yInit = direction === 'up' ? 60 : 0;
+  const xInit = direction === 'left' ? 80 : direction === 'right' ? -80 : 0;
+  return (
+    <motion.div ref={ref} initial={{ y: yInit, x: xInit, opacity: 0 }}
+      animate={visible ? { y: 0, x: 0, opacity: 1 } : {}}
+      transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
 
 export default function StorefrontGrid() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const scrollContainerRef = useRef(null);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const response = await fetch('/api/products');
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setProducts(data);
-        }
-      } catch (error) {
-        console.error("Failed to load products for storefront", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
+    fetch('/api/products')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d)) setProducts(d); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  // For collections, show a list of featured products
   const featured = products.filter(p => p.isFeatured).map(p => ({
     name: p.name,
-    img: p.image || `https://placehold.co/400x400/111/333?text=${encodeURIComponent(p.name)}`,
-    linkUrl: `/products/${p.slug}`
+    img: p.image || `https://placehold.co/500x500/1A1A1A/C2A56D?text=${encodeURIComponent(p.name)}`,
+    linkUrl: `/products/${p.slug}`,
   }));
-
-  // Fallback to recent products if no featured products are set
-  const baseCollections = featured.length > 0
+  const base = featured.length > 0
     ? featured
     : products.slice(0, 10).map(p => ({
       name: p.name,
-      img: p.image || `https://placehold.co/400x400/111/333?text=${encodeURIComponent(p.name)}`,
-      linkUrl: `/products/${p.slug}`
+      img: p.image || `https://placehold.co/500x500/1A1A1A/C2A56D?text=${encodeURIComponent(p.name)}`,
+      linkUrl: `/products/${p.slug}`,
     }));
 
-  // Shuffle array randomly
-  const shuffle = (arr) => {
-    const shuffled = [...arr];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
+  const shuffle = arr => {
+    const s = [...arr];
+    for (let i = s.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [s[i], s[j]] = [s[j], s[i]]; }
+    return s;
   };
+  const items = shuffle(base);
 
-  const displayCollections = shuffle(baseCollections);
-
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 300; // pixels to scroll
-      if (direction === 'left') {
-        scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-      } else {
-        scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-  };
+  const scroll = dir => scrollRef.current?.scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' });
 
   if (loading) {
     return (
-      <section className="w-full bg-surface-bg py-6 sm:py-8 font-sans">
-        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 text-center">
-          <div className="bg-surface-card border border-surface-border rounded-md shadow-sm p-5 flex flex-col items-center">
-            <div className="flex items-center justify-between mb-4 w-full">
-              <div className="h-6 w-40 bg-surface-muted animate-pulse rounded-md" />
-              <div className="h-4 w-28 bg-surface-muted animate-pulse rounded-md hidden sm:block" />
-            </div>
-            <div className="flex justify-center gap-4 sm:gap-6 overflow-hidden w-full">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex flex-col items-center w-[180px] sm:w-[220px] flex-shrink-0">
-                  <div className="w-full aspect-square rounded-md bg-surface-muted animate-pulse mb-2" />
-                  <div className="h-4 w-3/4 bg-surface-muted animate-pulse rounded-md" />
-                </div>
-              ))}
-            </div>
-          </div>
+      <section className="w-full border-b border-surface-border">
+        <div className="flex gap-0">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex-shrink-0 w-1/4 aspect-square bg-surface-muted animate-pulse border-r border-surface-border" />
+          ))}
         </div>
       </section>
     );
   }
 
-  if (products.length === 0) {
-    return null; // Don't show the section if there are no products
-  }
+  if (products.length === 0) return null;
 
   return (
-    <section className="w-full bg-surface-bg py-6 sm:py-8 font-sans">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+    <section className="w-full border-b border-surface-border">
 
-        {/* Curated Collections Horizontal Scroll */}
-        {displayCollections.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-surface-card border border-surface-border rounded-md shadow-sm p-5 w-full flex flex-col items-center"
-          >
-            <div className="flex items-center justify-between w-full mb-6">
-              <h2 className="text-[21px] leading-[27px] font-bold text-fg tracking-tight text-center w-full sm:text-left sm:w-auto">Featured Products</h2>
-              <Link href="/products" className="text-primary-600 hover:text-primary-500 hover:underline text-[13px] font-medium hidden sm:block">
-                See all products
-              </Link>
-            </div>
+      {/* Section header */}
+      <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 py-10 border-b border-surface-border">
+        <Reveal>
+          <div className="flex items-center gap-3">
+            <div className="h-px w-10 bg-primary-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Featured</span>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1} direction="left">
+          <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Selected Products</h2>
+        </Reveal>
+        <Reveal delay={0.15} direction="left" className="hidden md:flex items-center gap-4">
+          <button onClick={() => scroll('left')} className="w-10 h-10 border border-surface-border flex items-center justify-center hover:border-fg hover:bg-fg hover:text-surface-bg transition-all" aria-label="Left">
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button onClick={() => scroll('right')} className="w-10 h-10 border border-surface-border flex items-center justify-center hover:border-fg hover:bg-fg hover:text-surface-bg transition-all" aria-label="Right">
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </Reveal>
+      </div>
 
-            <div className="relative w-full flex justify-center">
-              {/* Left Arrow */}
-              <button
-                onClick={() => scroll('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-surface-bg/80 hover:bg-surface-muted text-fg transition-colors shadow-sm"
-                aria-label="Scroll left"
+      {/* Scroll strip */}
+      <Reveal>
+        <div ref={scrollRef} className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex" style={{ width: 'max-content' }}>
+            {items.map((item, idx) => (
+              <Link
+                key={idx}
+                href={item.linkUrl}
+                className="group relative flex-shrink-0 border-r border-surface-border last:border-r-0"
+                style={{ width: 'clamp(220px, 22vw, 320px)' }}
               >
-                <ChevronLeft size={24} />
-              </button>
-
-              {/* Right Arrow */}
-              <button
-                onClick={() => scroll('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-surface-bg/80 hover:bg-surface-muted text-fg transition-colors shadow-sm"
-                aria-label="Scroll right"
-              >
-                <ChevronRight size={24} />
-              </button>
-
-              <div ref={scrollContainerRef} className="overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full flex justify-center">
-                <div className="flex gap-4 sm:gap-6">
-                  {displayCollections.map((item, idx) => (
-                    <Link href={item.linkUrl} key={idx} className="flex flex-col items-center w-[180px] sm:w-[220px] group cursor-pointer">
-                      <div className="w-full aspect-square rounded-md overflow-hidden bg-surface-muted mb-2 border border-surface-border">
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <span className="text-[14px] sm:text-[15px] text-fg font-medium text-center leading-snug group-hover:text-primary-600 transition-colors break-words">
-                        {item.name}
-                      </span>
-                    </Link>
-                  ))}
+                {/* Square image */}
+                <div className="relative w-full aspect-square overflow-hidden bg-surface-muted">
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-400" />
+                  {/* Arrow on hover */}
+                  <div className="absolute top-4 right-4 w-8 h-8 bg-primary-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <ArrowRight className="w-4 h-4 text-white -rotate-45" />
+                  </div>
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
+                {/* Name bar */}
+                <div className="px-4 py-4 border-t border-surface-border flex items-center justify-between">
+                  <span className="text-sm font-bold text-fg leading-snug group-hover:text-primary-500 transition-colors">
+                    {item.name}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 text-fg-muted flex-shrink-0 group-hover:text-primary-500 transition-colors ml-2" />
+                </div>
+
+                {/* Bottom gold line */}
+                <div className="absolute bottom-0 left-0 h-[2px] bg-primary-500 w-0 group-hover:w-full transition-all duration-400 ease-out" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* Mobile arrows + CTA */}
+      <div className="flex items-center justify-between px-6 py-5 border-t border-surface-border md:hidden">
+        <div className="flex gap-3">
+          <button onClick={() => scroll('left')} className="w-9 h-9 border border-surface-border flex items-center justify-center" aria-label="Left">
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button onClick={() => scroll('right')} className="w-9 h-9 border border-surface-border flex items-center justify-center" aria-label="Right">
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+        <Link href="/products" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-fg-muted hover:text-fg transition-colors">
+          View All <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
     </section>
   );

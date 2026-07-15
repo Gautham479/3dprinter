@@ -1,6 +1,7 @@
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import NavigationLoader from "@/components/NavigationLoader";
+import Script from "next/script";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -27,17 +28,11 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-body bg-surface-bg text-fg">
-        <script
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.getItem('mahashri-theme') === 'dark' || (!('mahashri-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              } catch (_) {}
-            `,
+            __html: `try{if(localStorage.getItem('mahashri-theme')==='dark'||(!('mahashri-theme' in localStorage)&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(_){}`,
           }}
         />
         <NavigationLoader />

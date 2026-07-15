@@ -55,6 +55,7 @@ export async function POST(request) {
     material: String(formData.get('material') || '').trim(),
     price: String(formData.get('price') || '').trim(),
     type: String(formData.get('type') || '').trim(),
+    tags: formData.getAll('tags').map(t => String(t).trim()).filter(Boolean),
     imageColor: String(formData.get('imageColor') || '').trim(),
     dimensions: String(formData.get('dimensions') || '').trim(),
     weight: String(formData.get('weight') || '').trim(),
@@ -62,22 +63,23 @@ export async function POST(request) {
     isFeatured: String(formData.get('isFeatured') || 'false') === 'true',
   };
 
+  // If tags provided, sync type to the first tag for backwards compat
+  if (body.tags.length > 0) {
+    body.type = body.tags[0];
+  }
+
   const imageFile = formData.get('imageFile');
   const imageFiles = formData.getAll('imageFiles');
 
-  const requiredFields = ['name', 'material', 'price', 'type'];
+  const requiredFields = ['name', 'material', 'price'];
   for (const field of requiredFields) {
     if (!body[field]) {
       return NextResponse.json({ error: `${field} is required` }, { status: 400 });
     }
   }
 
-  if (!MATERIAL_TYPES.includes(body.material)) {
-    return NextResponse.json({ error: 'Invalid material type' }, { status: 400 });
-  }
-
-  if (!PRODUCT_TYPES.includes(body.type)) {
-    return NextResponse.json({ error: 'Invalid category type' }, { status: 400 });
+  if (body.tags.length === 0) {
+    return NextResponse.json({ error: 'At least one category tag is required' }, { status: 400 });
   }
 
   const price = Number(body.price);
@@ -125,6 +127,7 @@ export async function POST(request) {
         images: finalImages,
         imageColor: body.imageColor || 'bg-primary-50',
         type: body.type,
+        tags: body.tags,
         dimensions: body.dimensions || 'N/A',
         weight: body.weight || 'N/A',
         inStock: body.inStock !== false,

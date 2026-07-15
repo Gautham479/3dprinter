@@ -26,8 +26,9 @@ export async function PATCH(request, { params }) {
     return NextResponse.json({ error: 'Invalid material type' }, { status: 400 });
   }
 
-  if (body.type && !PRODUCT_TYPES.includes(body.type)) {
-    return NextResponse.json({ error: 'Invalid category type' }, { status: 400 });
+  // If tags are being updated, sync type to first tag
+  if (Array.isArray(body.tags) && body.tags.length > 0) {
+    body.type = body.tags[0];
   }
 
   const updates = { ...body };

@@ -24,6 +24,7 @@ model Product {
   images          String[] @default([])
   imageColor      String
   type            String
+  tags            String[] @default([])
   dimensions      String
   weight          String
   inStock         Boolean  @default(true)

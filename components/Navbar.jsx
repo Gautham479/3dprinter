@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Lock, Rocket, Search, ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
+import { Lock, Rocket, Search, ShoppingCart, ChevronDown, Menu, X, User } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { supabase } from '@/lib/supabaseClient';
 import { PRODUCT_TYPES } from '../lib/catalog';
 import ThemeToggle from './ThemeToggle';
 
@@ -15,15 +16,32 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cart = useStore((state) => state.cart);
   const openCart = useStore((state) => state.openCart);
+  const user = useStore((state) => state.user);
+  const setUser = useStore((state) => state.setUser);
   const searchQuery = useStore((state) => state.searchQuery);
   const setSearchQuery = useStore((state) => state.setSearchQuery);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, [setUser]);
 
   const logoClicksRef = useRef(0);
   const clickTimeoutRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.ctrlKey && e.altKey && e.code === 'KeyA') {
+      const isKeyA = e.code === 'KeyA' || e.key === 'a' || e.key === 'A';
+      if (e.ctrlKey && e.altKey && isKeyA) {
         e.preventDefault();
         router.push('/admin/login');
       }
@@ -215,8 +233,9 @@ export default function Navbar() {
           {/* Right Actions */}
           <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end">
             {/* Search */}
-            <div className="hidden md:flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-64 focus-within:border-fg transition-all">
-              <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
+            {(pathname === '/products' || pathname.startsWith('/category/') || pathname.startsWith('/products/')) && (
+              <div className="hidden md:flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-64 focus-within:border-fg transition-all">
+                <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
               <input
                 type="text"
                 value={searchQuery}
@@ -225,9 +244,19 @@ export default function Navbar() {
                 className="w-full bg-transparent text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
                 aria-label="Search products"
               />
-            </div>
+              </div>
+            )}
             
             <ThemeToggle />
+
+            {/* User Profile / Orders */}
+            <button
+              className="relative p-2 rounded-sm border border-surface-border bg-surface-muted hover:border-fg transition-all"
+              onClick={() => router.push(user ? '/my-orders' : '/login')}
+              aria-label="User profile"
+            >
+              <User className="w-5 h-5 text-fg" />
+            </button>
 
             {/* Cart */}
             <button
@@ -249,8 +278,9 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-surface-bg border-b border-surface-border px-4 py-4 space-y-4 shadow-lg absolute w-full left-0">
           {/* Mobile Search */}
-          <div className="flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-full focus-within:border-fg transition-all">
-            <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
+          {(pathname === '/products' || pathname.startsWith('/category/') || pathname.startsWith('/products/')) && (
+            <div className="flex items-center gap-2 bg-surface-muted border border-surface-border rounded-sm px-3 py-2 w-full focus-within:border-fg transition-all">
+              <Search className="w-4 h-4 text-fg-subtle flex-shrink-0" />
             <input
               type="text"
               value={searchQuery}
@@ -259,7 +289,8 @@ export default function Navbar() {
               className="w-full bg-transparent text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
               aria-label="Search products"
             />
-          </div>
+            </div>
+          )}
           
           <div className="flex flex-col space-y-2">
             <div className="font-semibold text-fg-muted mb-1 px-2 text-sm uppercase tracking-wider">Products</div>
@@ -272,6 +303,13 @@ export default function Navbar() {
                 {type}
               </button>
             ))}
+            
+            <button 
+              onClick={() => { router.push(user ? '/my-orders' : '/login'); setMobileMenuOpen(false); }} 
+              className="px-4 py-2 text-sm text-left text-fg hover:bg-surface-muted rounded-sm transition-colors"
+            >
+              {user ? 'My Orders' : 'Sign In'}
+            </button>
             
             <div className="h-px bg-surface-border my-2"></div>
             

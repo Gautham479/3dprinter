@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { X, Trash2, ShoppingCart, Rocket, Package } from 'lucide-react';
 import { useStore, PRICING_SETTINGS } from '../store/useStore';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CartDrawer() {
@@ -14,11 +15,24 @@ export default function CartDrawer() {
   const totalCost = cart.reduce((acc, item) => acc + item.price, 0);
   const canCheckout = totalCost >= PRICING_SETTINGS.minimumOrderValue;
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!canCheckout) return;
     setCheckingOut(true);
-    closeCart();
-    router.push('/checkout');
+    
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      closeCart();
+      if (!session) {
+        router.push('/login?redirect=/checkout');
+      } else {
+        useStore.getState().setUser(session.user);
+        router.push('/checkout');
+      }
+    } catch (e) {
+      console.error(e);
+      setCheckingOut(false);
+    }
   };
 
 

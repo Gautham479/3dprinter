@@ -38,7 +38,7 @@ export default function Home() {
   const products = useStore((state) => state.products);
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">
+    <div className="flex flex-col min-h-screen bg-surface-bg w-full relative">
       <Navbar />
       <CartDrawer />
       <Suspense fallback={null}>
@@ -48,9 +48,7 @@ export default function Home() {
 
 
       {/* Hero Section */}
-      <section id="hero" className="w-full">
-        <Hero />
-      </section>
+      <Hero />
 
       {/* Categories Section */}
       <Categories />

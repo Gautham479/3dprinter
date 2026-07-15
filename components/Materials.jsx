@@ -1,201 +1,157 @@
 "use client";
 
-import React from 'react';
-import { Zap } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
+function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.08 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const yInit = direction === 'up' ? 60 : 0;
+  const xInit = direction === 'left' ? 80 : direction === 'right' ? -80 : 0;
+  return (
+    <motion.div ref={ref} initial={{ y: yInit, x: xInit, opacity: 0 }}
+      animate={visible ? { y: 0, x: 0, opacity: 1 } : {}}
+      transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+const MAT = {
+  PLA:  { color: '#C2A56D', label: 'bg-amber-50  text-amber-700  border-amber-200' },
+  PETG: { color: '#3B82F6', label: 'bg-blue-50   text-blue-700   border-blue-200' },
+  ABS:  { color: '#EF4444', label: 'bg-rose-50   text-rose-700   border-rose-200' },
+  TPU:  { color: '#10B981', label: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+};
+
 export default function Materials() {
+  const [active, setActive] = useState(0);
+
   const materials = [
     {
-      name: "PLA (Basic & Lightweight)",
+      key: 'PLA',  name: "PLA",  subtitle: "Basic & Lightweight",
       image: "/images/materials/home-lifestyle.png",
-      points: [
-        { content: <><strong className="text-fg">Smooth finish</strong> with a clean look</>, type: "normal" },
-        { content: <>Great for <strong className="text-fg">prototypes</strong>, models, and display items</>, type: "normal" },
-        { content: <><strong className="text-fg">Lightweight</strong> and accurate prints</>, type: "normal" },
-        { content: <><strong className="text-fg">Affordable</strong> and an easy choice for basic needs</>, type: "tip" }
-      ]
+      points: ["Smooth, professional finish", "Ideal for prototypes & display models", "Lightweight and highly accurate", "Most affordable choice"],
     },
     {
-      name: "PETG (All-Rounder Choice)",
+      key: 'PETG', name: "PETG", subtitle: "All-Rounder Choice",
       image: "/images/materials/industrial-precision.png",
-      points: [
-        { content: <>Strong and <strong className="text-fg">durable</strong> for everyday use</>, type: "normal" },
-        { content: <><strong className="text-fg">Water-resistant</strong> and long-lasting</>, type: "positive" },
-        { content: <>Handles <strong className="text-fg">outdoor conditions</strong> and <strong className="text-fg">sunlight</strong></>, type: "positive" },
-        { content: <>Reliable for <strong className="text-fg">functional parts</strong> and enclosures</>, type: "tip" }
-      ]
+      points: ["Strong and durable daily use", "Water-resistant, UV & sunlight stable", "Reliable for enclosures & mechanisms", "Best value for functional parts"],
     },
     {
-      name: "ABS (High Strength & Heat Resistant)",
+      key: 'ABS',  name: "ABS",  subtitle: "High Strength & Heat Resistant",
       image: "/images/materials/technical-enclosure.png",
-      points: [
-        { content: <>Tough and <strong className="text-fg">impact-resistant</strong></>, type: "positive" },
-        { content: <>Handles <strong className="text-fg">high temperatures</strong></>, type: "positive" },
-        { content: <>Suitable for <strong className="text-fg">heavy-use</strong> parts</>, type: "normal" },
-        { content: <>Ideal for <strong className="text-fg">automotive</strong> and practical applications</>, type: "tip" }
-      ]
+      points: ["Tough, impact-resistant build", "Handles high temperatures well", "Heavy-use functional applications", "Ideal for automotive parts"],
     },
     {
-      name: "TPU (Flexible & Shock Absorbing)",
+      key: 'TPU',  name: "TPU",  subtitle: "Flexible & Shock Absorbing",
       image: "/images/materials/flexible-tpu.png",
-      points: [
-        { content: <>Flexible with a <strong className="text-fg">rubber-like</strong> feel</>, type: "normal" },
-        { content: <>Absorbs <strong className="text-fg">shock</strong> and vibration</>, type: "positive" },
-        { content: <>Ideal for <strong className="text-fg">seals</strong>, <strong className="text-fg">gaskets</strong>, <strong className="text-fg">bushings</strong></>, type: "normal" },
-        { content: <>Great for <strong className="text-fg">grips</strong>, <strong className="text-fg">covers</strong>, and protective parts</>, type: "tip" }
-      ]
-    }
+      points: ["Rubber-like flexible feel", "Excellent shock & vibration damping", "Perfect for seals, gaskets & bushings", "Ideal for grips, covers & protectors"],
+    },
   ];
 
   const quickGuide = [
-    { question: "Outdoor / Sun use?", answer: "PETG or ABS", emoji: "☀️" },
-    { question: "High heat?", answer: "ABS", emoji: "🔥" },
-    { question: "Electrical use?", answer: "PETG or ABS", emoji: "⚡" },
-    { question: "Flexible part?", answer: "TPU", emoji: "🌀" },
-    { question: "Budget / basic use?", answer: "PLA", emoji: "🏷️" }
+    { q: "Outdoor / Sun?",    a: "PETG or ABS", e: "☀️" },
+    { q: "High heat?",        a: "ABS",          e: "🔥" },
+    { q: "Electrical?",       a: "PETG or ABS", e: "⚡" },
+    { q: "Needs flex?",       a: "TPU",          e: "🌀" },
+    { q: "Budget / basic?",   a: "PLA",          e: "🏷️" },
   ];
 
-  const getBullet = () => (
-    <span className="mt-1.5 flex-shrink-0 leading-none text-[10px] text-fg-subtle" aria-hidden="true">
-      ⬢
-    </span>
-  );
+  const cur = materials[active];
+  const col = MAT[cur.key];
 
   return (
-    <section id="materials" className="w-full py-20 bg-surface-bg border-b border-surface-border">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-5xl font-black text-fg mb-4">
-            Materials Guide
-          </h2>
-          <p className="text-lg text-fg-muted max-w-2xl mx-auto">
-            Select the right material for your project based on your specific needs. Experience the difference in quality and durability.
-          </p>
-        </motion.div>
+    <section id="materials" className="w-full border-b border-surface-border">
 
-        {/* Materials Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {materials.map((material, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="rounded-lg border border-surface-border bg-surface-card shadow-sm flex flex-col md:flex-row overflow-hidden"
-            >
-              <div className="md:w-2/5 aspect-[4/3] md:aspect-auto relative bg-surface-muted">
-                <Image 
-                  src={material.image} 
-                  alt={material.name} 
-                  fill 
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                />
-              </div>
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 py-10 border-b border-surface-border">
+        <Reveal>
+          <div className="flex items-center gap-3">
+            <div className="h-px w-10 bg-primary-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Materials</span>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1} direction="left">
+          <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Materials Guide</h2>
+        </Reveal>
+        <div className="hidden md:block w-32" />
+      </div>
 
-              <div className="md:w-3/5 p-8 flex flex-col justify-center">
-                <h3 className="text-xl font-bold text-fg mb-5">
-                  {material.name}
-                </h3>
-                <ul className="space-y-3">
-                  {material.points.map((point, j) => (
-                    <li key={j} className="flex gap-3 items-start">
-                      {getBullet()}
-                      <span className="text-fg-muted leading-relaxed text-sm">
-                        {point.content}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
+      {/* Tab selectors */}
+      <div className="flex border-b border-surface-border">
+        {materials.map((m, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            className="flex-1 py-5 px-4 text-xs font-black uppercase tracking-[0.16em] border-r border-surface-border last:border-r-0 transition-all duration-200 relative"
+            style={{
+              background: active === i ? col.color : 'transparent',
+              color: active === i ? '#fff' : 'var(--app-fg-muted)',
+            }}
+          >
+            {m.name}
+            <span className="block text-[9px] tracking-wider mt-0.5 opacity-70 normal-case font-bold">{m.subtitle}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Active panel: image left + points right */}
+      <motion.div
+        key={active}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-1 md:grid-cols-2 border-b border-surface-border"
+      >
+        {/* Image */}
+        <div className="relative aspect-video md:aspect-auto md:min-h-[360px] bg-surface-muted border-b md:border-b-0 md:border-r border-surface-border overflow-hidden">
+          <Image src={cur.image} alt={cur.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+          {/* Material badge */}
+          <div className="absolute top-6 left-6 px-3 py-1.5 font-black text-xs uppercase tracking-widest text-white"
+            style={{ background: col.color }}>
+            {cur.name}
+          </div>
         </div>
 
-        {/* Quick Guide */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-lg border border-surface-border bg-surface-card shadow-sm p-8"
-        >
-          <h3 className="text-2xl font-bold text-fg mb-6 text-center lg:text-left">
-            Quick Reference Guide
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {quickGuide.map((item, i) => {
-              const themes = [
-                {
-                  bg: "bg-amber-500/5 dark:bg-amber-500/10",
-                  border: "border-amber-500/20 dark:border-amber-500/30",
-                  accent: "bg-amber-500",
-                },
-                {
-                  bg: "bg-rose-500/5 dark:bg-rose-500/10",
-                  border: "border-rose-500/20 dark:border-rose-500/30",
-                  accent: "bg-rose-500",
-                },
-                {
-                  bg: "bg-sky-500/5 dark:bg-sky-500/10",
-                  border: "border-sky-500/20 dark:border-sky-500/30",
-                  accent: "bg-sky-500",
-                },
-                {
-                  bg: "bg-emerald-500/5 dark:bg-emerald-500/10",
-                  border: "border-emerald-500/20 dark:border-emerald-500/30",
-                  accent: "bg-emerald-500",
-                },
-                {
-                  bg: "bg-primary-500/5 dark:bg-primary-500/10",
-                  border: "border-primary-500/20 dark:border-primary-500/30",
-                  accent: "bg-primary-500",
-                }
-              ];
-              
-              const theme = themes[i] || themes[4];
-
-              return (
-                <div 
-                  key={i} 
-                  className={`flex flex-col p-5 rounded-sm border ${theme.border} ${theme.bg} relative overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5`}
-                >
-                  <div className={`absolute top-0 left-0 right-0 h-1 ${theme.accent}`} />
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xl leading-none">{item.emoji}</span>
-                    <p className="text-xs font-black text-fg-muted uppercase tracking-widest leading-normal">{item.question}</p>
-                  </div>
-                  
-                  <div className="mt-auto flex flex-wrap gap-1.5">
-                    {item.answer.split(' or ').map((ans) => {
-                      let matBadge = "";
-                      if (ans === 'PLA') matBadge = "bg-primary-500/10 text-primary-500 border border-primary-500/20 font-black";
-                      else if (ans === 'PETG') matBadge = "bg-blue-500/10 text-blue-500 border border-blue-500/20 font-black";
-                      else if (ans === 'ABS') matBadge = "bg-rose-500/10 text-rose-500 border border-rose-500/20 font-black";
-                      else if (ans === 'TPU') matBadge = "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-black";
-
-                      return (
-                        <span key={ans} className={`px-2.5 py-1 text-xs rounded-sm ${matBadge}`}>
-                          {ans}
-                        </span>
-                      );
-                    })}
-                  </div>
+        {/* Points */}
+        <div className="px-8 sm:px-12 py-10 flex flex-col justify-center">
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: col.color }}>{cur.key} · {cur.subtitle}</p>
+          <h3 className="font-black text-2xl sm:text-3xl text-fg tracking-tight mb-8">{cur.name} Material</h3>
+          <ul className="space-y-4">
+            {cur.points.map((pt, j) => (
+              <li key={j} className="flex items-start gap-4">
+                <div className="mt-[5px] flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: col.color }} />
                 </div>
-              );
-            })}
-          </div>
-        </motion.div>
+                <span className="text-base text-fg-muted leading-relaxed">{pt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* Quick reference row */}
+      <div className="grid grid-cols-1 sm:grid-cols-5">
+        {quickGuide.map((item, i) => (
+          <Reveal key={i} delay={i * 0.06}>
+            <div className="px-6 py-7 border-b sm:border-b-0 border-r border-surface-border last:border-r-0 flex flex-col gap-3 hover:bg-surface-muted transition-colors">
+              <span className="text-2xl">{item.e}</span>
+              <p className="text-[11px] font-black uppercase tracking-wider text-fg-muted">{item.q}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {item.a.split(' or ').map(ans => (
+                  <span key={ans} className={`px-2 py-0.5 text-[10px] font-black uppercase border ${MAT[ans]?.label || ''}`}>{ans}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </section>
   );

@@ -1,188 +1,215 @@
 @import "tailwindcss";
 
-/* ── PREMIUM SLATE-GOLD ENGINEERING THEME ── */
+/* ── PREMIUM ENGINEERING PALETTE ── */
 :root {
-  /* BACKGROUNDS */
-  --app-surface-bg: #E8EDF2; /* Light cool grayish-blue */
-  --app-surface-card: #FFFFFF; /* Solid contrast for cards */
-  --app-surface-muted: rgba(44, 57, 71, 0.05); /* Very subtle navy tint */
-  --app-surface-border: rgba(44, 57, 71, 0.15); /* Soft structural navy border */
+  --app-surface-bg:      #F0EDE8;
+  --app-surface-card:    #FFFFFF;
+  --app-surface-muted:   rgba(44, 57, 71, 0.06);
+  --app-surface-border:  rgba(44, 57, 71, 0.12);
 
-  /* TYPOGRAPHY */
-  --app-fg: #2C3947; /* Dark slate/navy blue for headings */
-  --app-fg-muted: #547A95; /* Muted steel blue for body */
-  --app-fg-subtle: rgba(44, 57, 71, 0.5); /* Muted slate */
+  --app-fg:              #1A1A1A;
+  --app-fg-muted:        #5C5C5C;
+  --app-fg-subtle:       rgba(44, 57, 71, 0.45);
 
-  /* ACTION ACCENT (MUTED GOLD) */
-  --app-primary-50: rgba(194, 165, 109, 0.1);
-  --app-primary-100: rgba(194, 165, 109, 0.2);
-  --app-primary-500: #C2A56D; /* Muted gold/sand */
-  --app-primary-600: #AA8F5D; /* Hover state gold */
-  --app-primary-900: #2C3947;
+  --app-primary-50:      rgba(194, 165, 109, 0.08);
+  --app-primary-100:     rgba(194, 165, 109, 0.18);
+  --app-primary-500:     #C2A56D;
+  --app-primary-600:     #A88D58;
+  --app-primary-900:     #1A1A1A;
 
-  --app-accent-400: #547A95;
-  --app-accent-500: #C2A56D;
-  --app-accent-600: #2C3947;
+  --app-accent-400:      #547A95;
+  --app-accent-500:      #C2A56D;
+  --app-accent-600:      #1A1A1A;
 
-  /* CTA */
-  --app-cta: #C2A56D; 
-  --app-cta-contrast: #FFFFFF; 
+  --app-cta:             #1A1A1A;
+  --app-cta-contrast:    #F0EDE8;
 
-  --app-banner: rgba(44, 57, 71, 0.1);
-  --app-overlay: rgba(232, 237, 242, 0.95);
+  --app-banner:          rgba(44, 57, 71, 0.08);
+  --app-overlay:         rgba(240, 237, 232, 0.97);
+
+  /* Section invert block */
+  --app-dark-bg:         #111111;
+  --app-dark-fg:         #F0EDE8;
 }
 
-/* DARK THEME */
 .dark {
-  /* BACKGROUNDS */
-  --app-surface-bg: #0F172A; /* Deep dark slate */
-  --app-surface-card: #1E293B; /* Slightly lighter slate */
-  --app-surface-muted: rgba(51, 65, 85, 0.5); 
-  --app-surface-border: rgba(148, 163, 184, 0.2); 
+  --app-surface-bg:      #111111;
+  --app-surface-card:    #1C1C1C;
+  --app-surface-muted:   rgba(255, 255, 255, 0.05);
+  --app-surface-border:  rgba(255, 255, 255, 0.1);
 
-  /* TYPOGRAPHY */
-  --app-fg: #F8FAFC; 
-  --app-fg-muted: #94A3B8; 
-  --app-fg-subtle: rgba(148, 163, 184, 0.5); 
+  --app-fg:              #F0EDE8;
+  --app-fg-muted:        #A8A8A0;
+  --app-fg-subtle:       rgba(240, 237, 232, 0.4);
 
-  /* ACTION ACCENT */
-  --app-primary-50: rgba(212, 175, 55, 0.1);
-  --app-primary-100: rgba(212, 175, 55, 0.2);
-  --app-primary-500: #D4AF37; /* Brighter gold */
-  --app-primary-600: #C2A56D; 
-  --app-primary-900: #1E293B;
+  --app-primary-50:      rgba(194, 165, 109, 0.1);
+  --app-primary-100:     rgba(194, 165, 109, 0.2);
+  --app-primary-500:     #C2A56D;
+  --app-primary-600:     #D4B87A;
+  --app-primary-900:     #111111;
 
-  --app-accent-400: #38BDF8;
-  --app-accent-500: #D4AF37;
-  --app-accent-600: #F8FAFC;
+  --app-accent-400:      #7AA3BA;
+  --app-accent-500:      #C2A56D;
+  --app-accent-600:      #F0EDE8;
 
-  --app-cta: #D4AF37; 
-  --app-cta-contrast: #0F172A; 
+  --app-cta:             #C2A56D;
+  --app-cta-contrast:    #111111;
 
-  --app-banner: rgba(51, 65, 85, 0.5);
-  --app-overlay: rgba(15, 23, 42, 0.95);
+  --app-banner:          rgba(255, 255, 255, 0.05);
+  --app-overlay:         rgba(17, 17, 17, 0.97);
+
+  --app-dark-bg:         #C2A56D;
+  --app-dark-fg:         #111111;
 }
 
 @theme {
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-body), ui-sans-serif, system-ui, sans-serif;
 
-  --color-fg: var(--app-fg);
-  --color-fg-muted: var(--app-fg-muted);
-  --color-fg-subtle: var(--app-fg-subtle);
-  --color-surface-bg: var(--app-surface-bg);
-  --color-surface-card: var(--app-surface-card);
-  --color-surface-muted: var(--app-surface-muted);
+  --color-fg:             var(--app-fg);
+  --color-fg-muted:       var(--app-fg-muted);
+  --color-fg-subtle:      var(--app-fg-subtle);
+  --color-surface-bg:     var(--app-surface-bg);
+  --color-surface-card:   var(--app-surface-card);
+  --color-surface-muted:  var(--app-surface-muted);
   --color-surface-border: var(--app-surface-border);
-  --color-overlay: var(--app-overlay);
+  --color-overlay:        var(--app-overlay);
 
-  --color-primary-50: var(--app-primary-50);
-  --color-primary-100: var(--app-primary-100);
-  --color-primary-500: var(--app-primary-500);
-  --color-primary-600: var(--app-primary-600);
-  --color-primary-900: var(--app-primary-900);
+  --color-primary-50:     var(--app-primary-50);
+  --color-primary-100:    var(--app-primary-100);
+  --color-primary-500:    var(--app-primary-500);
+  --color-primary-600:    var(--app-primary-600);
+  --color-primary-900:    var(--app-primary-900);
 
-  --color-accent-400: var(--app-accent-400);
-  --color-accent-500: var(--app-accent-500);
-  --color-accent-600: var(--app-accent-600);
+  --color-accent-400:     var(--app-accent-400);
+  --color-accent-500:     var(--app-accent-500);
+  --color-accent-600:     var(--app-accent-600);
 
-  --color-cta: var(--app-cta);
-  --color-cta-contrast: var(--app-cta-contrast);
-  --color-brand-orange: var(--app-cta);
+  --color-cta:            var(--app-cta);
+  --color-cta-contrast:   var(--app-cta-contrast);
+  --color-brand-orange:   var(--app-primary-500);
 
-  --color-promo-banner: var(--app-banner);
+  --color-promo-banner:   var(--app-banner);
 }
 
 @layer base {
   body {
     @apply bg-surface-bg text-fg antialiased font-body;
+    cursor: default;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
   }
 
-  * {
+  html {
     scroll-behavior: smooth;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--app-surface-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--app-primary-500); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--app-primary-600); }
 
-  ::-webkit-scrollbar-track {
-    background: var(--app-surface-bg);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--app-surface-border);
-    border-radius: 0;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--app-primary-500);
-  }
+  /* Text selection */
+  ::selection { background: rgba(194, 165, 109, 0.3); color: var(--app-fg); }
 }
 
 @layer components {
-  /* Sharp structural input */
   .input-field {
-    @apply w-full rounded-sm border border-surface-border bg-surface-bg px-3 py-2.5 text-fg text-sm focus:outline-none focus:border-primary-500 transition-colors;
+    @apply w-full border border-surface-border bg-surface-bg px-4 py-3 text-fg text-sm focus:outline-none focus:border-primary-500 transition-colors;
   }
 
-  /* Solid card instead of glass - sharp minimal */
   .glass-card {
     background: var(--app-surface-card);
     border: 1px solid var(--app-surface-border);
-    border-radius: 2px;
   }
 
-  /* Structural UI button */
-  .btn-glow {
-    position: relative;
-    border-radius: 2px;
-    transition: all 0.15s ease-in-out;
+  /* ── MARQUEE ── */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 24s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
   }
 
-  .btn-glow:active {
-    transform: scale(0.98);
+  /* ── CLIP REVEAL ── */
+  .clip-reveal {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .clip-reveal.in-view {
+    clip-path: inset(0 0% 0 0);
   }
 
-  /* Fade up animation - sharp ease */
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* ── SLIDE UP ── */
+  @keyframes slideUp {
+    from { transform: translateY(60px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .animate-fade-up {
-    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* ── LINE DRAW ── */
+  @keyframes drawLine {
+    from { transform: scaleX(0); transform-origin: left; }
+    to   { transform: scaleX(1); transform-origin: left; }
   }
 
-  /* Gradient text replaced with solid text */
-  .gradient-text {
-    color: var(--app-primary-500);
+  .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--app-surface-border); }
+
+  /* ── DARK SECTION BLOCK ── */
+  .section-dark {
+    background: var(--app-dark-bg);
+    color: var(--app-dark-fg);
   }
 
-  /* Custom scrollbar for panels */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+  /* ── BUTTON BASE ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: var(--app-cta);
+    color: var(--app-cta-contrast);
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--app-cta);
+    transition: all 0.2s ease;
   }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
+  .btn-primary:hover {
     background: transparent;
+    color: var(--app-cta);
   }
 
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--app-surface-border);
-    border-radius: 0;
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--app-fg);
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--app-fg);
+    transition: all 0.2s ease;
+  }
+  .btn-outline:hover {
+    background: var(--app-fg);
+    color: var(--app-surface-bg);
   }
 }

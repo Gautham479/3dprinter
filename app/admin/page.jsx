@@ -15,6 +15,7 @@ const EMPTY_FORM = {
   image: '',
   imageColor: 'bg-primary-50',
   type: PRODUCT_TYPES[0],
+  tags: [],
   dimensions: '',
   weight: '',
   inStock: true,
@@ -277,11 +278,15 @@ export default function AdminDashboardPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      if (productCategoryFilter !== 'ALL' && p.type !== productCategoryFilter) return false;
+      if (productCategoryFilter !== 'ALL') {
+        const productTags = p.tags && p.tags.length > 0 ? p.tags : [p.type];
+        if (!productTags.includes(productCategoryFilter)) return false;
+      }
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
       return (p.name?.toLowerCase() || '').includes(q) ||
         (p.fullDescription?.toLowerCase() || '').includes(q) ||
+        (p.tags || []).some(t => t.toLowerCase().includes(q)) ||
         (p.type?.toLowerCase() || '').includes(q) ||
         (p.material?.toLowerCase() || '').includes(q);
     }).sort((a, b) => {
@@ -363,13 +368,14 @@ export default function AdminDashboardPage() {
     payload.set('fullDescription', form.fullDescription);
     payload.set('material', form.material);
     payload.set('price', String(Number(form.price)));
-    payload.set('type', form.type);
+    payload.set('type', form.tags[0] || form.type);
     payload.set('imageColor', form.imageColor);
     payload.set('dimensions', form.dimensions);
     payload.set('weight', form.weight);
     payload.set('note', form.note);
     payload.set('inStock', String(form.inStock));
     payload.set('isFeatured', String(form.isFeatured));
+    form.tags.forEach(tag => payload.append('tags', tag));
     if (imageFile) {
       payload.set('imageFile', await compressImage(imageFile));
     }
@@ -659,9 +665,37 @@ export default function AdminDashboardPage() {
                 <form onSubmit={handleCreateProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input className={inputClass} placeholder="Name" value={form.name} onChange={(e) => updateField('name', e.target.value)} required />
                   <textarea className={`${inputClass} md:col-span-2 min-h-24 resize-none`} placeholder="Full description" value={form.fullDescription} onChange={(e) => updateField('fullDescription', e.target.value)} />
-                  <select className={inputClass} value={form.type} onChange={(e) => updateField('type', e.target.value)}>
-                    {PRODUCT_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
-                  </select>
+
+                  {/* ── Multi-tag category picker ── */}
+                  <div className="md:col-span-2">
+                    <label className="block text-xs text-fg-muted font-bold mb-2">Category Tags <span className="text-red-400">*</span> <span className="font-normal">(select all that apply)</span></label>
+                    <div className="flex flex-wrap gap-2">
+                      {PRODUCT_TYPES.map(tag => {
+                        const selected = form.tags.includes(tag);
+                        return (
+                          <button
+                            type="button"
+                            key={tag}
+                            onClick={() => {
+                              const next = selected
+                                ? form.tags.filter(t => t !== tag)
+                                : [...form.tags, tag];
+                              updateField('tags', next);
+                            }}
+                            className={`px-3 py-1.5 text-xs font-black rounded-sm border transition-all ${
+                              selected
+                                ? 'bg-primary-500 border-primary-500 text-white'
+                                : 'bg-surface-muted border-surface-border text-fg-muted hover:border-primary-500/50'
+                            }`}
+                          >
+                            {tag}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {form.tags.length === 0 && <p className="text-xs text-red-400 mt-1">Select at least one category</p>}
+                  </div>
+
                   <select className={inputClass} value={form.material} onChange={(e) => updateField('material', e.target.value)}>
                     {MATERIAL_TYPES.map((material) => <option key={material} value={material}>{material}</option>)}
                   </select>
@@ -823,28 +857,42 @@ export default function AdminDashboardPage() {
                                   }}
                                   className="font-black text-fg bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all w-full max-w-[300px]"
                                 />
-                                <div className="text-sm text-fg-muted flex items-center gap-1">
-                                  <select
-                                    key={`type-${product.id}-${product.type}`}
-                                    defaultValue={product.type}
-                                    onChange={async (e) => {
-                                      const val = e.target.value;
-                                      if (val && val !== product.type) {
-                                        await fetch(`/api/admin/products/${product.id}`, {
-                                          method: 'PATCH',
-                                          headers: { 'Content-Type': 'application/json' },
-                                          body: JSON.stringify({ type: val }),
-                                        });
-                                        fetchProducts();
-                                      }
-                                    }}
-                                    className="bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all text-xs"
-                                  >
-                                    {PRODUCT_TYPES.map(type => (
-                                      <option key={type} value={type}>{type}</option>
-                                    ))}
-                                  </select>
-                                  <span> | {product.material} | ₹</span>
+                                <div className="text-sm text-fg-muted flex flex-wrap items-center gap-1.5 mt-1">
+                                  {/* Tag pills — click to toggle */}
+                                  {PRODUCT_TYPES.map(tag => {
+                                    const productTags = product.tags && product.tags.length > 0
+                                      ? product.tags
+                                      : [product.type];
+                                    const isOn = productTags.includes(tag);
+                                    return (
+                                      <button
+                                        key={tag}
+                                        type="button"
+                                        title={isOn ? `Remove "${tag}"` : `Add "${tag}"`}
+                                        onClick={async () => {
+                                          const current = product.tags && product.tags.length > 0 ? product.tags : [product.type];
+                                          const next = isOn
+                                            ? current.filter(t => t !== tag)
+                                            : [...current, tag];
+                                          if (next.length === 0) return;
+                                          await fetch(`/api/admin/products/${product.id}`, {
+                                            method: 'PATCH',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ tags: next }),
+                                          });
+                                          fetchProducts();
+                                        }}
+                                        className={`px-2 py-0.5 text-[10px] font-black rounded-sm border transition-all ${
+                                          isOn
+                                            ? 'bg-primary-500 border-primary-500 text-white'
+                                            : 'bg-surface-muted border-surface-border text-fg-subtle hover:border-primary-500/40'
+                                        }`}
+                                      >
+                                        {tag}
+                                      </button>
+                                    );
+                                  })}
+                                  <span className="text-xs"> | {product.material} | ₹</span>
                                   <input
                                     key={`price-${product.id}-${product.price}`}
                                     type="number"

@@ -1,116 +1,114 @@
 "use client";
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
+function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.12 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const yInit = direction === 'up' ? 60 : 0;
+  const xInit = direction === 'left' ? 80 : direction === 'right' ? -80 : 0;
+  return (
+    <motion.div ref={ref} initial={{ y: yInit, x: xInit, opacity: 0 }}
+      animate={visible ? { y: 0, x: 0, opacity: 1 } : {}}
+      transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
 export default function Categories() {
   const categories = [
-    {
-      title: "Idols",
-      desc: "Collectible idols and premium figurines",
-      image: "/photos/idols.jpeg",
-      link: "/category/idols",
-      position: "object-center",
-    },
-    {
-      title: "Action Figures",
-      desc: "Dynamic heroes and articulated models",
-      image: "/photos/action 1.jpeg",
-      link: "/category/action figures",
-      position: "object-top",
-    },
-    {
-      title: "Daily Accessories",
-      desc: "Everyday lifestyle essentials and gadgets",
-      image: "/photos/daily acc .jpeg",
-      link: "/category/daily accessories",
-      position: "object-center",
-    },
-    {
-      title: "Playables",
-      desc: "Interactive toys and engaging models",
-      image: "/photos/playables.jpeg",
-      link: "/category/playables",
-      position: "object-bottom",
-    },
+    { title: "Idols",             desc: "Collectible idols and premium figurines",        image: "/photos/idols.jpeg",          link: "/category/idols",              position: "object-center" },
+    { title: "Action Figures",    desc: "Dynamic heroes and articulated models",          image: "/photos/action 1.jpeg",       link: "/category/action figures",     position: "object-top" },
+    { title: "Desk Organizers",   desc: "Everyday lifestyle essentials and gadgets",      image: "/photos/daily acc .jpeg",     link: "/category/desk organizers",    position: "object-center" },
+    { title: "Playables",         desc: "Interactive toys and engaging models",           image: "/photos/playables.jpeg",      link: "/category/playables",          position: "object-bottom" },
   ];
 
   return (
-    <section className="w-full py-20 bg-surface-bg border-b border-surface-border font-sans">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center w-full"
-        >
-          <h2 className="text-3xl md:text-4xl font-black text-fg tracking-tight mb-2 uppercase">Our Collections</h2>
-          <p className="text-fg-subtle text-lg font-medium">Find exactly what you're looking for</p>
-        </motion.div>
+    <section className="w-full border-b border-surface-border">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map((cat, i) => {
-            return (
-              <Link 
-                key={i} 
-                href={cat.link} 
-                className="group block relative w-full h-[280px] sm:h-[320px] rounded-xl overflow-hidden border border-surface-border shadow-md focus:outline-none"
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0 z-0 bg-surface-muted">
-                  <Image
-                    src={cat.image}
-                    alt={cat.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className={`object-cover ${cat.position} w-full h-full transition-transform duration-500 group-hover:scale-105`}
-                    priority={i < 2}
-                  />
+      {/* Section header */}
+      <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 py-10 border-b border-surface-border">
+        <Reveal>
+          <div className="flex items-center gap-3">
+            <div className="h-px w-10 bg-primary-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Collections</span>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1} direction="left">
+          <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Our Collections</h2>
+        </Reveal>
+        <Reveal delay={0.15} direction="left" className="hidden md:block">
+          <Link href="/products" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-fg-muted hover:text-fg transition-colors border-b border-transparent hover:border-fg pb-0.5">
+            All Products <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </Reveal>
+      </div>
+
+      {/* 2-column grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        {categories.map((cat, i) => (
+          <Reveal key={i} delay={i * 0.08}>
+            <Link
+              href={cat.link}
+              className="group relative block overflow-hidden border-b border-r border-surface-border"
+              style={{ height: 'clamp(280px, 35vw, 480px)' }}
+            >
+              {/* Image */}
+              <Image
+                src={cat.image}
+                alt={cat.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={`object-cover ${cat.position} transition-transform duration-700 ease-out group-hover:scale-105`}
+                priority={i < 2}
+              />
+
+              {/* Thin bottom gradient for text legibility only */}
+              <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
+
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col justify-between p-8 sm:p-10 text-white">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-[0.22em] text-white/50">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="w-8 h-8 border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
                 </div>
-
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/45 to-black/20 group-hover:from-black/90 group-hover:via-black/55 group-hover:to-black/25 transition-all duration-300" />
-
-                {/* Card Content */}
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8 select-none">
-                  <h3 className="text-2xl sm:text-3xl font-black tracking-wider text-white mb-2 uppercase drop-shadow-md">
+                <div>
+                  <p className="text-sm text-white/60 font-medium mb-2">{cat.desc}</p>
+                  <h3 className="font-black text-3xl sm:text-4xl md:text-5xl tracking-tight leading-none">
                     {cat.title}
                   </h3>
-                  <p className="text-sm sm:text-base font-semibold text-white/80 max-w-[85%] mb-4 drop-shadow-sm">
-                    {cat.desc}
-                  </p>
-                  
-                  {/* Hover CTA Indicator */}
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-primary-500 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                    Explore Collection
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </span>
                 </div>
-              </Link>
-            );
-          })}
-        </div>
+              </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 flex justify-center"
-        >
-          <Link 
-            href="/products" 
-            className="inline-flex items-center justify-center bg-primary-500 hover:bg-primary-600 text-white font-bold text-base py-3.5 px-10 rounded-sm shadow-md transition-colors duration-200"
-          >
+              {/* Bottom gold line on hover */}
+              <div className="absolute bottom-0 left-0 h-[3px] bg-primary-500 w-0 group-hover:w-full transition-all duration-500 ease-out" />
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+
+      {/* Bottom CTA bar */}
+      <div className="flex items-center justify-center px-6 py-8 border-t border-surface-border">
+        <Reveal>
+          <Link href="/products" className="btn-primary">
             Explore All Products
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <ArrowRight className="w-4 h-4" />
           </Link>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

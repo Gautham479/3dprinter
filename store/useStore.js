@@ -57,6 +57,7 @@ export const useStore = create((set) => ({
   isCalculating: false,
   cart: [],
   isCartOpen: false,
+  user: null,
   searchQuery: '',
   products: [],
   colors: [
@@ -75,6 +76,7 @@ export const useStore = create((set) => ({
 
   openCart: () => set({ isCartOpen: true }),
   closeCart: () => set({ isCartOpen: false }),
+  setUser: (user) => set({ user }),
   setSearchQuery: (query) => set({ searchQuery: query }),
   setProducts: (products) => set({ products }),
   fetchColors: async () => {

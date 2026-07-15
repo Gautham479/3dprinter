@@ -189,14 +189,18 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
   const activeType = searchQuery.trim() ? 'All' : selectedType;
 
   const filteredProducts = (localProducts || []).filter((product) => {
-    const typeMatches = activeType === 'All' || product.type === activeType;
+    const tagMatches = activeType === 'All'
+      || (product.tags && product.tags.length > 0
+        ? product.tags.includes(activeType)
+        : product.type === activeType);  // fallback for legacy products
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const queryMatches =
       normalizedQuery.length === 0 ||
       product.name.toLowerCase().includes(normalizedQuery) ||
       (product.fullDescription?.toLowerCase() || '').includes(normalizedQuery) ||
+      (product.tags || []).some(t => t.toLowerCase().includes(normalizedQuery)) ||
       product.type.toLowerCase().includes(normalizedQuery);
-    return typeMatches && queryMatches;
+    return tagMatches && queryMatches;
   });
 
   const colors = useStore((state) => state.colors);

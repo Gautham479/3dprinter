@@ -12,8 +12,10 @@ const getCategoryTagline = (type) => {
   const t = type.toLowerCase();
   if (t.includes('kit card')) return "Not just a card — a masterpiece in your hands.";
   if (t.includes('playable')) return "Crafted for curious minds.";
-  if (t.includes('collect')) return "Crafted to be admired, shaped with precision.";
+  if (t.includes('collect') || t.includes('idol')) return "Crafted to be admired, shaped with precision.";
   if (t.includes('home decor')) return "Where style meets everyday function.";
+  if (t.includes('desk') || t.includes('organizer') || t.includes('accessori')) return "Designed for your space, engineered for purpose.";
+  if (t.includes('action')) return "Dynamic heroes, engineered in every detail.";
   return `Explore our premium selection of ${type.toLowerCase()}.`;
 };
 
@@ -24,8 +26,8 @@ function CategoryHero({ category }) {
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
-    'desk organizers': '/pics/desk_organizers.png',
-    'playables': '/pics/playables.jpg',
+    'desk organizers': '/photos/daily acc .jpeg',
+    'playables': '/photos/playables.jpeg',
     'collectibles': '/pics/collectibles.png',
     'home decor': '/pics/home decor.webp',
     'kit cards': '/pics/kit_cards.png',

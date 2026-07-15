@@ -1,5 +1,9 @@
 "use client";
 
+// Force dynamic rendering — this page uses useSearchParams and Supabase auth
+// which cannot be statically prerendered at build time
+export const dynamic = 'force-dynamic';
+
 import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';

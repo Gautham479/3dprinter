@@ -55,7 +55,13 @@ export default function Hero() {
 
   useEffect(() => {
     fetch('/api/config')
-      .then(r => r.json())
+      .then(async r => {
+        if (!r.ok) {
+          console.error('API returned error:', r.status);
+          return null;
+        }
+        return r.json();
+      })
       .then(d => setConfig(d))
       .catch(console.error);
   }, []);

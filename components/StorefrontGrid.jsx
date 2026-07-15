@@ -31,7 +31,13 @@ export default function StorefrontGrid() {
 
   useEffect(() => {
     fetch('/api/products')
-      .then(r => r.json())
+      .then(async r => {
+        if (!r.ok) {
+          console.error('API returned error:', r.status);
+          return [];
+        }
+        return r.json();
+      })
       .then(d => { if (Array.isArray(d)) setProducts(d); })
       .catch(console.error)
       .finally(() => setLoading(false));

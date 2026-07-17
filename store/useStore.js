@@ -37,7 +37,11 @@ function calculatePrice(config, fileStats) {
   else if (config.material === 'ABS') materialMultiplier = 1.4;
   else if (config.material === 'TPU') materialMultiplier = 1.8;
 
-  const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier;
+  let qualityMultiplier = 1.0;
+  if (config.quality === 'Draft') qualityMultiplier = 0.8;
+  else if (config.quality === 'High') qualityMultiplier = 1.3;
+
+  const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier * qualityMultiplier;
   return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));
 }
 

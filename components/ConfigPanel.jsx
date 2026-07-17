@@ -66,12 +66,13 @@ export default function ConfigPanel() {
     <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8 relative">
-        <div className="w-9 h-9 rounded-sm bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
-          <Zap className="w-4 h-4 text-primary-500" />
+        <div className="w-9 h-9 rounded-sm flex items-center justify-center" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)' }}>
+          <Zap className="w-4 h-4" style={{ color: '#ef4444' }} />
         </div>
         <h3 className="text-lg font-black text-fg">Configure Your Print</h3>
         <motion.div
-          className="ml-auto w-2 h-2 rounded-sm bg-accent-500"
+          className="ml-auto w-2 h-2 rounded-full"
+          style={{ backgroundColor: '#ef4444' }}
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />
@@ -109,7 +110,7 @@ export default function ConfigPanel() {
             {['Single Color', 'Multicolor'].map((mode) => (
               <button
                 key={mode}
-                onClick={() => setConfig({ colorMode: mode, color: mode === 'Multicolor' ? 'Multicolor' : config.color })}
+                onClick={(e) => { e.stopPropagation(); setConfig({ colorMode: mode, color: mode === 'Multicolor' ? 'Multicolor' : config.color }); }}
                 className={`py-2.5 px-3 rounded-sm text-sm font-bold border transition-all ${config.colorMode === mode
                     ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
                     : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
@@ -120,7 +121,16 @@ export default function ConfigPanel() {
             ))}
           </div>
 
-          {config.colorMode !== 'Multicolor' && (
+          {config.colorMode === 'Multicolor' ? (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-center gap-2 py-3 px-4 rounded-sm border border-yellow-500/40 bg-yellow-500/10"
+            >
+              <Sparkles className="w-4 h-4 text-yellow-500" />
+              <span className="text-sm font-black text-yellow-500 tracking-wide">Coming Soon</span>
+            </motion.div>
+          ) : (
             <motion.div
               ref={colorContainerRef}
               initial={{ opacity: 0, height: 0 }}
@@ -193,7 +203,7 @@ export default function ConfigPanel() {
               max={100}
               step={5}
               value={config.strength}
-              onChange={(e) => setConfig({ strength: Number(e.target.value) })}
+              onChange={(e) => setConfig({ strength: Number(e.target.value), _forceUpdate: Date.now() })}
               className="w-full h-2 rounded-sm appearance-none cursor-pointer"
               style={{
                 background: `linear-gradient(to right, var(--app-primary-500) 0%, var(--app-accent-500) ${strengthPercentage}%, var(--app-surface-border) ${strengthPercentage}%)`,
@@ -248,7 +258,7 @@ export default function ConfigPanel() {
                   <p className="text-5xl font-black text-primary-500">₹{mockPrice}</p>
                   <p className="text-xs text-fg-muted flex items-center justify-center gap-1 mt-1">
                     <motion.span
-                      className="w-1.5 h-1.5 rounded-sm bg-accent-500"
+                      className="w-1.5 h-1.5 rounded-full bg-red-500"
                       animate={{ opacity: [1, 0.3, 1] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />

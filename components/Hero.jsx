@@ -85,17 +85,8 @@ export default function Hero() {
   return (
     <div ref={containerRef} className="w-full">
 
-      {/* ── SECTION 1: Full-Width Hero Image ── */}
-      <section className="w-full bg-surface-bg p-0 m-0 pt-16">
-        <img
-          src="/images/hero.png?v=5"
-          alt="3D Printed Parts for Everyday Life"
-          className="w-full h-auto block object-cover"
-        />
-      </section>
-
-      {/* ── SECTION 2: Text content panel (scroll below image) ── */}
-      <section className="relative w-full flex flex-col bg-surface-bg">
+      {/* ── Text content panel (placed at top of homepage) ── */}
+      <section className="relative w-full flex flex-col bg-surface-bg pt-20">
 
         {/* Top strip */}
         <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 pt-6 pb-0">

@@ -31,7 +31,16 @@ export default function CustomPrintPage() {
       <Navbar />
       <CartDrawer />
       
-      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-16 min-h-[60vh]">
+      {/* Edge-to-Edge Hero Collage Image shifted from Homepage */}
+      <div className="w-full bg-surface-bg p-0 m-0 pt-16">
+        <img
+          src="/images/hero.png?v=5"
+          alt="3D Printed Parts for Everyday Life"
+          className="w-full h-auto block object-cover"
+        />
+      </div>
+
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6 min-h-[60vh]">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}

@@ -39,6 +39,13 @@ function ProductsContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get('category') || 'All';
 
+  React.useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-16 min-h-[60vh]">
       <motion.div

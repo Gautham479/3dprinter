@@ -56,12 +56,23 @@ export default function StorefrontGrid() {
       linkUrl: `/products/${p.slug}`,
     }));
 
-  const shuffle = arr => {
-    const s = [...arr];
-    for (let i = s.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [s[i], s[j]] = [s[j], s[i]]; }
-    return s;
-  };
-  const items = shuffle(base);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const shuffle = arr => {
+      const s = [...arr];
+      for (let i = s.length - 1; i > 0; i--) { 
+        const j = Math.floor(Math.random() * (i + 1)); 
+        [s[i], s[j]] = [s[j], s[i]]; 
+      }
+      return s;
+    };
+    if (base.length > 0) {
+      setItems(shuffle(base));
+    } else {
+      setItems([]);
+    }
+  }, [products]);
 
   const scroll = dir => scrollRef.current?.scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' });
 

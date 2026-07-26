@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, ArrowRight } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Package, Star, Zap, Clock } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 /* ── Reveal helper ── */
@@ -31,17 +32,34 @@ function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
 
 /* ── Horizontal marquee ticker ── */
 function Ticker() {
-  const items = ['STL Upload', 'OBJ Upload', 'PLA', 'PETG', 'ABS', 'TPU', 'Same-Day Quote', 'Precision Prints', 'ISO Certified', '99.9% Success'];
+  const items = [
+    'STL Upload', 'OBJ Upload', 'PLA', 'PETG', 'ABS', 'TPU',
+    'Same-Day Quote', 'Precision Prints', 'ISO Certified', '99.9% Success',
+    'Pan-India Delivery', 'Custom Orders', 'Engineering Grade',
+  ];
   const doubled = [...items, ...items];
   return (
-    <div className="w-full overflow-hidden border-t border-b border-surface-border py-4 bg-surface-bg">
+    <div className="w-full overflow-hidden border-t border-b border-surface-border py-3.5 bg-surface-bg">
       <div className="marquee-track">
         {doubled.map((item, i) => (
-          <span key={i} className="flex items-center gap-6 px-8 text-xs font-black uppercase tracking-[0.2em] text-fg-muted whitespace-nowrap">
+          <span key={i} className="flex items-center gap-5 px-7 text-[10px] font-black uppercase tracking-[0.22em] text-fg-muted whitespace-nowrap">
             {item}
-            <span className="w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+            <span className="w-1 h-1 rounded-full bg-primary-500 flex-shrink-0" />
           </span>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Stat pill ── */
+function StatPill({ icon: Icon, value, label }) {
+  return (
+    <div className="flex items-center gap-3 px-5 py-3 border border-surface-border bg-surface-card/60">
+      <Icon className="w-4 h-4 text-primary-500 flex-shrink-0" />
+      <div>
+        <div className="text-base font-black text-fg leading-none">{value}</div>
+        <div className="text-[10px] font-bold uppercase tracking-widest text-fg-muted mt-0.5">{label}</div>
       </div>
     </div>
   );
@@ -50,16 +68,11 @@ function Ticker() {
 export default function Hero() {
   const [config, setConfig] = useState(null);
   const containerRef = useRef(null);
-  const { scrollY } = useScroll();
-  const headlineY = useTransform(scrollY, [0, 400], [0, -60]);
 
   useEffect(() => {
     fetch('/api/config')
       .then(async r => {
-        if (!r.ok) {
-          console.error('API returned error:', r.status);
-          return null;
-        }
+        if (!r.ok) { console.error('API returned error:', r.status); return null; }
         return r.json();
       })
       .then(d => setConfig(d))
@@ -72,13 +85,22 @@ export default function Hero() {
   return (
     <div ref={containerRef} className="w-full">
 
-      {/* ── HERO PANEL ── full viewport */}
-      <section className="relative w-full flex flex-col" style={{ minHeight: '100svh' }}>
+      {/* ── SECTION 1: Full-Width Hero Image ── */}
+      <section className="w-full bg-surface-bg p-0 m-0 pt-16">
+        <img
+          src="/images/hero.png?v=5"
+          alt="3D Printed Parts for Everyday Life"
+          className="w-full h-auto block object-cover"
+        />
+      </section>
+
+      {/* ── SECTION 2: Text content panel (scroll below image) ── */}
+      <section className="relative w-full flex flex-col bg-surface-bg">
 
         {/* Top strip */}
         <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 pt-6 pb-0">
           <span className="text-[11px] font-black uppercase tracking-[0.2em] text-fg-muted">
-            MahashriLab © 2025
+            MahashriLab © 2026
           </span>
           <div className="flex items-center gap-2 text-[11px] font-bold text-fg-muted uppercase tracking-widest">
             <ShieldCheck className="w-3.5 h-3.5 text-primary-500" />
@@ -86,11 +108,11 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Main content — grows to fill */}
+        {/* Main content */}
         <div className="flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 pt-10 pb-0">
 
           {/* Overline */}
-          <Reveal delay={0} className="mb-6">
+          <Reveal delay={0} className="mb-4">
             <div className="flex items-center gap-3">
               <div className="h-px w-12 bg-primary-500" />
               <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">
@@ -100,14 +122,12 @@ export default function Hero() {
           </Reveal>
 
           {/* Headline */}
-          <motion.div style={{ y: headlineY }}>
-            <Reveal delay={0.08}>
-              <h1 className="font-black leading-[0.92] tracking-[-0.03em] text-fg"
-                style={{ fontSize: 'clamp(52px, 8vw, 120px)' }}>
-                {heading}
-              </h1>
-            </Reveal>
-          </motion.div>
+          <Reveal delay={0.08}>
+            <h1 className="font-black leading-[1.05] tracking-[-0.03em] text-fg pt-2"
+              style={{ fontSize: 'clamp(44px, 6vw, 90px)' }}>
+              {heading}
+            </h1>
+          </Reveal>
 
           {/* Divider line */}
           <Reveal delay={0.18} className="mt-10 mb-8">
@@ -135,11 +155,18 @@ export default function Hero() {
             </Reveal>
           </div>
 
-          {/* Spacer */}
-          <div className="h-10 md:h-14" />
+          {/* Stats row */}
+          <Reveal delay={0.4} className="mt-10 mb-10">
+            <div className="flex flex-wrap gap-3">
+              <StatPill icon={Package} value="500+"  label="Products Delivered" />
+              <StatPill icon={Star}    value="4.9★"  label="Customer Rating" />
+              <StatPill icon={Zap}     value="24hr"  label="Quote Turnaround" />
+              <StatPill icon={Clock}   value="3-7d"  label="Pan-India Shipping" />
+            </div>
+          </Reveal>
         </div>
 
-        {/* Ticker at the very bottom of hero */}
+        {/* Ticker at the very bottom */}
         <Ticker />
       </section>
 

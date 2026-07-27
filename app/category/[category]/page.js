@@ -26,7 +26,7 @@ function CategoryHero({ category }) {
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
-    'desk organizers': '/photos/daily acc .jpeg',
+    'organizers': '/photos/daily acc .jpeg',
     'playables': '/photos/playables.jpeg',
     'collectibles': '/pics/collectibles.png',
     'home decor': '/pics/home decor.webp',

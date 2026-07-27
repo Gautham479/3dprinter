@@ -92,7 +92,7 @@ export default function Footer() {
 
             <h4 className="text-fg font-black text-xs uppercase tracking-widest mb-3">About Us</h4>
             <p className="text-fg-muted text-sm leading-relaxed mb-5">
-              At MahashriLab, we craft unique and functional products using cutting-edge 3D printing technology. From stylish desk organizers to clever puzzles and fun gadgets — our creations are where art meets purpose.
+              At MahashriLab, we craft unique and functional products using cutting-edge 3D printing technology. From stylish organizers to clever puzzles and fun gadgets — our creations are where art meets purpose.
             </p>
 
             {/* Status */}

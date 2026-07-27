@@ -66,12 +66,12 @@ export default function ConfigPanel() {
     <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8 relative">
-        <div className="w-9 h-9 rounded-sm bg-primary-500/15 border border-primary-500/25 flex items-center justify-center">
-          <Zap className="w-4 h-4 text-primary-500" />
+        <div className="w-9 h-9 rounded-sm bg-red-500/15 border border-red-500/25 flex items-center justify-center">
+          <Zap className="w-4 h-4 text-red-500" />
         </div>
         <h3 className="text-lg font-black text-fg">Configure Your Print</h3>
         <motion.div
-          className="ml-auto w-2 h-2 rounded-sm bg-accent-500"
+          className="ml-auto w-2 h-2 rounded-sm bg-red-500"
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />

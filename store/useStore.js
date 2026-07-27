@@ -37,8 +37,12 @@ function calculatePrice(config, fileStats) {
   else if (config.material === 'ABS') materialMultiplier = 1.4;
   else if (config.material === 'TPU') materialMultiplier = 1.8;
 
+  let qualitySurcharge = 0;
+  if (config.quality === 'Standard') qualitySurcharge = 40;
+  else if (config.quality === 'High') qualitySurcharge = 40 + 80; // +40 for Standard, +80 more for High
+
   const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier;
-  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));
+  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice + qualitySurcharge));
 }
 
 export const useStore = create((set) => ({

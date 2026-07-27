@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, ArrowRight, Package, Star, Zap, Clock } from 'lucide-react';
+import { ArrowRight, Package, Star, Zap, Clock } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -93,10 +93,6 @@ export default function Hero() {
           <span className="text-[11px] font-black uppercase tracking-[0.2em] text-fg-muted">
             MahashriLab © 2026
           </span>
-          <div className="flex items-center gap-2 text-[11px] font-bold text-fg-muted uppercase tracking-widest">
-            <ShieldCheck className="w-3.5 h-3.5 text-primary-500" />
-            ISO Certified · 99.9% Success
-          </div>
         </div>
 
         {/* Main content */}

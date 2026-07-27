@@ -31,37 +31,28 @@ export default function CustomPrintPage() {
       <Navbar />
       <CartDrawer />
       
-      {/* Edge-to-Edge Hero Collage Image shifted from Homepage */}
-      <div className="w-full bg-surface-bg p-0 m-0 pt-16">
-        <img
-          src="/images/hero.png?v=5"
-          alt="3D Printed Parts for Everyday Life"
-          className="w-full h-auto block object-cover"
-        />
-      </div>
-
-      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6 min-h-[60vh]">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-24 min-h-[60vh]">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="text-center max-w-4xl mx-auto mb-10">
             <h1 className="text-4xl font-black text-fg mb-3">Custom 3D Printing</h1>
             <div className="h-[2px] w-20 bg-primary-500 mx-auto rounded-sm mb-4" />
             <p className="text-fg-muted mb-6">
               Upload your own 3D models (STL files), configure your material preferences, and get an instant quote.
             </p>
             
-            {/* Collage Section */}
+            {/* Hero Banner Section */}
             <div className="mb-10">
               <h2 className="text-2xl font-bold text-fg mb-4">What Can We Print?</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
-                {siteConfig.collageImages.map((img, idx) => (
-                  <div key={idx} className="aspect-square relative rounded-sm overflow-hidden border border-surface-border bg-surface-muted">
-                    <img src={img} alt={`Print example ${idx + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
+              <div className="max-w-4xl mx-auto rounded-lg overflow-hidden border border-surface-border bg-surface-muted shadow-sm">
+                <img
+                  src="/images/hero.png?v=5"
+                  alt="3D Printed Examples"
+                  className="w-full h-auto block object-cover"
+                />
               </div>
             </div>
 

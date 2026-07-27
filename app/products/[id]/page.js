@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Ruler, Package, Truck } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Ruler, Package, Truck, Star, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -463,6 +463,9 @@ export default function ProductPage() {
                 )}
               </motion.button>
             </div>
+
+            {/* Policy Accordions */}
+            <ProductAccordions />
           </div>
         </div>
 
@@ -510,4 +513,91 @@ export default function ProductPage() {
     </div>
   );
 }
+
+function ProductAccordions() {
+  const [openIndex, setOpenIndex] = useState(1);
+
+  const toggle = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="mt-6 border-t border-b border-surface-border divide-y divide-surface-border/60">
+      {/* 100% Breakage Insurance */}
+      <div className="py-3">
+        <button
+          type="button"
+          onClick={() => toggle(0)}
+          className="w-full flex items-center justify-between py-1 text-left font-bold text-fg hover:text-primary-500 transition-colors group"
+        >
+          <div className="flex items-center gap-2.5">
+            <Star className="w-4 h-4 text-primary-500" />
+            <span className="text-sm font-bold text-fg group-hover:text-primary-500">100% Breakage Insurance</span>
+          </div>
+          {openIndex === 0 ? <ChevronUp className="w-4 h-4 text-fg-muted" /> : <ChevronDown className="w-4 h-4 text-fg-muted" />}
+        </button>
+        {openIndex === 0 && (
+          <div className="pt-2 pb-1 text-xs text-fg-muted leading-relaxed pl-6">
+            All our orders come with 100% breakage insurance during transit. If your item arrives damaged or broken, we will replace it free of charge.
+          </div>
+        )}
+      </div>
+
+      {/* Shipping Information */}
+      <div className="py-3">
+        <button
+          type="button"
+          onClick={() => toggle(1)}
+          className="w-full flex items-center justify-between py-1 text-left font-bold text-fg hover:text-primary-500 transition-colors group"
+        >
+          <div className="flex items-center gap-2.5">
+            <Truck className="w-4 h-4 text-primary-500" />
+            <span className="text-sm font-bold text-fg group-hover:text-primary-500">Shipping Information:</span>
+          </div>
+          {openIndex === 1 ? <ChevronUp className="w-4 h-4 text-fg-muted" /> : <ChevronDown className="w-4 h-4 text-fg-muted" />}
+        </button>
+        {openIndex === 1 && (
+          <div className="pt-2 pb-1 text-xs text-fg-muted leading-relaxed pl-6 space-y-2">
+            <ul className="list-disc pl-4 space-y-1.5">
+              <li>
+                <strong className="text-fg font-semibold">Dispatch Time:</strong> Orders are normally processed and dispatched within 24 hours. However, during peak seasons or sale events, please allow 3-4 business days for your order to be dispatched due to high volumes.
+              </li>
+              <li>
+                <strong className="text-fg font-semibold">Estimated Delivery:</strong> Expect delivery within 6 to 7 business days.
+              </li>
+              <li>
+                See our{' '}
+                <a href="/contact" className="underline font-bold text-fg hover:text-primary-500 transition-colors">
+                  Shipping Policy
+                </a>{' '}
+                for more details.
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Return and Exchange Policy */}
+      <div className="py-3">
+        <button
+          type="button"
+          onClick={() => toggle(2)}
+          className="w-full flex items-center justify-between py-1 text-left font-bold text-fg hover:text-primary-500 transition-colors group"
+        >
+          <div className="flex items-center gap-2.5">
+            <RotateCcw className="w-4 h-4 text-primary-500" />
+            <span className="text-sm font-bold text-fg group-hover:text-primary-500">Return and Exchange Policy:</span>
+          </div>
+          {openIndex === 2 ? <ChevronUp className="w-4 h-4 text-fg-muted" /> : <ChevronDown className="w-4 h-4 text-fg-muted" />}
+        </button>
+        {openIndex === 2 && (
+          <div className="pt-2 pb-1 text-xs text-fg-muted leading-relaxed pl-6">
+            We inspect all products before dispatch. Returns or exchanges are supported within 7 days of receipt for defective or incorrectly fulfilled items.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 

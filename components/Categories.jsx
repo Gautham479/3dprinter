@@ -27,10 +27,10 @@ function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
 
 export default function Categories() {
   const categories = [
-    { title: "Idols",             desc: "Collectible idols and premium figurines",        image: "/photos/idols.jpeg",          link: "/category/idols",              position: "object-center" },
-    { title: "Action Figures",    desc: "Dynamic heroes and articulated models",          image: "/photos/action 1.jpeg",       link: "/category/action figures",     position: "object-top" },
-    { title: "Desk Organizers",   desc: "Everyday lifestyle essentials and gadgets",      image: "/photos/daily acc .jpeg",     link: "/category/desk organizers",    position: "object-center" },
-    { title: "Playables",         desc: "Interactive toys and engaging models",           image: "/photos/playables.jpeg",      link: "/category/playables",          position: "object-bottom" },
+    { title: "Idols",             desc: "Collectible idols and premium figurines",        image: "/photos/idols.jpeg",          link: `/category/${encodeURIComponent('Idols')}`,             position: "object-center" },
+    { title: "Action Figures",    desc: "Dynamic heroes and articulated models",          image: "/photos/action 1.jpeg",       link: `/category/${encodeURIComponent('Action Figures')}`,    position: "object-top" },
+    { title: "Organizers",   desc: "Everyday lifestyle essentials and gadgets",      image: "/photos/daily acc .jpeg",     link: `/category/${encodeURIComponent('Organizers')}`,   position: "object-center" },
+    { title: "Playables",         desc: "Interactive toys and engaging models",           image: "/photos/playables.jpeg",      link: `/category/${encodeURIComponent('Playables')}`,         position: "object-bottom" },
   ];
 
   return (

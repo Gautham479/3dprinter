@@ -20,6 +20,10 @@ function ScrollToSection() {
   const section = searchParams.get('section');
 
   React.useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     if (section) {
       setTimeout(() => {
         const el = document.getElementById(section);
@@ -28,6 +32,8 @@ function ScrollToSection() {
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 100);
+    } else {
+      window.scrollTo(0, 0);
     }
   }, [section]);
 

@@ -27,6 +27,7 @@ const formatPrintTime = (hours) => {
 export default function ConfigPanel() {
   const { config, setConfig, selectedFile, mockPrice, addToCart, colors, fetchColors, fileStats, isTooBig } = useStore();
   const strengthPercentage = ((config.strength - 10) / 90) * 100;
+  const isMulticolor = config.colorMode === 'Multicolor';
   const colorContainerRef = useRef(null);
 
   useEffect(() => {
@@ -204,7 +205,8 @@ export default function ConfigPanel() {
               step={5}
               value={config.strength}
               onChange={(e) => setConfig({ strength: Number(e.target.value), _forceUpdate: Date.now() })}
-              className="w-full h-2 rounded-sm appearance-none cursor-pointer"
+              className={`w-full h-2 rounded-sm appearance-none ${isMulticolor ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+              disabled={isMulticolor}
               style={{
                 background: `linear-gradient(to right, var(--app-primary-500) 0%, var(--app-accent-500) ${strengthPercentage}%, var(--app-surface-border) ${strengthPercentage}%)`,
               }}
@@ -215,6 +217,9 @@ export default function ConfigPanel() {
             <span>Light (10%)</span>
             <span>Solid (100%)</span>
           </div>
+          {isMulticolor && (
+            <p className="text-sm text-red-500 font-black tracking-wide">Infill strength: Coming Soon</p>
+          )}
         </div>
 
         {/* Price display */}

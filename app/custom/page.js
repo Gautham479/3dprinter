@@ -49,7 +49,7 @@ export default function CustomPrintPage() {
               <h2 className="text-2xl font-bold text-fg mb-4">What Can We Print?</h2>
               <div className="max-w-4xl mx-auto rounded-lg overflow-hidden border border-surface-border bg-surface-muted shadow-sm">
                 <img
-                  src="/images/hero.png?v=5"
+                  src="/images/hero2.jpg"
                   alt="3D Printed Examples"
                   className="w-full h-auto block object-cover"
                 />

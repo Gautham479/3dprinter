@@ -21,6 +21,11 @@ export async function GET(request) {
       ];
     }
 
+    if (!process.env.DATABASE_URL) {
+      console.warn('DATABASE_URL is not set. Returning empty product list.');
+      return NextResponse.json([]);
+    }
+
     const products = await prisma.product.findMany({
       where: whereClause,
       orderBy: { createdAt: 'asc' },
@@ -28,7 +33,7 @@ export async function GET(request) {
 
     return NextResponse.json(products);
   } catch (error) {
-    const details = error instanceof Error ? error.message : 'Unknown database error';
-    return NextResponse.json({ error: `Failed to load products. ${details}` }, { status: 500 });
+    console.error('Error fetching products:', error);
+    return NextResponse.json([]);
   }
 }

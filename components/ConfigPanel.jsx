@@ -172,7 +172,7 @@ export default function ConfigPanel() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
               { id: 'Draft', label: 'Draft' },
-              { id: 'Standard', label: 'Standard' },
+              { id: 'Standard', label: 'Medium' },
               { id: 'High', label: 'High' }
             ].map((q) => (
               <button

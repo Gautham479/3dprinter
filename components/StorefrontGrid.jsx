@@ -91,7 +91,7 @@ export default function StorefrontGrid() {
           </div>
         </Reveal>
         <Reveal delay={0.1} direction="left">
-          <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Selected Products</h2>
+          <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Featured Products</h2>
         </Reveal>
         <Reveal delay={0.15} direction="left" className="hidden md:flex items-center gap-4">
           <button onClick={() => scroll('left')} className="w-10 h-10 border border-surface-border flex items-center justify-center hover:border-fg hover:bg-fg hover:text-surface-bg transition-all" aria-label="Left">

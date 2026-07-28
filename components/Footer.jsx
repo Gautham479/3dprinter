@@ -42,9 +42,26 @@ export default function Footer() {
               </span>
             </div>
 
-            <p className="text-fg-muted max-w-sm leading-relaxed mb-6 text-sm">
-              Industrial grade 3D printing for everyone. Upload, customize, and order high-quality parts in seconds.
+            <h4 className="text-fg font-black mb-3 text-sm uppercase tracking-widest">ABOUT US</h4>
+            <p className="text-fg-muted max-w-md leading-relaxed mb-6 text-sm">
+              At MahashriLab, we craft unique and functional products using cutting-edge 3D printing technology. From stylish organizers to clever puzzles and fun gadgets, our creations are where art meets purpose.
             </p>
+
+            {/* Contact details */}
+            <div className="space-y-2 mb-6 text-sm text-fg-muted">
+              <div className="flex items-center gap-2">
+                <span className="text-primary-500">📞</span>
+                <span>+91 6364205864</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-primary-500">✉️</span>
+                <span>Contact@mahashrilab.in</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-primary-500">📍</span>
+                <span>Bengaluru, Karnataka, India</span>
+              </div>
+            </div>
 
             {/* Status indicator */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border border-surface-border bg-surface-bg/50 text-xs font-bold text-fg-muted">

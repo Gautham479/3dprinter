@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
             <div>
               <h2 className="text-2xl font-bold text-heading mb-4">7. Contact Us</h2>
               <p>
-                If you have questions about this Privacy Policy, please contact us at: support@mahashrilab.com or call us at +91-XXXXXXXXXX
+                If you have questions about this Privacy Policy, please contact us at: support@mahashrilab.com or call us at +91 6364205864
               </p>
             </div>
           </div>

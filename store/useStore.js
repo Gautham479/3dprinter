@@ -42,7 +42,13 @@ function calculatePrice(config, fileStats) {
   else if (config.quality === 'High') qualityMultiplier = 1.3;
 
   const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier * qualityMultiplier;
-  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));
+
+  // Flat quality surcharges
+  let qualityFlat = 0;
+  if (config.quality === 'Standard') qualityFlat = 40;  // Medium +₹40
+  else if (config.quality === 'High') qualityFlat = 80;  // High +₹80
+
+  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice + qualityFlat));
 }
 
 export const useStore = create((set) => ({

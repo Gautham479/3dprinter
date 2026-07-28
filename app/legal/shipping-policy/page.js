@@ -140,7 +140,7 @@ export default function ShippingPolicy() {
             <div>
               <h2 className="text-2xl font-bold text-heading mb-4">11. Contact Us</h2>
               <p>
-                For shipping inquiries or issues, please contact: support@mahashrilab.com or call us at +91-XXXXXXXXXX
+                For shipping inquiries or issues, please contact: support@mahashrilab.com or call us at +91 6364205864
               </p>
             </div>
           </div>

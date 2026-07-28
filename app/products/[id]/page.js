@@ -592,7 +592,7 @@ function ProductAccordions() {
         </button>
         {openIndex === 2 && (
           <div className="pt-2 pb-1 text-xs text-fg-muted leading-relaxed pl-6">
-            We inspect all products before dispatch. Returns or exchanges are supported within 7 days of receipt for defective or incorrectly fulfilled items.
+            We inspect all products before dispatch. Returns or exchanges are supported within 48 hours of receipt for defective or incorrectly fulfilled items.
           </div>
         )}
       </div>

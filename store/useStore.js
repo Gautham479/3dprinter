@@ -37,27 +37,12 @@ function calculatePrice(config, fileStats) {
   else if (config.material === 'ABS') materialMultiplier = 1.4;
   else if (config.material === 'TPU') materialMultiplier = 1.8;
 
-<<<<<<< HEAD
-  let qualityMultiplier = 1.0;
-  if (config.quality === 'Draft') qualityMultiplier = 0.8;
-  else if (config.quality === 'High') qualityMultiplier = 1.3;
+  let qualityExtra = 0;
+  if (config.quality === 'Medium') qualityExtra = 40;
+  else if (config.quality === 'High') qualityExtra = 80;
 
-  const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier * qualityMultiplier;
-
-  // Flat quality surcharges
-  let qualityFlat = 0;
-  if (config.quality === 'Standard') qualityFlat = 40;  // Medium +₹40
-  else if (config.quality === 'High') qualityFlat = 80;  // High +₹80
-
-  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice + qualityFlat));
-=======
-  let qualitySurcharge = 0;
-  if (config.quality === 'Standard') qualitySurcharge = 40;
-  else if (config.quality === 'High') qualitySurcharge = 40 + 80; // +40 for Standard, +80 more for High
-
-  const basePrice = (subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier;
-  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice + qualitySurcharge));
->>>>>>> 584f2c01c70a7faea8d482d12cb29c2739a5b1d6
+  const basePrice = ((subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier) + qualityExtra;
+  return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));
 }
 
 export const useStore = create((set) => ({

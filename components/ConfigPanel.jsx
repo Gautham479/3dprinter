@@ -67,7 +67,6 @@ export default function ConfigPanel() {
     <div className="relative rounded-sm border border-surface-border bg-surface-card/90 p-6 sm:p-8 overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8 relative">
-<<<<<<< HEAD
         <div className="w-9 h-9 rounded-sm flex items-center justify-center" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)' }}>
           <Zap className="w-4 h-4" style={{ color: '#ef4444' }} />
         </div>
@@ -75,14 +74,6 @@ export default function ConfigPanel() {
         <motion.div
           className="ml-auto w-2 h-2 rounded-full"
           style={{ backgroundColor: '#ef4444' }}
-=======
-        <div className="w-9 h-9 rounded-sm bg-red-500/15 border border-red-500/25 flex items-center justify-center">
-          <Zap className="w-4 h-4 text-red-500" />
-        </div>
-        <h3 className="text-lg font-black text-fg">Configure Your Print</h3>
-        <motion.div
-          className="ml-auto w-2 h-2 rounded-sm bg-red-500"
->>>>>>> 584f2c01c70a7faea8d482d12cb29c2739a5b1d6
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />
@@ -180,8 +171,8 @@ export default function ConfigPanel() {
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'Draft', label: 'Draft' },
-              { id: 'Standard', label: 'Medium' },
+              { id: 'Standard', label: 'Standard' },
+              { id: 'Medium', label: 'Medium' },
               { id: 'High', label: 'High' }
             ].map((q) => (
               <button

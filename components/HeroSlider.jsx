@@ -138,10 +138,10 @@ export default function HeroSlider() {
   return (
     <section className="relative w-full h-[94vh] sm:h-[98vh] min-h-[700px] max-h-[1150px] overflow-hidden bg-[#F3F4F6] hero-slider-container">
       
-      {/* Top Autoplay Progress Bar */}
-      <div className="absolute top-0 left-0 w-full h-1 z-40 bg-black/10">
+      {/* Top Autoplay Progress Bar - slim neutral */}
+      <div className="absolute top-0 left-0 w-full h-0.5 z-40 bg-black/10">
         <div 
-          className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 transition-all duration-75 ease-linear shadow-[0_0_12px_rgba(37,99,235,0.8)]"
+          className="h-full bg-gray-400/60 transition-all duration-75 ease-linear"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -258,44 +258,41 @@ export default function HeroSlider() {
               {/* Left-Aligned Apple-Tech Foreground Dark Glass Card */}
               <div className="relative z-20 w-full h-full flex items-center justify-start max-w-[1550px] mx-auto px-4 sm:px-8 lg:px-16">
                 <div
-                  className={`w-full max-w-xl lg:max-w-2xl bg-[#0F141C]/85 sm:bg-[#0F141C]/92 backdrop-blur-3xl border border-white/20 shadow-[0_30px_90px_rgba(0,0,0,0.35)] rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 md:p-14 text-left transition-all duration-700 ease-out relative overflow-hidden animate-card-float ${
+                  className={`w-full max-w-xl lg:max-w-2xl bg-white/90 sm:bg-white/95 backdrop-blur-3xl border border-gray-200/80 shadow-[0_30px_70px_rgba(0,0,0,0.18)] rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 md:p-14 text-left transition-all duration-700 ease-out relative overflow-hidden animate-card-float ${
                     isActive
                       ? 'translate-y-0 opacity-100 scale-100'
                       : 'translate-y-10 opacity-0 scale-95'
                   }`}
                 >
                   {/* Decorative Corner Accents */}
-                  <div className="absolute top-5 left-5 w-4 h-4 border-t-2 border-l-2 border-blue-400/40" />
-                  <div className="absolute top-5 right-5 w-4 h-4 border-t-2 border-r-2 border-blue-400/40" />
-                  <div className="absolute bottom-5 left-5 w-4 h-4 border-b-2 border-l-2 border-blue-400/40" />
-                  <div className="absolute bottom-5 right-5 w-4 h-4 border-b-2 border-r-2 border-blue-400/40" />
-
-                  {/* Pulsing Top Edge Line */}
-                  <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_20px_rgba(59,130,246,1)] animate-pulse" />
+                  <div className="absolute top-5 left-5 w-4 h-4 border-t-2 border-l-2 border-gray-300" />
+                  <div className="absolute top-5 right-5 w-4 h-4 border-t-2 border-r-2 border-gray-300" />
+                  <div className="absolute bottom-5 left-5 w-4 h-4 border-b-2 border-l-2 border-gray-300" />
+                  <div className="absolute bottom-5 right-5 w-4 h-4 border-b-2 border-r-2 border-gray-300" />
 
                   {/* Brand & Badge Row */}
                   <div className="flex flex-wrap items-center gap-3 mb-5">
-                    <span className="text-xs font-black uppercase tracking-[0.25em] text-blue-400">
+                    <span className="text-xs font-black uppercase tracking-[0.25em] text-gray-500">
                       {slide.brand}
                     </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[11px] font-bold uppercase tracking-wider">
-                      <Sparkles className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-600 text-[11px] font-bold uppercase tracking-wider">
+                      <Sparkles className="w-3.5 h-3.5 text-gray-500" />
                       <span>{slide.badge}</span>
                     </div>
                   </div>
 
                   {/* Large Hero Headline */}
-                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] mb-5">
+                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-gray-900 tracking-tight leading-[1.08] mb-5">
                     {slide.headlineLine1}{' '}
                     <br className="hidden sm:inline" />
-                    <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent drop-shadow-sm">
+                    <span className="text-gray-700">
                       {slide.headlineLine2}
                     </span>
                   </h1>
 
                   {/* Subtitle */}
-                  <p className="text-sm sm:text-base md:text-lg text-gray-300 font-medium leading-relaxed mb-8 max-w-xl">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-600 font-medium leading-relaxed mb-8 max-w-xl">
                     {slide.subtitle}
                   </p>
 
@@ -304,9 +301,8 @@ export default function HeroSlider() {
                     {/* Primary Button */}
                     <Link
                       href={slide.primaryLink}
-                      className="relative overflow-hidden inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm sm:text-base font-bold tracking-wide shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:shadow-[0_0_40px_rgba(37,99,235,0.9)] transition-all duration-300 transform hover:-translate-y-0.5 group border border-blue-400/40"
+                      className="relative overflow-hidden inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-gray-900 hover:bg-gray-700 text-white text-sm sm:text-base font-bold tracking-wide shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-300 transform hover:-translate-y-0.5 group"
                     >
-                      <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 animate-shine pointer-events-none" />
                       <span>{slide.primaryBtn}</span>
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
@@ -314,7 +310,7 @@ export default function HeroSlider() {
                     {/* Secondary Button */}
                     <Link
                       href={slide.secondaryLink}
-                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm sm:text-base font-semibold border border-white/20 backdrop-blur-md transition-all duration-300 transform hover:-translate-y-0.5"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-transparent hover:bg-gray-100 text-gray-800 text-sm sm:text-base font-semibold border border-gray-300 transition-all duration-300 transform hover:-translate-y-0.5"
                     >
                       <span>{slide.secondaryBtn}</span>
                     </Link>

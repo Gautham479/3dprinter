@@ -343,7 +343,7 @@ export default function ProductPage() {
             <div>
               {/* Type badge */}
               <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-primary-500/10 text-primary-500 rounded-sm text-sm font-black border border-primary-500/20">
+                <span className="px-3 py-1 bg-primary-500/10 text-fg rounded-sm text-sm font-black border border-primary-500/20">
                   {product.type}
                 </span>
                 {!product.inStock && (
@@ -356,15 +356,15 @@ export default function ProductPage() {
               <h1 className="text-4xl font-black text-fg mb-3">{product.name}</h1>
 
               <div className="mb-6">
-                <p className="text-5xl font-black text-primary-500 mb-4">₹{product.price}</p>
+                <p className="text-5xl font-black text-fg mb-4">₹{product.price}</p>
                 <div className="flex flex-col gap-2 p-3.5 rounded-sm bg-primary-500/10 border border-primary-500/20">
                   <div className="flex items-start gap-2.5">
-                    <Truck className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-bold">Shipping charges additional at checkout</p>
+                    <Truck className="w-4 h-4 text-fg mt-0.5 flex-shrink-0" />
+                    <p className="text-xs sm:text-sm text-fg font-bold">Shipping charges additional at checkout</p>
                   </div>
                   <div className="flex items-start gap-2.5">
-                    <Package className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
+                    <Package className="w-4 h-4 text-fg mt-0.5 flex-shrink-0" />
+                    <p className="text-xs sm:text-sm text-fg font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
                   </div>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function ProductPage() {
                 <div className="grid grid-cols-2 gap-4">
                   {specs.map((spec) => (
                     <div key={spec.label} className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center flex-shrink-0 text-primary-500 mt-0.5">
+                      <div className="w-8 h-8 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center flex-shrink-0 text-fg mt-0.5">
                         {spec.icon}
                       </div>
                       <div>
@@ -509,7 +509,7 @@ export default function ProductPage() {
                   </div>
                   <div className="p-4 border-t border-surface-border/50">
                     <h3 className="text-fg font-bold text-sm mb-1 group-hover:text-primary-500 transition-colors">{p.name}</h3>
-                    <p className="text-primary-500 font-black">₹{p.price}</p>
+                    <p className="text-fg font-black">₹{p.price}</p>
                   </div>
                 </motion.div>
               ))}

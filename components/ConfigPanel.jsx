@@ -167,7 +167,7 @@ export default function ConfigPanel() {
         {/* Quality */}
         <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-black text-fg">
-            <Layers className="w-4 h-4 text-primary-500" /> Quality
+            <Layers className="w-4 h-4 text-fg" /> Quality
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
@@ -179,7 +179,7 @@ export default function ConfigPanel() {
                 key={q.id}
                 onClick={() => setConfig({ quality: q.id })}
                 className={`py-3 px-1 rounded-sm border transition-all flex items-center justify-center ${config.quality === q.id
-                    ? 'border-primary-500/50 bg-primary-500/10 text-primary-500'
+                    ? 'border-primary-500/50 bg-primary-500/10 text-fg font-black'
                     : 'border-surface-border bg-surface-muted/40 text-fg-muted hover:border-primary-500/30 hover:text-fg'
                   }`}
               >
@@ -192,9 +192,9 @@ export default function ConfigPanel() {
         {/* Strength */}
         <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-black text-fg">
-            <Sliders className="w-4 h-4 text-primary-500" />
+            <Sliders className="w-4 h-4 text-fg" />
             Infill Strength
-            <span className="ml-auto text-primary-500 font-black text-base">{config.strength}%</span>
+            <span className="ml-auto text-fg font-black text-base">{config.strength}%</span>
           </label>
 
           <div className="relative">

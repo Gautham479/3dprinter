@@ -38,8 +38,8 @@ function calculatePrice(config, fileStats) {
   else if (config.material === 'TPU') materialMultiplier = 1.8;
 
   let qualityExtra = 0;
-  if (config.quality === 'Medium') qualityExtra = 40;
-  else if (config.quality === 'High') qualityExtra = 80;
+  if (config.quality === 'Medium') qualityExtra = 50;
+  else if (config.quality === 'High') qualityExtra = 100;
 
   const basePrice = ((subtotal + profitAmount + multicolorCharge + PRICING_SETTINGS.setupFee) * materialMultiplier) + qualityExtra;
   return Math.max(PRICING_SETTINGS.minimumPrice, Math.round(basePrice));

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Package, Star, Zap, Clock } from 'lucide-react';
+import { ArrowRight, Zap, Clock } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -145,8 +145,6 @@ export default function Hero() {
           {/* Stats row */}
           <Reveal delay={0.4} className="mt-10 mb-10">
             <div className="flex flex-wrap gap-3">
-              <StatPill icon={Package} value="500+"  label="Products Delivered" />
-              <StatPill icon={Star}    value="4.9★"  label="Customer Rating" />
               <StatPill icon={Zap}     value="24hr"  label="Quote Turnaround" />
               <StatPill icon={Clock}   value="3-7d"  label="Pan-India Shipping" />
             </div>

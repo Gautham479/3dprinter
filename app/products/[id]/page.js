@@ -369,7 +369,16 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              <p className="text-fg-muted text-base mb-8 leading-relaxed">{product.fullDescription}</p>
+              <p className="text-fg-muted text-base mb-6 leading-relaxed">{product.fullDescription}</p>
+
+              {product.note && (
+                <div className="mb-8 flex items-start gap-3 px-4 py-3.5 rounded-sm bg-amber-500/10 border border-amber-500/25">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <p className="text-sm text-amber-700 dark:text-amber-400 font-semibold leading-relaxed">{product.note}</p>
+                </div>
+              )}
 
               {/* Specs */}
               <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 mb-6 relative overflow-hidden">

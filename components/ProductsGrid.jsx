@@ -189,10 +189,10 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
   const activeType = searchQuery.trim() ? 'All' : selectedType;
 
   const filteredProducts = (localProducts || []).filter((product) => {
-    const tagMatches = activeType === 'All'
-      || (product.tags && product.tags.length > 0
-        ? product.tags.includes(activeType)
-        : product.type === activeType);  // fallback for legacy products
+    // Treat 'Idols' as an alias for 'Action Figures' (merged categories)
+    const productTags = (product.tags && product.tags.length > 0 ? product.tags : [product.type])
+      .map(t => t === 'Idols' ? 'Action Figures' : t);
+    const tagMatches = activeType === 'All' || productTags.includes(activeType);
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const queryMatches =
       normalizedQuery.length === 0 ||

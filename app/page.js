@@ -3,6 +3,7 @@
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import HeroSlider from '@/components/HeroSlider';
 import Hero from '@/components/Hero';
 import Categories from '@/components/Categories';
 import StorefrontGrid from '@/components/StorefrontGrid';
@@ -44,14 +45,15 @@ export default function Home() {
   const products = useStore((state) => state.products);
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface-bg w-full relative">
+    <div className="flex flex-col min-h-screen bg-surface-bg w-full relative pt-16">
       <Navbar />
       <CartDrawer />
       <Suspense fallback={null}>
         <ScrollToSection />
       </Suspense>
       
-
+      {/* Hero Slider Section */}
+      <HeroSlider />
 
       {/* Hero Section */}
       <Hero />

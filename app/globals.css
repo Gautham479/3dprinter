@@ -213,3 +213,48 @@
     color: var(--app-surface-bg);
   }
 }
+
+/* ── HERO SLIDER CUSTOM SWIPER STYLES ── */
+.custom-swiper-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  border-radius: 9999px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: 0 4px !important;
+  cursor: pointer;
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active {
+  width: 28px;
+  background: linear-gradient(to right, #3B82F6, #8B5CF6);
+  border-radius: 9999px;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+}
+
+/* ── APPLE TECH HERO CARD ANIMATIONS ── */
+@keyframes cardFloatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes buttonShimmer {
+  0% { transform: translateX(-100%) rotate(12deg); }
+  40%, 100% { transform: translateX(250%) rotate(12deg); }
+}
+
+.animate-card-float {
+  animation: cardFloatSlow 6s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: buttonShimmer 4s ease-in-out infinite;
+}
+
+

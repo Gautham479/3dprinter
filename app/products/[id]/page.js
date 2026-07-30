@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Ruler, Package, Truck, Star, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowLeft, ShoppingCart, Check, ChevronLeft, ChevronRight, Layers, Weight, Ruler, Package, Truck, Star, RotateCcw, ChevronDown, ChevronUp, ShieldCheck, Zap, Award, Sparkles, FileCode, Printer, PackageCheck, ArrowRight } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
@@ -86,9 +87,15 @@ export default function ProductPage() {
         const productsResponse = await fetch('/api/products?includeOutOfStock=1');
         const allProducts = await productsResponse.json().catch(() => []);
         if (Array.isArray(allProducts)) {
-          const filtered = allProducts.filter((item) => item.slug !== data.slug);
-          const shuffled = filtered.sort(() => 0.5 - Math.random());
-          setRelatedProducts(shuffled.slice(0, 3));
+          // Prefer same-category products, fall back to random
+          const sameCategory = allProducts.filter(
+            (item) => item.slug !== data.slug && item.type === data.type
+          );
+          const others = allProducts.filter(
+            (item) => item.slug !== data.slug && item.type !== data.type
+          );
+          const pool = [...sameCategory.sort(() => 0.5 - Math.random()), ...others.sort(() => 0.5 - Math.random())];
+          setRelatedProducts(pool.slice(0, 6));
         }
       } catch {
         setNotFound(true);
@@ -478,44 +485,60 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Related Products */}
+        {/* ── Trust Badges ── */}
+        <TrustBadges />
+
+        {/* ── Related Products ── */}
         {relatedProducts.length > 0 && (
           <div className="mt-20 pt-12 border-t border-surface-border/50">
-            <h2 className="text-2xl font-black text-fg mb-8">Other Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="h-px w-8 bg-primary-500" />
+              <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Collections</span>
+            </div>
+            <h2 className="text-2xl font-black text-fg mb-8">You May Also Like</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {relatedProducts.map((p, i) => (
                 <motion.div
                   key={p.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => router.push(`/products/${p.slug}`)}
+                  transition={{ delay: i * 0.07 }}
                   whileHover={{ y: -4 }}
                   className="rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden cursor-pointer group transition-all hover:shadow-lg"
                 >
-                  <div className={`w-full aspect-[4/3] relative ${(p.image || p.images?.[0]) ? 'bg-surface-muted' : `bg-primary-50`}`}>
-                    {(p.image || p.images?.[0]) ? (
-                      <Image
-                        src={p.image || p.images?.[0]}
-                        alt={p.name}
-                        fill
-                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-black/20" />
-                    )}
-                  </div>
-                  <div className="p-4 border-t border-surface-border/50">
-                    <h3 className="text-fg font-bold text-sm mb-1 group-hover:text-primary-500 transition-colors">{p.name}</h3>
-                    <p className="text-fg font-black">₹{p.price}</p>
-                  </div>
+                  <Link href={`/products/${p.slug}`} className="block">
+                    <div className="w-full aspect-[3/4] relative bg-surface-muted overflow-hidden">
+                      {(p.image || p.images?.[0]) ? (
+                        <Image
+                          src={p.image || p.images?.[0]}
+                          alt={p.name}
+                          fill
+                          className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-primary-50">
+                          <Layers className="w-8 h-8 text-primary-500/30" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 border-t border-surface-border/50">
+                      <h3 className="text-fg font-bold text-xs mb-1 group-hover:text-primary-500 transition-colors line-clamp-2 leading-snug">{p.name}</h3>
+                      <p className="text-primary-500 font-black text-sm">₹{p.price}</p>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>
           </div>
         )}
+
+        {/* ── How It's Made ── */}
+        <HowItsMade />
+
+        {/* ── FAQs ── */}
+        <ProductFAQ />
       </motion.div>
 
       <Footer />
@@ -610,3 +633,173 @@ function ProductAccordions() {
 }
 
 
+/* ─────────────────────────────────────────────
+   TRUST BADGES
+───────────────────────────────────────────── */
+function TrustBadges() {
+  const badges = [
+    { icon: <Award className="w-5 h-5" />, title: 'High Precision Printing', sub: 'Layer accuracy down to 0.1mm' },
+    { icon: <Sparkles className="w-5 h-5" />, title: 'Premium Materials', sub: 'PLA · PETG · ABS · TPU' },
+    { icon: <ShieldCheck className="w-5 h-5" />, title: 'Safe & Secure Packaging', sub: '100% breakage insurance' },
+    { icon: <Zap className="w-5 h-5" />, title: 'Fast Dispatch', sub: 'Ships within 24 hours' },
+    { icon: <PackageCheck className="w-5 h-5" />, title: 'Quality Checked', sub: 'Every item inspected before shipping' },
+  ];
+
+  return (
+    <div className="mt-20 pt-12 border-t border-surface-border/50">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="h-px w-8 bg-primary-500" />
+        <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Why Us</span>
+      </div>
+      <h2 className="text-2xl font-black text-fg mb-8">Why Choose MahashriLabs</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {badges.map((b, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08 }}
+            className="flex flex-col items-center text-center gap-3 p-5 rounded-sm border border-surface-border bg-surface-card/80 hover:border-primary-500/40 hover:shadow-md transition-all duration-300"
+          >
+            <div className="w-11 h-11 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-500 flex-shrink-0">
+              {b.icon}
+            </div>
+            <div>
+              <p className="text-fg font-black text-xs uppercase tracking-wide leading-snug">{b.title}</p>
+              <p className="text-fg-muted text-[11px] font-medium mt-1 leading-snug">{b.sub}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   HOW IT'S MADE
+───────────────────────────────────────────── */
+function HowItsMade() {
+  const steps = [
+    { icon: <FileCode className="w-6 h-6" />, step: '01', title: 'Design', desc: 'Your idea is translated into a precise 3D model using CAD or STL files.' },
+    { icon: <Printer className="w-6 h-6" />, step: '02', title: '3D Printing', desc: 'Printed layer-by-layer on professional FDM machines with premium filaments.' },
+    { icon: <Sparkles className="w-6 h-6" />, step: '03', title: 'Finishing & QC', desc: 'Sanded, cleaned, and quality-checked to ensure a flawless final product.' },
+    { icon: <PackageCheck className="w-6 h-6" />, step: '04', title: 'Packaging & Delivery', desc: 'Securely packed with breakage protection and dispatched pan-India.' },
+  ];
+
+  return (
+    <div className="mt-20 pt-12 border-t border-surface-border/50">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="h-px w-8 bg-primary-500" />
+        <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Process</span>
+      </div>
+      <h2 className="text-2xl font-black text-fg mb-10">How It's Made</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+        {steps.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="relative flex flex-col gap-4 p-6 border border-surface-border bg-surface-card/60 hover:bg-surface-card transition-colors duration-300"
+          >
+            {/* Step connector line */}
+            {i < steps.length - 1 && (
+              <div className="hidden lg:block absolute top-9 right-0 translate-x-1/2 z-10">
+                <ArrowRight className="w-4 h-4 text-primary-500/50" />
+              </div>
+            )}
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-500 flex-shrink-0">
+                {s.icon}
+              </div>
+              <span className="text-4xl font-black text-surface-border leading-none select-none">{s.step}</span>
+            </div>
+            <div>
+              <p className="text-fg font-black text-sm mb-1.5">{s.title}</p>
+              <p className="text-fg-muted text-xs leading-relaxed">{s.desc}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   PRODUCT FAQs
+───────────────────────────────────────────── */
+function ProductFAQ() {
+  const [openIdx, setOpenIdx] = useState(null);
+
+  const faqs = [
+    {
+      q: 'What materials are used in 3D printing?',
+      a: 'We use premium-grade filaments including PLA, PETG, ABS, and TPU — each chosen based on product requirements. All materials are safe, durable, and quality-certified.'
+    },
+    {
+      q: 'How long does delivery take?',
+      a: 'Orders are dispatched within 24 hours (or 3-4 days during peak seasons). Estimated delivery is 6-7 business days across India.'
+    },
+    {
+      q: 'Is the product fragile? How is it packed?',
+      a: 'All products are individually inspected and bubble-wrapped in sturdy boxes. We offer 100% breakage insurance — if it arrives damaged, we replace it free of charge.'
+    },
+    {
+      q: 'Can I customise this product?',
+      a: 'Yes! We offer custom colours, sizes, and design modifications. Use the Custom Order page or contact us directly to discuss your requirements.'
+    },
+    {
+      q: 'Do you offer returns or replacements?',
+      a: 'Returns and exchanges are accepted within 48 hours of delivery for defective or incorrectly fulfilled orders. Contact our support team with photos of the issue.'
+    },
+    {
+      q: 'Are the products food-safe or child-safe?',
+      a: 'Our PLA products are generally non-toxic and safe for display. However, 3D printed items are not certified food-safe unless specified. Keep small parts away from young children.'
+    },
+  ];
+
+  return (
+    <div className="mt-20 pt-12 border-t border-surface-border/50 mb-4">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="h-px w-8 bg-primary-500" />
+        <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">FAQs</span>
+      </div>
+      <h2 className="text-2xl font-black text-fg mb-8">Frequently Asked Questions</h2>
+      <div className="max-w-3xl divide-y divide-surface-border border border-surface-border rounded-sm overflow-hidden">
+        {faqs.map((faq, i) => (
+          <div key={i}>
+            <button
+              type="button"
+              onClick={() => setOpenIdx(openIdx === i ? null : i)}
+              className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-surface-muted/40 transition-colors duration-200 group"
+            >
+              <span className="text-fg font-bold text-sm group-hover:text-primary-500 transition-colors leading-snug">{faq.q}</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-sm border border-surface-border flex items-center justify-center text-fg-muted group-hover:border-primary-500/40 group-hover:text-primary-500 transition-all">
+                {openIdx === i ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </span>
+            </button>
+            <AnimatePresence initial={false}>
+              {openIdx === i && (
+                <motion.div
+                  key="answer"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-6 pb-5 pt-1">
+                    <div className="h-px w-full bg-surface-border/60 mb-4" />
+                    <p className="text-fg-muted text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

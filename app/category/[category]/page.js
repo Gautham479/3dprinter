@@ -7,15 +7,38 @@ import CartDrawer from '@/components/CartDrawer';
 import ProductsGrid from '@/components/ProductsGrid';
 import { motion } from 'framer-motion';
 
+const normalizeCategoryName = (rawName) => {
+  if (!rawName) return 'Products';
+  const decoded = decodeURIComponent(rawName).trim();
+  const lower = decoded.toLowerCase().replace(/-/g, ' ');
+  if (lower === 'idols' || lower === 'idol') {
+    return 'Idols';
+  }
+  if (lower === 'action figures' || lower === 'action figure' || lower === 'action-figures') {
+    return 'Action Figures';
+  }
+  if (lower.includes('action') && lower.includes('idol')) {
+    return 'Action Figures & Idols';
+  }
+  if (lower.includes('kit card') || lower.includes('kit-card') || lower.includes('playable')) {
+    return 'Playables';
+  }
+  if (lower.includes('organizer') || lower.includes('daily accessories')) {
+    return 'Organizers';
+  }
+  if (lower.includes('home decor') || lower.includes('home-decor')) {
+    return 'Home Decor';
+  }
+  return decoded;
+};
+
 const getCategoryTagline = (type) => {
   if (!type) return null;
   const t = type.toLowerCase();
-  if (t.includes('kit card')) return "Not just a card — a masterpiece in your hands.";
-  if (t.includes('playable')) return "Crafted for curious minds.";
-  if (t.includes('collect') || t.includes('idol')) return "Crafted to be admired, shaped with precision.";
+  if (t.includes('action') || t.includes('idol')) return "Collectible action figures, spiritual idols, and anime-inspired creations.";
+  if (t.includes('playable') || t.includes('kit card')) return "Interactive Kit Cards and build-it-yourself models designed for creative assembly.";
   if (t.includes('home decor')) return "Where style meets everyday function.";
-  if (t.includes('desk') || t.includes('organizer') || t.includes('accessori')) return "Designed for your space, engineered for purpose.";
-  if (t.includes('action')) return "Dynamic heroes, engineered in every detail.";
+  if (t.includes('organizer')) return "Functional desk organizers, key holders, and everyday home accessories.";
   return `Explore our premium selection of ${type.toLowerCase()}.`;
 };
 
@@ -23,12 +46,12 @@ function CategoryHero({ category }) {
   const safeCategory = category || 'Category';
   
   const categoryImageMap = {
+    'action figures & idols': '/photos/action 1.jpeg',
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'organizers': '/photos/daily acc .jpeg',
-    'playables': '/photos/playables.jpeg',
-    'collectibles': '/pics/collectibles.png',
+    'playables': '/pics/kit_cards.png',
     'home decor': '/pics/home decor.webp',
     'kit cards': '/pics/kit_cards.png',
   };
@@ -40,8 +63,8 @@ function CategoryHero({ category }) {
 
   const getObjectPosition = (category) => {
     const cat = category.toLowerCase();
-    if (cat.includes('collectible')) return 'center 20%';
-    if (cat.includes('playable')) return 'bottom';
+    if (cat.includes('idol')) return 'center 20%';
+    if (cat.includes('playable')) return 'center';
     if (cat.includes('action figure')) return 'top';
     return 'center';
   };
@@ -77,7 +100,7 @@ function CategoryHero({ category }) {
 }
 
 function CategoryContent({ categoryName }) {
-  const decodedCategory = decodeURIComponent(categoryName);
+  const decodedCategory = normalizeCategoryName(categoryName);
 
   return (
     <div className="w-full flex flex-col items-center">

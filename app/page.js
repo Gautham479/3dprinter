@@ -7,7 +7,6 @@ import HeroSlider from '@/components/HeroSlider';
 import Hero from '@/components/Hero';
 import Categories from '@/components/Categories';
 import StorefrontGrid from '@/components/StorefrontGrid';
-import FuturisticFeatureGrid from '@/components/FuturisticFeatureGrid';
 import ProductsGrid from '@/components/ProductsGrid';
 import Materials from '@/components/Materials';
 import HowItWorks from '@/components/HowItWorks';
@@ -64,9 +63,6 @@ export default function Home() {
 
       {/* Amazon-Style Storefront Section */}
       <StorefrontGrid />
-
-      {/* Futuristic E-Commerce Feature Grid */}
-      <FuturisticFeatureGrid />
 
       {/* Additional Added Sections */}
       <Materials />

@@ -189,10 +189,40 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
   const activeType = searchQuery.trim() ? 'All' : selectedType;
 
   const filteredProducts = (localProducts || []).filter((product) => {
-    // Treat 'Idols' as an alias for 'Action Figures' (merged categories)
-    const productTags = (product.tags && product.tags.length > 0 ? product.tags : [product.type])
-      .map(t => t === 'Idols' ? 'Action Figures' : t);
-    const tagMatches = activeType === 'All' || productTags.includes(activeType);
+    const rawTags = (product.tags && product.tags.length > 0 ? product.tags : [product.type]) || [];
+    const productType = product.type || '';
+
+    let tagMatches = false;
+    if (activeType === 'All') {
+      tagMatches = true;
+    } else if (activeType === 'Action Figures') {
+      tagMatches = rawTags.some(t => t.toLowerCase().includes('action figure') || t.toLowerCase() === 'action figures') || productType.toLowerCase().includes('action');
+    } else if (activeType === 'Idols') {
+      tagMatches = rawTags.some(t => t.toLowerCase().includes('idol')) || productType.toLowerCase().includes('idol');
+    } else if (activeType === 'Action Figures & Idols') {
+      tagMatches = rawTags.some(t => {
+        const lower = t.toLowerCase();
+        return lower.includes('action') || lower.includes('idol');
+      }) || productType.toLowerCase().includes('action') || productType.toLowerCase().includes('idol');
+    } else if (activeType === 'Playables') {
+      tagMatches = rawTags.some(t => {
+        const lower = t.toLowerCase();
+        return lower.includes('playable') || lower.includes('kit card');
+      }) || productType.toLowerCase().includes('playable') || productType.toLowerCase().includes('kit card');
+    } else if (activeType === 'Organizers') {
+      tagMatches = rawTags.some(t => {
+        const lower = t.toLowerCase();
+        return lower.includes('organizer') || lower.includes('daily');
+      }) || productType.toLowerCase().includes('organizer') || productType.toLowerCase().includes('daily');
+    } else if (activeType === 'Home Decor') {
+      tagMatches = rawTags.some(t => {
+        const lower = t.toLowerCase();
+        return lower.includes('home') || lower.includes('decor');
+      }) || productType.toLowerCase().includes('home') || productType.toLowerCase().includes('decor');
+    } else {
+      tagMatches = rawTags.includes(activeType) || productType === activeType;
+    }
+
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const queryMatches =
       normalizedQuery.length === 0 ||
@@ -200,6 +230,7 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
       (product.fullDescription?.toLowerCase() || '').includes(normalizedQuery) ||
       (product.tags || []).some(t => t.toLowerCase().includes(normalizedQuery)) ||
       product.type.toLowerCase().includes(normalizedQuery);
+
     return tagMatches && queryMatches;
   });
 

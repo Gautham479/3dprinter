@@ -185,32 +185,6 @@ export default function FuturisticFeatureGrid() {
             </div>
           </div>
 
-          {/* Card 3: Minimalist Horizontal Glass Strip (Spans 12 cols) */}
-          <div className="md:col-span-12 group relative rounded-[36px] bg-gradient-to-r from-white/[0.05] via-white/[0.03] to-white/[0.05] backdrop-blur-2xl border border-white/15 p-8 sm:p-10 shadow-[0_25px_80px_rgba(0,0,0,0.6)] overflow-hidden transition-all duration-500 hover:border-blue-400/40">
-            <div className="flex flex-wrap items-center justify-between gap-6 relative z-10">
-              
-              {/* Left Icons Cluster */}
-              <div className="flex items-center gap-4">
-                <div className="p-3.5 rounded-2xl bg-blue-500/15 border border-blue-400/30 text-blue-400">
-                  <Compass className="w-6 h-6" />
-                </div>
-                <div className="p-3.5 rounded-2xl bg-indigo-500/15 border border-indigo-400/30 text-indigo-300">
-                  <Cpu className="w-6 h-6" />
-                </div>
-                <div className="p-3.5 rounded-2xl bg-purple-500/15 border border-purple-400/30 text-purple-300">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-              </div>
-
-              {/* Right Decorative Line Art Geometry */}
-              <div className="flex items-center gap-3">
-                <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/30 to-blue-400" />
-                <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping" />
-              </div>
-
-            </div>
-          </div>
-
         </div>
 
       </div>

@@ -27,10 +27,34 @@ function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
 
 export default function Categories() {
   const categories = [
-    { title: "Action Figures",    desc: "Collectible idols, dynamic heroes & articulated models",  image: "/photos/action 1.jpeg",       link: `/category/${encodeURIComponent('Action Figures')}`,    position: "object-top" },
-    { title: "Organizers",   desc: "Everyday lifestyle essentials and gadgets",      image: "/photos/daily acc .jpeg",     link: `/category/${encodeURIComponent('Organizers')}`,   position: "object-center" },
-    { title: "Playables",         desc: "Interactive toys and engaging models",           image: "/photos/playables.jpeg",      link: `/category/${encodeURIComponent('Playables')}`,         position: "object-bottom" },
-    { title: "Collectibles",      desc: "Crafted to be admired, shaped with precision",    image: "/photos/idols.jpeg",          link: `/category/${encodeURIComponent('Collectibles')}`,      position: "object-center" },
+    { 
+      title: "Action Figures", 
+      desc: "Collectible action figures, articulated models, and anime-inspired creations.", 
+      image: "/photos/action 1.jpeg", 
+      link: `/category/${encodeURIComponent('Action Figures')}`, 
+      position: "object-top" 
+    },
+    { 
+      title: "Idols", 
+      desc: "Premium 3D printed idols and spiritual sculptures crafted with exceptional detail.", 
+      image: "/photos/idols.jpeg", 
+      link: `/category/${encodeURIComponent('Idols')}`, 
+      position: "object-center" 
+    },
+    { 
+      title: "Organizers", 
+      desc: "Functional desk organizers, key holders, and everyday home accessories.", 
+      image: "/photos/daily acc .jpeg", 
+      link: `/category/${encodeURIComponent('Organizers')}`, 
+      position: "object-center" 
+    },
+    { 
+      title: "Playables", 
+      desc: "Interactive Kit Cards and build-it-yourself models designed for creative assembly.", 
+      image: "/pics/kit_cards.png", 
+      link: `/category/${encodeURIComponent('Playables')}`, 
+      position: "object-center" 
+    },
   ];
 
   return (

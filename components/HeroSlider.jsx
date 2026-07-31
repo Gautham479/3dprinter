@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, 
@@ -106,27 +106,11 @@ export default function HeroSlider() {
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    setProgress(0);
-    const interval = setInterval(() => {
-      setProgress((prev) => (prev >= 100 ? 0 : prev + 0.333));
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [activeIndex]);
 
   return (
     <section className="relative w-full bg-gray-50 hero-slider-container">
       
-      {/* Top Autoplay Progress Bar */}
-      <div className="absolute top-0 left-0 w-full h-1 z-40 bg-gray-200/60">
-        <div 
-          className="h-full bg-gray-900 transition-all duration-100 ease-linear"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+
 
       <div className="relative w-full h-[85vh] min-h-[620px] max-h-[900px]">
         <Swiper

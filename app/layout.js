@@ -1,6 +1,5 @@
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
-import NavigationLoader from "@/components/NavigationLoader";
 import Script from "next/script";
 
 const outfit = Outfit({
@@ -35,7 +34,6 @@ export default function RootLayout({ children }) {
             __html: `try{if(localStorage.getItem('mahashri-theme')==='dark'||(!('mahashri-theme' in localStorage)&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(_){}`,
           }}
         />
-        <NavigationLoader />
         {children}
       </body>
     </html>

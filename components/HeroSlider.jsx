@@ -31,7 +31,7 @@ const SLIDES = [
     isFullImage: true,
     isWhiteBtn: true,
     shopBtn: 'Shop Now',
-    shopLink: '/home-decor',
+    shopLink: '/category/Home%20Decor',
     images: [
       { url: '/pics/home_decor_hero_wide.png', label: 'Mahashri Labs - Timeless Design for a Greener Tomorrow' }
     ]
@@ -41,7 +41,7 @@ const SLIDES = [
     isFullImage: true,
     isWhiteBtn: true,
     shopBtn: 'Shop Now',
-    shopLink: '/collectibles',
+    shopLink: '/category/Collectibles',
     images: [
       { url: '/pics/collectibles_banner_wide.jpg', label: 'Crafted for Beautiful Spaces - Mahashri Lab Collectibles' }
     ]

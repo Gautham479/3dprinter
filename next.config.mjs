@@ -11,6 +11,16 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/home-decor',
+        destination: '/category/Home%20Decor',
+        permanent: true,
+      },
+      {
+        source: '/collectibles',
+        destination: '/category/Collectibles',
+        permanent: true,
+      },
+      {
         source: '/products/idols',
         destination: '/category/Idols',
         permanent: true,

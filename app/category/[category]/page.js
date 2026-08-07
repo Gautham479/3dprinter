@@ -29,12 +29,16 @@ const normalizeCategoryName = (rawName) => {
   if (lower.includes('home decor') || lower.includes('home-decor')) {
     return 'Home Decor';
   }
+  if (lower.includes('collectible') || lower.includes('collectibles')) {
+    return 'Collectibles';
+  }
   return decoded;
 };
 
 const getCategoryTagline = (type) => {
   if (!type) return null;
   const t = type.toLowerCase();
+  if (t.includes('collectible')) return "Highly detailed 3D printed action figures, superhero models, and gaming display items crafted for collectors.";
   if (t.includes('action') || t.includes('idol')) return "Collectible action figures, spiritual idols, and anime-inspired creations.";
   if (t.includes('playable') || t.includes('kit card')) return "Interactive Kit Cards and build-it-yourself models designed for creative assembly.";
   if (t.includes('home decor')) return "Where style meets everyday function.";
@@ -46,13 +50,15 @@ function CategoryHero({ category }) {
   const safeCategory = category || 'Category';
   
   const categoryImageMap = {
+    'collectibles': '/photos/action 1.jpeg',
     'action figures & idols': '/photos/action 1.jpeg',
+    'idols & action figures': '/photos/action 1.jpeg',
     'idols': '/photos/idols.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'organizers': '/photos/daily acc .jpeg',
     'playables': '/pics/kit_cards.png',
-    'home decor': '/pics/home_decor_banner.jpg',
+    'home decor': '/pics/home decor.webp',
     'kit cards': '/pics/kit_cards.png',
   };
 

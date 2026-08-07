@@ -257,4 +257,59 @@
   animation: buttonShimmer 4s ease-in-out infinite;
 }
 
+/* ── HERO SLIDE 1 — FADE IN ANIMATION ── */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── HERO SHOP BUTTON (shared base) ── */
+.hero-shop-btn {
+  transition: transform 0.22s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease, background 0.25s ease;
+  will-change: transform;
+}
+
+.hero-shop-btn:hover {
+  transform: scale(1.045) translateY(-2px);
+}
+
+.hero-shop-btn:active {
+  transform: scale(0.97);
+}
+
+/* red variant hover */
+.hero-shop-btn[style*='#ff2244']:hover,
+.hero-shop-btn[style*='#e60023']:hover {
+  box-shadow: 0 12px 36px rgba(230,0,35,0.5), 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+/* white variant hover */
+.hero-shop-btn[style*='rgba(255,255,255,0.92']:hover {
+  background: rgba(255,255,255,1) !important;
+  box-shadow: 0 20px 56px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.2) !important;
+}
+
+/* ── PULSING HALO RINGS ── */
+@keyframes heroPulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(230,0,35,0.55); opacity: 1; }
+  70%  { box-shadow: 0 0 0 24px rgba(230,0,35,0); opacity: 0.6; }
+  100% { box-shadow: 0 0 0 0 rgba(230,0,35,0); opacity: 0; }
+}
+
+@keyframes heroWhitePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.6); opacity: 1; }
+  70%  { box-shadow: 0 0 0 24px rgba(255,255,255,0); opacity: 0.5; }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); opacity: 0; }
+}
+
+.hero-pulse-ring {
+  animation: heroPulseRing 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
 

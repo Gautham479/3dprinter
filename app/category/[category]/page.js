@@ -52,7 +52,7 @@ function CategoryHero({ category }) {
     'daily accessories': '/photos/daily acc .jpeg',
     'organizers': '/photos/daily acc .jpeg',
     'playables': '/pics/kit_cards.png',
-    'home decor': '/pics/home decor.webp',
+    'home decor': '/pics/home_decor_banner.jpg',
     'kit cards': '/pics/kit_cards.png',
   };
 

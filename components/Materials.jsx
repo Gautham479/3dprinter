@@ -86,20 +86,34 @@ export default function Materials() {
 
       {/* Tab selectors */}
       <div className="flex border-b border-surface-border">
-        {materials.map((m, i) => (
-          <button
-            key={i}
-            onClick={() => setActive(i)}
-            className="flex-1 py-5 px-4 text-xs font-black uppercase tracking-[0.16em] border-r border-surface-border last:border-r-0 transition-all duration-200 relative"
-            style={{
-              background: active === i ? col.color : 'transparent',
-              color: active === i ? '#fff' : 'var(--app-fg-muted)',
-            }}
-          >
-            {m.name}
-            <span className="block text-[9px] tracking-wider mt-0.5 opacity-70 normal-case font-bold">{m.subtitle}</span>
-          </button>
-        ))}
+        {materials.map((m, i) => {
+          const matCol = MAT[m.key];
+          const isActive = active === i;
+          return (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className="flex-1 py-5 px-4 text-xs font-black uppercase tracking-[0.16em] border-r border-surface-border last:border-r-0 transition-all duration-200 relative"
+              style={{
+                background: isActive ? matCol.color : 'var(--app-surface-muted)',
+                color: isActive ? '#fff' : 'var(--app-fg)',
+                borderTop: isActive ? 'none' : `3px solid ${matCol.color}`,
+              }}
+            >
+              {/* Active: bold bottom indicator */}
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/30" />
+              )}
+              {m.name}
+              <span
+                className="block text-[9px] tracking-wider mt-0.5 normal-case font-bold"
+                style={{ opacity: isActive ? 0.85 : 0.65 }}
+              >
+                {m.subtitle}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Active panel: image left + points right */}

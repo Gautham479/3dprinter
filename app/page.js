@@ -58,11 +58,23 @@ export default function Home() {
       {/* Hero Section */}
       <Hero />
 
+      {/* ── SECTION DIVIDER: Hero → Collections ── */}
+      <div className="w-full flex flex-col items-center" aria-hidden="true">
+        <div className="w-full h-[3px]" style={{ background: 'linear-gradient(90deg, transparent 0%, #C2A56D 20%, #C2A56D 80%, transparent 100%)' }} />
+        <div className="w-full h-px bg-surface-border" />
+      </div>
+
       {/* Categories Section */}
       <Categories />
 
       {/* Amazon-Style Storefront Section */}
       <StorefrontGrid />
+
+      {/* ── SECTION DIVIDER: Featured Products → Materials Guide ── */}
+      <div className="w-full flex flex-col items-center" aria-hidden="true">
+        <div className="w-full h-[3px]" style={{ background: 'linear-gradient(90deg, transparent 0%, #3B82F6 20%, #C2A56D 50%, #3B82F6 80%, transparent 100%)' }} />
+        <div className="w-full h-px bg-surface-border" />
+      </div>
 
       {/* Additional Added Sections */}
       <Materials />

@@ -28,77 +28,24 @@ import 'swiper/css/pagination';
 const SLIDES = [
   {
     id: 'mahashrilabs',
-    brand: 'MahashriLabs',
-    badge: '⚡ PREMIUM 3D PRINTING STUDIO',
-    headlineLine1: 'Bringing Ideas',
-    headlineLine2: 'Into Reality',
-    subtitle: 'Custom manufacturing, premium collectibles, and innovative 3D printed creations designed with precision.',
-    primaryBtn: 'Explore Collection',
-    primaryLink: '/products',
-    secondaryBtn: 'How It Works',
-    secondaryLink: '/#how-it-works',
-    trustIndicators: [
-      { title: 'Custom 3D Printing', subtitle: 'Made to your specifications', icon: Layers },
-      { title: 'Premium Materials', subtitle: 'PLA • PETG • ABS • TPU', icon: Box },
-      { title: 'High Precision', subtitle: 'Detailed & reliable prints', icon: CheckCircle2 },
-    ],
+    isFullImage: true,
+    isWhiteBtn: true,
     shopBtn: 'Shop Now',
-    shopLink: '/category/Home%20Decor',
+    shopLink: '/home-decor',
     images: [
-      { url: '/pics/home decor.webp', label: 'Home Décor' },
-      { url: '/pics/desk_organizers.png', label: 'Minimal Desk' },
-      { url: '/pics/collectibles.png', label: 'Precision Print' },
-      { url: '/photos/daily acc .jpeg', label: 'Lifestyle Setup' }
+      { url: '/pics/home_decor_hero_wide.png', label: 'Mahashri Labs - Timeless Design for a Greener Tomorrow' }
     ]
   },
   {
     id: 'collectibles',
-    brand: 'MahashriLabs',
-    badge: '🔥 EXCLUSIVE COLLECTIBLE SERIES',
-    headlineLine1: 'Design.',
-    headlineLine2: 'Print. Create.',
-    subtitle: 'Highly detailed 3D printed action figures, superhero models, and gaming display items crafted for true collectors.',
-    primaryBtn: 'Browse Collectibles',
-    primaryLink: '/products',
-    secondaryBtn: 'View All',
-    secondaryLink: '/products',
-    trustIndicators: [
-      { title: 'Detailed Finishing', subtitle: 'Ultra-smooth surface detail', icon: Sparkles },
-      { title: 'Custom Designs', subtitle: 'From concept to reality', icon: Target },
-      { title: 'Safe Packaging', subtitle: 'Protective shipping pan-India', icon: ShieldCheck },
-    ],
+    isFullImage: true,
+    isWhiteBtn: true,
     shopBtn: 'Shop Now',
-    shopLink: '/category/Action%20Figures%20%26%20Idols',
+    shopLink: '/collectibles',
     images: [
-      { url: '/pics/collectibles.png', label: 'Collectibles' },
-      { url: '/photos/action 1.jpeg', label: 'Anime Collector' },
-      { url: '/photos/action 2.jpeg', label: 'Superhero Figure' },
-      { url: '/photos/idols.jpeg', label: 'Fantasy Model' }
+      { url: '/pics/collectibles_banner_wide.jpg', label: 'Crafted for Beautiful Spaces - Mahashri Lab Collectibles' }
     ]
   },
-  {
-    id: 'everyday-innovation',
-    brand: 'MahashriLabs',
-    badge: '✨ CREATIVE LIFESTYLE CATALOGUE',
-    headlineLine1: 'Everyday',
-    headlineLine2: 'Innovation',
-    subtitle: 'Functional desk accessories, elegant home décor items, and interactive kit cards designed to elevate modern spaces.',
-    primaryBtn: 'Explore Collection',
-    primaryLink: '/products',
-    secondaryBtn: 'View Catalogue',
-    secondaryLink: '/products',
-    trustIndicators: [
-      { title: 'High Quality Prints', subtitle: 'Professional finish', icon: CheckCircle2 },
-      { title: 'Eco-Friendly PLA', subtitle: 'Sustainable material options', icon: Sparkles },
-      { title: 'Made On Demand', subtitle: 'Printed fresh when you order', icon: Clock },
-    ],
-    images: [
-      { url: '/pics/desk_organizers.png', label: 'Desk Organizers' },
-      { url: '/pics/home decor.webp', label: 'Home Décor' },
-      { url: '/pics/kit_cards.png', label: 'Kit Cards' },
-      { url: '/pics/playables.jpg', label: 'Playables' }
-    ]
-  }
 ];
 
 export default function HeroSlider() {
@@ -110,7 +57,6 @@ export default function HeroSlider() {
   return (
     <section className="relative w-full bg-gray-50 hero-slider-container">
       
-
 
       <div className="relative w-full h-[85vh] min-h-[620px] max-h-[900px]">
         <Swiper
@@ -145,6 +91,129 @@ export default function HeroSlider() {
         >
           {SLIDES.map((slide, index) => {
             const isActive = activeIndex === index;
+
+            if (slide.isFullImage) {
+              return (
+                <SwiperSlide key={slide.id} className="w-full h-full select-none relative overflow-hidden">
+                  {/* ── BLURRED BACKGROUND FILL (prevents empty letterbox bars) ── */}
+                  <div
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                      backgroundImage: `url(${slide.images[0].url})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      filter: 'blur(28px) brightness(0.55) saturate(1.3)',
+                      transform: 'scale(1.12)',
+                    }}
+                    aria-hidden="true"
+                  />
+
+                  {/* ── SUBTLE VIGNETTE for button legibility ── */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent z-[1]" aria-hidden="true" />
+
+                  {/* ── MAIN IMAGE — object-contain, full visibility, hover scale ── */}
+                  <div className="absolute inset-0 flex items-center justify-center z-[2]">
+                    <img
+                      src={slide.images[0].url}
+                      alt={slide.images[0].label}
+                      loading="eager"
+                      className="transition-transform duration-[4000ms] ease-out"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        transform: isActive ? 'scale(1.03)' : 'scale(1)',
+                      }}
+                    />
+                  </div>
+
+                  {/* ── BOTTOM-CENTER SHOP NOW BUTTON ── */}
+                  <div
+                    className="absolute inset-x-0 bottom-0 z-[10] flex justify-center pb-10 sm:pb-14"
+                    style={{ animation: isActive ? 'heroFadeIn 1s cubic-bezier(0.16,1,0.3,1) 0.2s both' : 'none' }}
+                  >
+                    {/* Pulsing halo ring */}
+                    <span
+                      className="absolute bottom-10 sm:bottom-14 w-44 h-14 rounded-full pointer-events-none"
+                      style={{
+                        animation: isActive ? (slide.isWhiteBtn ? 'heroWhitePulse 2.4s ease-in-out infinite' : 'heroPulseRing 2.2s cubic-bezier(0.25,0.46,0.45,0.94) infinite') : 'none'
+                      }}
+                      aria-hidden="true"
+                    />
+
+                    <Link
+                      href={slide.shopLink}
+                      id={`hero-slide-${slide.id}-shop-now`}
+                      className="hero-shop-btn group relative overflow-hidden inline-flex items-center gap-3 font-black uppercase rounded-full"
+                      style={slide.isWhiteBtn ? {
+                        /* ── WHITE BUTTON ── */
+                        padding: 'clamp(13px, 1.8vw, 18px) clamp(28px, 4.5vw, 52px)',
+                        fontSize: 'clamp(0.72rem, 1.3vw, 0.95rem)',
+                        background: 'rgba(255,255,255,0.92)',
+                        color: '#1a1a1a',
+                        letterSpacing: '0.2em',
+                        boxShadow: '0 16px 48px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                        border: '1.5px solid rgba(255,255,255,0.6)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                      } : {
+                        /* ── RED BUTTON ── */
+                        padding: 'clamp(13px, 1.8vw, 18px) clamp(28px, 4.5vw, 52px)',
+                        fontSize: 'clamp(0.72rem, 1.3vw, 0.95rem)',
+                        background: 'linear-gradient(135deg, #ff2244 0%, #e60023 45%, #b8001b 100%)',
+                        color: '#ffffff',
+                        letterSpacing: '0.2em',
+                        boxShadow: '0 20px 60px rgba(230,0,35,0.55), 0 6px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25)',
+                        border: '1.5px solid rgba(255,255,255,0.18)',
+                        backdropFilter: 'blur(6px)',
+                      }}
+                    >
+                      {/* Shimmer sweep on hover */}
+                      <span
+                        className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
+                        style={{
+                          background: slide.isWhiteBtn
+                            ? 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.06) 50%, transparent 100%)'
+                            : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%)',
+                          borderRadius: 'inherit',
+                        }}
+                        aria-hidden="true"
+                      />
+
+                      {/* Sparkle prefix */}
+                      <Sparkles
+                        className="relative z-10 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                        style={{
+                          width: 'clamp(13px, 1.3vw, 16px)',
+                          height: 'clamp(13px, 1.3vw, 16px)',
+                          color: slide.isWhiteBtn ? '#b8860b' : '#ffffff',
+                        }}
+                      />
+
+                      <span className="relative z-10 tracking-[0.22em]">Shop Now</span>
+
+                      {/* Arrow in frosted circle */}
+                      <span
+                        className="relative z-10 flex items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110"
+                        style={{
+                          width: 'clamp(26px, 2.8vw, 34px)',
+                          height: 'clamp(26px, 2.8vw, 34px)',
+                          flexShrink: 0,
+                          background: slide.isWhiteBtn ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.15)',
+                        }}
+                      >
+                        <ArrowRight
+                          style={{ width: 'clamp(12px, 1.3vw, 16px)', height: 'clamp(12px, 1.3vw, 16px)' }}
+                          className="transition-transform duration-300 group-hover:translate-x-0.5"
+                        />
+                      </span>
+                    </Link>
+                  </div>
+
+                </SwiperSlide>
+              );
+            }
 
             return (
               <SwiperSlide key={slide.id} className="w-full h-full select-none bg-white">
@@ -237,16 +306,18 @@ export default function HeroSlider() {
 
                   {/* RIGHT 50%: Hero Image Container */}
                   <div className="w-full h-[350px] sm:h-[420px] lg:h-full relative overflow-hidden bg-neutral-950 group">
-                    <img
-                      src={slide.images[0].url}
-                      alt={slide.images[0].label}
-                      loading="lazy"
-                      className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${
-                        isActive ? 'scale-105' : 'scale-100'
-                      }`}
-                    />
-                    {/* Bottom gradient for button legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+                    <Link href={slide.shopLink || '/category/Home%20Decor'} className="block w-full h-full">
+                      <img
+                        src={slide.images[0].url}
+                        alt={slide.images[0].label}
+                        loading="lazy"
+                        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[6000ms] ease-out ${
+                          isActive ? 'scale-105' : 'scale-100'
+                        }`}
+                      />
+                      {/* Bottom gradient for button legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+                    </Link>
 
                     {/* Shop Now Button — premium centred overlay */}
                     {slide.shopBtn && (

@@ -35,7 +35,7 @@ function Ticker() {
   const items = [
     'STL Upload', 'OBJ Upload', 'PLA', 'PETG', 'ABS', 'TPU',
     'Same-Day Quote', 'Precision Prints', 'ISO Certified', '99.9% Success',
-    'Pan-India Delivery', 'Custom Orders', 'Engineering Grade',
+    'Delivered Across India', 'Custom Orders', 'Engineering Grade',
   ];
   const doubled = [...items, ...items];
   return (
@@ -146,7 +146,7 @@ export default function Hero() {
           <Reveal delay={0.4} className="mt-10 mb-10">
             <div className="flex flex-wrap gap-3">
               <StatPill icon={Zap}     value="24hr"  label="Quote Turnaround" />
-              <StatPill icon={Clock}   value="3-7d"  label="Pan-India Shipping" />
+              <StatPill icon={Clock}   value="3-7d"  label="Delivered Across India" />
             </div>
           </Reveal>
         </div>

@@ -71,11 +71,7 @@ export default function Categories() {
         <Reveal delay={0.1} direction="left">
           <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Our Collections</h2>
         </Reveal>
-        <Reveal delay={0.15} direction="left" className="hidden md:block">
-          <Link href="/products" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-fg-muted hover:text-fg transition-colors border-b border-transparent hover:border-fg pb-0.5">
-            All Products <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </Reveal>
+
       </div>
 
       {/* 2-column grid */}
@@ -125,15 +121,7 @@ export default function Categories() {
         ))}
       </div>
 
-      {/* Bottom CTA bar */}
-      <div className="flex items-center justify-center px-6 py-8 border-t border-surface-border">
-        <Reveal>
-          <Link href="/products" className="btn-primary">
-            Explore All Products
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </Reveal>
-      </div>
+
     </section>
   );
 }

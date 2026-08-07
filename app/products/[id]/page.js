@@ -346,10 +346,11 @@ export default function ProductPage() {
           </div>
 
           {/* Right: Details */}
-          <div className="flex flex-col justify-between">
-            <div>
-              {/* Type badge */}
-              <div className="flex items-center gap-3 mb-4">
+          <div className="flex flex-col gap-0">
+
+            {/* Type badge + Name */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
                 <span className="px-3 py-1 bg-primary-500/10 text-fg rounded-sm text-sm font-black border border-primary-500/20">
                   {product.type}
                 </span>
@@ -359,42 +360,144 @@ export default function ProductPage() {
                   </span>
                 )}
               </div>
+              <h1 className="text-4xl font-black text-fg">{product.name}</h1>
+            </div>
 
-              <h1 className="text-4xl font-black text-fg mb-3">{product.name}</h1>
+            {/* ── 1. PRICE ── */}
+            <div className="mb-4 pb-4 border-b border-surface-border">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-1.5 h-4 rounded-sm" style={{ background: '#C2A56D' }} />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: '#C2A56D' }}>Price</span>
+              </div>
+              <p className="text-5xl font-black text-fg">₹{product.price}</p>
+            </div>
 
-              <div className="mb-6">
-                <p className="text-5xl font-black text-fg mb-4">₹{product.price}</p>
-                <div className="flex flex-col gap-2 p-3.5 rounded-sm bg-primary-500/10 border border-primary-500/20">
-                  <div className="flex items-start gap-2.5">
-                    <Truck className="w-4 h-4 text-fg mt-0.5 flex-shrink-0" />
-                    <p className="text-xs sm:text-sm text-fg font-bold">Shipping charges additional at checkout</p>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <Package className="w-4 h-4 text-fg mt-0.5 flex-shrink-0" />
-                    <p className="text-xs sm:text-sm text-fg font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
-                  </div>
+            {/* ── 2. SHIPMENT DETAIL ── */}
+            <div className="mb-4 pb-4 border-b border-surface-border">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-1.5 h-4 rounded-sm bg-blue-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">Shipment Detail</span>
+              </div>
+              <div className="flex flex-col gap-2 p-3.5 rounded-sm bg-blue-500/8 border border-blue-500/20">
+                <div className="flex items-start gap-2.5">
+                  <Truck className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs sm:text-sm text-fg font-bold">Shipping charges additional at checkout</p>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <Package className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs sm:text-sm text-fg font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
                 </div>
               </div>
+            </div>
 
-              <p className="text-fg-muted text-base mb-6 leading-relaxed">{product.fullDescription}</p>
+            {/* ── 3. COLOUR OPTIONS ── */}
+            <div className="mb-4 pb-4 border-b border-surface-border">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-1.5 h-4 rounded-sm bg-purple-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500">Colour Options</span>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-2"
+              >
+                <div className="flex gap-2 flex-wrap">
+                  {activeColors.map((color) => (
+                    <button
+                      key={color.name}
+                      type="button"
+                      title={color.name}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSingleColor(color.name);
+                      }}
+                      className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
+                        ? 'border-purple-500 scale-110 shadow-md'
+                        : 'border-surface-border hover:border-purple-400'
+                        }`}
+                      style={{ backgroundColor: color.hex }}
+                    />
+                  ))}
+                </div>
+                <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
+              </motion.div>
+            </div>
 
-              {product.note && (
-                <div className="mb-8 flex items-start gap-3 px-4 py-3.5 rounded-sm bg-amber-500/10 border border-amber-500/25">
+            {/* ── 4. ADD TO CART ── */}
+            <div className="mb-4 pb-4 border-b border-surface-border">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-1.5 h-4 rounded-sm bg-green-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Add to Cart</span>
+              </div>
+              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-4 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-green-500/60" />
+                {product.inStock && (
+                  <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-4 rounded-sm bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-black">
+                    <motion.span
+                      className="w-2 h-2 rounded-sm bg-green-500"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                    In Stock
+                  </div>
+                )}
+                <motion.button
+                  disabled={!product.inStock}
+                  onClick={handleAddToCart}
+                  whileHover={product.inStock ? { scale: 1.02 } : {}}
+                  whileTap={product.inStock ? { scale: 0.98 } : {}}
+                  className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
+                    ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
+                    : addedToCart
+                      ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
+                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
+                    }`}
+                >
+                  {!product.inStock ? (
+                    'Out of Stock'
+                  ) : addedToCart ? (
+                    <>
+                      <Check className="w-5 h-5" />
+                      Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5" />
+                      Add to Cart
+                    </>
+                  )}
+                </motion.button>
+              </div>
+            </div>
+
+            {/* ── 5. NOTE ── */}
+            {product.note && (
+              <div className="mb-4 pb-4 border-b border-surface-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-1.5 h-4 rounded-sm bg-amber-500" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">Note</span>
+                </div>
+                <div className="flex items-start gap-3 px-4 py-3.5 rounded-sm bg-amber-500/10 border border-amber-500/25">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5">
                     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                   <p className="text-sm text-amber-700 dark:text-amber-400 font-semibold leading-relaxed">{product.note}</p>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Specs */}
-              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 mb-6 relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/30" />
-                <h3 className="text-fg font-black mb-4 text-sm uppercase tracking-widest">Specifications</h3>
+            {/* ── 6. SPECIFICATIONS ── */}
+            <div className="mb-4 pb-4 border-b border-surface-border">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-1.5 h-4 rounded-sm bg-teal-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-teal-500">Specifications</span>
+              </div>
+              <div className="rounded-sm border border-teal-500/20 bg-teal-500/5 p-5 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-teal-500/40" />
                 <div className="grid grid-cols-2 gap-4">
                   {specs.map((spec) => (
                     <div key={spec.label} className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center flex-shrink-0 text-fg mt-0.5">
+                      <div className="w-8 h-8 rounded-sm bg-teal-500/10 border border-teal-500/20 flex items-center justify-center flex-shrink-0 text-teal-600 mt-0.5">
                         {spec.icon}
                       </div>
                       <div>
@@ -405,79 +508,15 @@ export default function ProductPage() {
                   ))}
                 </div>
               </div>
-
-              {/* Color option */}
-              <div className="mb-6">
-                <p className="text-fg-muted text-sm font-bold mb-3 uppercase tracking-wider">Color Option</p>
-
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="space-y-2 mt-2"
-                >
-                  <div className="flex gap-2 flex-wrap">
-                    {activeColors.map((color) => (
-                      <button
-                        key={color.name}
-                        type="button"
-                        title={color.name}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSingleColor(color.name);
-                        }}
-                        className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
-                          ? 'border-primary-500 scale-110 shadow-md'
-                          : 'border-surface-border hover:border-primary-500/50'
-                          }`}
-                        style={{ backgroundColor: color.hex }}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
-                </motion.div>
-              </div>
             </div>
 
-            {/* CTA */}
-            <div className="rounded-sm border border-surface-border bg-surface-card/80 p-6 relative overflow-hidden shadow-lg mt-6">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/50" />
-              {product.inStock && (
-                <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-5 rounded-sm bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-black">
-                  <motion.span
-                    className="w-2 h-2 rounded-sm bg-green-500"
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                  In Stock
-                </div>
-              )}
-
-              <motion.button
-                disabled={!product.inStock}
-                onClick={handleAddToCart}
-                whileHover={product.inStock ? { scale: 1.02 } : {}}
-                whileTap={product.inStock ? { scale: 0.98 } : {}}
-                className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
-                  ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
-                  : addedToCart
-                    ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
-                    : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
-                  }`}
-              >
-                {!product.inStock ? (
-                  'Out of Stock'
-                ) : addedToCart ? (
-                  <>
-                    <Check className="w-5 h-5" />
-                    Added to Cart
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </>
-                )}
-              </motion.button>
+            {/* ── 7. ABOUT ── */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-1.5 h-4 rounded-sm bg-slate-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">About</span>
+              </div>
+              <p className="text-fg-muted text-base leading-relaxed">{product.fullDescription}</p>
             </div>
 
             {/* Policy Accordions */}
@@ -684,7 +723,7 @@ function HowItsMade() {
     { icon: <FileCode className="w-6 h-6" />, step: '01', title: 'Design', desc: 'Your idea is translated into a precise 3D model using CAD or STL files.' },
     { icon: <Printer className="w-6 h-6" />, step: '02', title: '3D Printing', desc: 'Printed layer-by-layer on professional FDM machines with premium filaments.' },
     { icon: <Sparkles className="w-6 h-6" />, step: '03', title: 'Finishing & QC', desc: 'Sanded, cleaned, and quality-checked to ensure a flawless final product.' },
-    { icon: <PackageCheck className="w-6 h-6" />, step: '04', title: 'Packaging & Delivery', desc: 'Securely packed with breakage protection and dispatched pan-India.' },
+    { icon: <PackageCheck className="w-6 h-6" />, step: '04', title: 'Packaging & Delivery', desc: 'Securely packed with breakage protection and delivered across India.' },
   ];
 
   return (

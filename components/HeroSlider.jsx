@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowRight, 
@@ -54,6 +54,16 @@ export default function HeroSlider() {
   const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  useEffect(() => {
+    if (swiperRef.current && prevRef.current && nextRef.current) {
+      swiperRef.current.params.navigation.prevEl = prevRef.current;
+      swiperRef.current.params.navigation.nextEl = nextRef.current;
+      swiperRef.current.navigation.destroy();
+      swiperRef.current.navigation.init();
+      swiperRef.current.navigation.update();
+    }
+  }, []);
+
   return (
     <section className="relative w-full bg-gray-50 hero-slider-container">
       
@@ -81,9 +91,7 @@ export default function HeroSlider() {
             prevEl: prevRef.current,
             nextEl: nextRef.current,
           }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
+          onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
@@ -345,16 +353,20 @@ export default function HeroSlider() {
         {/* Navigation Arrows */}
         <button
           ref={prevRef}
+          type="button"
+          onClick={() => swiperRef.current?.slidePrev()}
           aria-label="Previous slide"
-          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/90 hover:bg-gray-900 hover:text-white backdrop-blur-md border border-gray-200 text-gray-800 flex items-center justify-center transition-all duration-300 shadow-md group transform hover:scale-105"
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 hover:bg-gray-900 hover:text-white backdrop-blur-md border border-gray-200 text-gray-800 flex items-center justify-center transition-all duration-300 shadow-md group transform hover:scale-105 cursor-pointer"
         >
           <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
         </button>
 
         <button
           ref={nextRef}
+          type="button"
+          onClick={() => swiperRef.current?.slideNext()}
           aria-label="Next slide"
-          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/90 hover:bg-gray-900 hover:text-white backdrop-blur-md border border-gray-200 text-gray-800 flex items-center justify-center transition-all duration-300 shadow-md group transform hover:scale-105"
+          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 hover:bg-gray-900 hover:text-white backdrop-blur-md border border-gray-200 text-gray-800 flex items-center justify-center transition-all duration-300 shadow-md group transform hover:scale-105 cursor-pointer"
         >
           <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
         </button>

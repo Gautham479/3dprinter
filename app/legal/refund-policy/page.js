@@ -40,9 +40,9 @@ export default function RefundPolicy() {
           <div className="text-body space-y-6">
             <div>
               <h2 className="text-2xl font-bold text-heading mb-4">1. Refund Eligibility</h2>
-              <p className="mb-3">We offer a 48-hour refund policy for defective items. To be eligible for a refund, your order must meet the following criteria:</p>
+              <p className="mb-3">We offer a 36-hour refund policy for defective items. To be eligible for a refund, your order must meet the following criteria:</p>
               <ul className="list-disc list-inside space-y-2 ml-2">
-                <li>Request made within 48 hours of delivery</li>
+                <li>Request made within 36 hours of delivery</li>
                 <li>Item must be defective or not match order specifications</li>
                 <li>Item must be unused and in its original condition</li>
                 <li>Item must be returned with proof of purchase (invoice)</li>
@@ -64,7 +64,7 @@ export default function RefundPolicy() {
               <h2 className="text-2xl font-bold text-heading mb-4">3. Refund Process</h2>
               <p className="mb-3">To request a refund:</p>
               <ul className="list-disc list-inside space-y-2 ml-2">
-                <li>Contact us within 48 hours of delivery with photos of the defect</li>
+                <li>Contact us within 36 hours of delivery with photos of the defect</li>
                 <li>Provide your order number and reason for the refund</li>
                 <li>Ship the item back to us (prepaid shipping label provided)</li>
                 <li>We will inspect the item and process the refund within 5-7 business days</li>

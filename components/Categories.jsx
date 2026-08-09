@@ -61,17 +61,17 @@ export default function Categories() {
     <section className="w-full border-b border-surface-border">
 
       {/* Section header */}
-      <div className="flex items-center justify-between px-6 sm:px-10 lg:px-16 py-10 border-b border-surface-border">
+      <div className="flex flex-col items-center justify-center text-center px-6 sm:px-10 lg:px-16 py-10 border-b border-surface-border gap-2">
         <Reveal>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             <div className="h-px w-10 bg-primary-500" />
             <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Collections</span>
+            <div className="h-px w-10 bg-primary-500" />
           </div>
         </Reveal>
-        <Reveal delay={0.1} direction="left">
+        <Reveal delay={0.1}>
           <h2 className="font-black text-2xl sm:text-3xl md:text-4xl text-fg tracking-tight">Our Collections</h2>
         </Reveal>
-
       </div>
 
       {/* 2-column grid */}

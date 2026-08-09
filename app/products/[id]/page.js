@@ -378,14 +378,10 @@ export default function ProductPage() {
                 <span className="w-1.5 h-4 rounded-sm bg-blue-500" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">Shipment Detail</span>
               </div>
-              <div className="flex flex-col gap-2 p-3.5 rounded-sm bg-blue-500/8 border border-blue-500/20">
-                <div className="flex items-start gap-2.5">
-                  <Truck className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+              <div className="p-3.5 rounded-sm bg-blue-500/8 border border-blue-500/20">
+                <div className="flex items-center gap-2.5">
+                  <Truck className="w-4 h-4 text-blue-500 flex-shrink-0" />
                   <p className="text-xs sm:text-sm text-fg font-bold">Shipping charges additional at checkout</p>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Package className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-fg font-bold leading-tight">Please allow 3-4 business days for order processing, with delivery arriving in an estimated 6-7 days.</p>
                 </div>
               </div>
             </div>
@@ -393,8 +389,8 @@ export default function ProductPage() {
             {/* ── 3. COLOUR OPTIONS ── */}
             <div className="mb-4 pb-4 border-b border-surface-border">
               <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-4 rounded-sm bg-purple-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500">Colour Options</span>
+                <span className="w-1.5 h-4 rounded-sm bg-fg" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-fg">Colour Options</span>
               </div>
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -412,8 +408,8 @@ export default function ProductPage() {
                         setSingleColor(color.name);
                       }}
                       className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
-                        ? 'border-purple-500 scale-110 shadow-md'
-                        : 'border-surface-border hover:border-purple-400'
+                        ? 'border-fg scale-110 shadow-md'
+                        : 'border-surface-border hover:border-fg/60'
                         }`}
                       style={{ backgroundColor: color.hex }}
                     />
@@ -663,7 +659,7 @@ function ProductAccordions() {
         </button>
         {openIndex === 2 && (
           <div className="pt-2 pb-1 text-xs text-fg-muted leading-relaxed pl-6">
-            We inspect all products before dispatch. Returns or exchanges are supported within 48 hours of receipt for defective or incorrectly fulfilled items.
+            We inspect all products before dispatch. Returns or exchanges are supported within 36 hours of receipt for defective or incorrectly fulfilled items.
           </div>
         )}
       </div>
@@ -791,7 +787,7 @@ function ProductFAQ() {
     },
     {
       q: 'Do you offer returns or replacements?',
-      a: 'Returns and exchanges are accepted within 48 hours of delivery for defective or incorrectly fulfilled orders. Contact our support team with photos of the issue.'
+      a: 'Returns and exchanges are accepted within 36 hours of delivery for defective or incorrectly fulfilled orders. Contact our support team with photos of the issue.'
     },
     {
       q: 'Are the products food-safe or child-safe?',

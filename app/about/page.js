@@ -175,7 +175,7 @@ export default function AboutPage() {
               },
               {
                 title: "Return Policy",
-                description: "We stand behind our products with a 48-hour return policy for defective items. See our Refund Policy for details.",
+                description: "We stand behind our products with a 36-hour return policy for defective items. See our Refund Policy for details.",
               },
               {
                 title: "Dedicated Support",

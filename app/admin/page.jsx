@@ -911,6 +911,27 @@ export default function AdminDashboardPage() {
                                     className="w-20 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all"
                                   />
                                 </div>
+                                <div className="flex items-center gap-1.5 mt-1 text-xs">
+                                  <span className="font-bold text-fg-subtle">Dimensions:</span>
+                                  <input
+                                    key={`dim-${product.id}-${product.dimensions}`}
+                                    type="text"
+                                    defaultValue={product.dimensions || ''}
+                                    placeholder="e.g. 15 x 15 x 20 cm"
+                                    onBlur={async (e) => {
+                                      const val = e.target.value.trim();
+                                      if (val !== (product.dimensions || '')) {
+                                        await fetch(`/api/admin/products/${product.id}`, {
+                                          method: 'PATCH',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ dimensions: val }),
+                                        });
+                                        fetchProducts();
+                                      }
+                                    }}
+                                    className="font-semibold text-fg bg-transparent border-b border-surface-border/50 hover:border-primary-500 focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1.5 py-0.5 rounded-sm transition-all w-full max-w-[260px] placeholder:text-fg-subtle/50"
+                                  />
+                                </div>
                                 <textarea
                                   key={`desc-${product.id}-${product.fullDescription}`}
                                   defaultValue={product.fullDescription || ''}

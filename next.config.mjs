@@ -22,7 +22,7 @@ const nextConfig = {
       },
       {
         source: '/products/idols',
-        destination: '/category/Idols',
+        destination: '/category/Collectibles',
         permanent: true,
       },
       {

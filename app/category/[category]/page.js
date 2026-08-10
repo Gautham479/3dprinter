@@ -11,14 +11,11 @@ const normalizeCategoryName = (rawName) => {
   if (!rawName) return 'Products';
   const decoded = decodeURIComponent(rawName).trim();
   const lower = decoded.toLowerCase().replace(/-/g, ' ');
-  if (lower === 'idols' || lower === 'idol') {
-    return 'Idols';
+  if (lower === 'idols' || lower === 'idol' || lower.includes('collectible') || lower.includes('collectibles')) {
+    return 'Collectibles';
   }
   if (lower === 'action figures' || lower === 'action figure' || lower === 'action-figures') {
     return 'Action Figures';
-  }
-  if (lower.includes('action') && lower.includes('idol')) {
-    return 'Action Figures & Idols';
   }
   if (lower.includes('kit card') || lower.includes('kit-card') || lower.includes('playable')) {
     return 'Playables';
@@ -29,17 +26,14 @@ const normalizeCategoryName = (rawName) => {
   if (lower.includes('home decor') || lower.includes('home-decor')) {
     return 'Home Decor';
   }
-  if (lower.includes('collectible') || lower.includes('collectibles')) {
-    return 'Collectibles';
-  }
   return decoded;
 };
 
 const getCategoryTagline = (type) => {
   if (!type) return null;
   const t = type.toLowerCase();
-  if (t.includes('collectible')) return "Highly detailed 3D printed action figures, superhero models, and gaming display items crafted for collectors.";
-  if (t.includes('action') || t.includes('idol')) return "Collectible action figures, spiritual idols, and anime-inspired creations.";
+  if (t.includes('collectible')) return "Curated 3D printed display models, detailed statues, and artistic collectibles.";
+  if (t.includes('action')) return "Collectible action figures, articulated models, and anime-inspired creations.";
   if (t.includes('playable') || t.includes('kit card')) return "Interactive Kit Cards and build-it-yourself models designed for creative assembly.";
   if (t.includes('home decor')) return "Where style meets everyday function.";
   if (t.includes('organizer')) return "Functional desk organizers, key holders, and everyday home accessories.";
@@ -50,10 +44,8 @@ function CategoryHero({ category }) {
   const safeCategory = category || 'Category';
   
   const categoryImageMap = {
-    'collectibles': '/photos/action 1.jpeg',
-    'action figures & idols': '/photos/action 1.jpeg',
-    'idols & action figures': '/photos/action 1.jpeg',
-    'idols': '/photos/idols.jpeg',
+    'collectibles': '/pics/collectibles.png',
+    'idols': '/pics/collectibles.png',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'organizers': '/photos/daily acc .jpeg',

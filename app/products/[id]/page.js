@@ -369,100 +369,86 @@ export default function ProductPage() {
                 <span className="w-1.5 h-4 rounded-sm" style={{ background: '#C2A56D' }} />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: '#C2A56D' }}>Price</span>
               </div>
-              <p className="text-5xl font-black text-fg">₹{product.price}</p>
-            </div>
-
-            {/* ── 2. SHIPMENT DETAIL ── */}
-            <div className="mb-4 pb-4 border-b border-surface-border">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-4 rounded-sm bg-blue-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">Shipment Detail</span>
-              </div>
-              <div className="p-3.5 rounded-sm bg-blue-500/8 border border-blue-500/20">
-                <div className="flex items-center gap-2.5">
-                  <Truck className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-fg font-bold">Shipping charges additional at checkout</p>
-                </div>
+              <p className="text-5xl font-black text-fg mb-2">₹{product.price}</p>
+              <div className="flex items-center gap-2 text-fg-subtle">
+                <Truck className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <p className="text-xs sm:text-sm font-semibold">Shipping charges additional at checkout</p>
               </div>
             </div>
 
-            {/* ── 3. COLOUR OPTIONS ── */}
+            {/* ── 2. COLOUR OPTIONS & ADD TO CART (Combined Box) ── */}
             <div className="mb-4 pb-4 border-b border-surface-border">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-4 rounded-sm bg-fg" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-fg">Colour Options</span>
-              </div>
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="space-y-2"
-              >
-                <div className="flex gap-2 flex-wrap">
-                  {activeColors.map((color) => (
-                    <button
-                      key={color.name}
-                      type="button"
-                      title={color.name}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSingleColor(color.name);
-                      }}
-                      className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
-                        ? 'border-fg scale-110 shadow-md'
-                        : 'border-surface-border hover:border-fg/60'
-                        }`}
-                      style={{ backgroundColor: color.hex }}
-                    />
-                  ))}
-                </div>
-                <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
-              </motion.div>
-            </div>
+              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-4 space-y-4 relative overflow-hidden shadow-sm">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary-500/60" />
 
-            {/* ── 4. ADD TO CART ── */}
-            <div className="mb-4 pb-4 border-b border-surface-border">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-1.5 h-4 rounded-sm bg-green-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Add to Cart</span>
-              </div>
-              <div className="rounded-sm border border-surface-border bg-surface-card/80 p-4 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-green-500/60" />
-                {product.inStock && (
-                  <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-4 rounded-sm bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-black">
-                    <motion.span
-                      className="w-2 h-2 rounded-sm bg-green-500"
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                    In Stock
+                {/* Colour Options */}
+                {activeColors.length > 0 && (
+                  <div className="pb-3 border-b border-surface-border/60">
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <span className="w-1.5 h-3.5 rounded-sm bg-fg" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-fg">Colour Options</span>
+                    </div>
+                    <div className="flex gap-2 flex-wrap mb-2">
+                      {activeColors.map((color) => (
+                        <button
+                          key={color.name}
+                          type="button"
+                          title={color.name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSingleColor(color.name);
+                          }}
+                          className={`w-8 h-8 rounded-sm border-2 transition-all hover:scale-110 ${singleColor === color.name
+                            ? 'border-fg scale-110 shadow-md'
+                            : 'border-surface-border hover:border-fg/60'
+                            }`}
+                          style={{ backgroundColor: color.hex }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-xs text-fg-subtle font-semibold">Selected: {singleColor || 'None'}</p>
                   </div>
                 )}
-                <motion.button
-                  disabled={!product.inStock}
-                  onClick={handleAddToCart}
-                  whileHover={product.inStock ? { scale: 1.02 } : {}}
-                  whileTap={product.inStock ? { scale: 0.98 } : {}}
-                  className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
-                    ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
-                    : addedToCart
-                      ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
-                      : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
-                    }`}
-                >
-                  {!product.inStock ? (
-                    'Out of Stock'
-                  ) : addedToCart ? (
-                    <>
-                      <Check className="w-5 h-5" />
-                      Added to Cart
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-5 h-5" />
-                      Add to Cart
-                    </>
+
+                {/* Add to Cart */}
+                <div>
+                  {product.inStock && (
+                    <div className="flex items-center w-max gap-1.5 px-3 py-1.5 mb-3 rounded-sm bg-green-500/10 border border-green-500/20 text-green-500 text-xs font-black">
+                      <motion.span
+                        className="w-2 h-2 rounded-sm bg-green-500"
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+                      In Stock
+                    </div>
                   )}
-                </motion.button>
+                  <motion.button
+                    disabled={!product.inStock}
+                    onClick={handleAddToCart}
+                    whileHover={product.inStock ? { scale: 1.02 } : {}}
+                    whileTap={product.inStock ? { scale: 0.98 } : {}}
+                    className={`w-full py-4 rounded-sm font-black text-lg flex items-center justify-center gap-3 transition-all ${!product.inStock
+                      ? 'bg-surface-muted text-fg-subtle border border-surface-border cursor-not-allowed'
+                      : addedToCart
+                        ? 'bg-accent-500/15 text-accent-500 border border-accent-500/30'
+                        : 'btn-glow bg-primary-500 hover:bg-primary-600 text-[var(--app-cta-contrast)]'
+                      }`}
+                  >
+                    {!product.inStock ? (
+                      'Out of Stock'
+                    ) : addedToCart ? (
+                      <>
+                        <Check className="w-5 h-5" />
+                        Added to Cart
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-5 h-5" />
+                        Add to Cart
+                      </>
+                    )}
+                  </motion.button>
+                </div>
               </div>
             </div>
 

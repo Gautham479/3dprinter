@@ -35,10 +35,10 @@ export default function Categories() {
       position: "object-top" 
     },
     { 
-      title: "Idols", 
-      desc: "Premium 3D printed idols and spiritual sculptures crafted with exceptional detail.", 
-      image: "/photos/idols.jpeg", 
-      link: `/category/${encodeURIComponent('Idols')}`, 
+      title: "Collectibles", 
+      desc: "Curated 3D printed display models, detailed statues, and artistic collectibles.", 
+      image: "/pics/collectibles.png", 
+      link: `/category/${encodeURIComponent('Collectibles')}`, 
       position: "object-center" 
     },
     { 

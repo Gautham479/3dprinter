@@ -653,94 +653,99 @@ function ProductAccordions() {
 
 
 /* ─────────────────────────────────────────────
-   MATERIALS & PRECISION SHOWCASE
+   ALTERNATING FEATURE SHOWCASE (Materials & Precision)
 ───────────────────────────────────────────── */
 function ProductFeatureHighlights() {
   return (
-    <div className="mt-20 pt-12 border-t border-surface-border/50">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        
-        {/* Card 1 — Materials */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden shadow-sm hover:border-primary-500/30 transition-all duration-300"
-        >
-          {/* Image Container */}
-          <div className="w-full relative aspect-[4/3] sm:aspect-[16/10] bg-black/60 overflow-hidden border-b border-surface-border flex items-center justify-center">
-            <Image
-              src="/pics/materials_showcase.jpg"
-              alt="Premium Printing Materials"
-              fill
-              className="object-contain w-full h-full"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+    <div className="mt-20 pt-12 border-t border-surface-border/50 space-y-16 lg:space-y-24">
+      
+      {/* ── ROW 1: Image Left, Text Right ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center"
+      >
+        {/* Left: Image 1 */}
+        <div className="w-full relative aspect-[16/10] rounded-sm border border-surface-border bg-black/60 overflow-hidden shadow-md group">
+          <Image
+            src="/pics/materials_showcase.jpg"
+            alt="Premium Printing Materials"
+            fill
+            className="object-contain w-full h-full transition-transform duration-700 group-hover:scale-102"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
+          />
+        </div>
+
+        {/* Right: Text 1 */}
+        <div className="flex flex-col justify-center space-y-4 lg:pl-4">
+          <div className="flex items-center gap-2.5">
+            <div className="h-px w-6 bg-primary-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Materials Showcase</span>
           </div>
 
-          {/* Text Content */}
-          <div className="p-6 flex flex-col justify-between flex-1 gap-4">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-black text-fg mb-2 tracking-tight">
-                Premium Printing Materials
-              </h3>
-              <p className="text-fg-muted text-sm sm:text-base leading-relaxed">
-                “We use high-quality 3D printing filaments from trusted brands to deliver strong, durable and visually refined products.”
-              </p>
-            </div>
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-fg tracking-tight">
+            Premium Printing Materials
+          </h3>
 
-            {/* Supporting Line */}
-            <div className="pt-3 border-t border-surface-border/60 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-sm bg-primary-500 flex-shrink-0" />
-              <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide">
-                Quality Materials • Vibrant Finishes • Reliable Results
-              </p>
-            </div>
+          <p className="text-fg-muted text-base sm:text-lg leading-relaxed">
+            We use high-quality filaments from trusted brands to create durable, detailed, and visually refined products.
+          </p>
+
+          <div className="pt-2 flex items-center gap-2.5 border-t border-surface-border/60">
+            <span className="w-2 h-2 rounded-sm bg-primary-500 flex-shrink-0" />
+            <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide uppercase">
+              Quality Materials • Vibrant Finishes • Reliable Results
+            </p>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
-        {/* Card 2 — Precision */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden shadow-sm hover:border-primary-500/30 transition-all duration-300"
-        >
-          {/* Image Container */}
-          <div className="w-full relative aspect-[4/3] sm:aspect-[16/10] bg-black/60 overflow-hidden border-b border-surface-border flex items-center justify-center">
-            <Image
-              src="/pics/precision_printing.jpg"
-              alt="High-Precision 3D Printing"
-              fill
-              className="object-contain w-full h-full"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+      {/* ── ROW 2: Text Left, Image Right (Stacked Image -> Text on Mobile) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center"
+      >
+        {/* Text 2 (Left on Desktop, Second on Mobile) */}
+        <div className="flex flex-col justify-center space-y-4 lg:pr-4 order-2 lg:order-1">
+          <div className="flex items-center gap-2.5">
+            <div className="h-px w-6 bg-primary-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Craftsmanship & Detail</span>
           </div>
 
-          {/* Text Content */}
-          <div className="p-6 flex flex-col justify-between flex-1 gap-4">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-black text-fg mb-2 tracking-tight">
-                High-Precision 3D Printing
-              </h3>
-              <p className="text-fg-muted text-sm sm:text-base leading-relaxed">
-                “Every product is printed with precision to achieve clean details, accurate dimensions and a smooth professional finish.”
-              </p>
-            </div>
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-fg tracking-tight">
+            High Precision 3D Printing
+          </h3>
 
-            {/* Supporting Line */}
-            <div className="pt-3 border-t border-surface-border/60 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-sm bg-primary-500 flex-shrink-0" />
-              <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide">
-                Sharp Details • Accurate Dimensions • Consistent Quality
-              </p>
-            </div>
+          <p className="text-fg-muted text-base sm:text-lg leading-relaxed">
+            Every detail is carefully printed using advanced 3D printing technology for accurate dimensions, clean surfaces, and consistent results.
+          </p>
+
+          <div className="pt-2 flex items-center gap-2.5 border-t border-surface-border/60">
+            <span className="w-2 h-2 rounded-sm bg-primary-500 flex-shrink-0" />
+            <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide uppercase">
+              Sharp Details • Accurate Dimensions • Consistent Quality
+            </p>
           </div>
-        </motion.div>
+        </div>
 
-      </div>
+        {/* Image 2 (Right on Desktop, First on Mobile) */}
+        <div className="w-full relative aspect-[16/10] rounded-sm border border-surface-border bg-black/60 overflow-hidden shadow-md group order-1 lg:order-2">
+          <Image
+            src="/pics/precision_printing.jpg"
+            alt="High Precision 3D Printing"
+            fill
+            className="object-contain w-full h-full transition-transform duration-700 group-hover:scale-102"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
+        </div>
+      </motion.div>
+
     </div>
   );
 }

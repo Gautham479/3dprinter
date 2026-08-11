@@ -506,8 +506,8 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* ── Trust Badges ── */}
-        <TrustBadges />
+        {/* ── Feature Highlights (Materials & Precision) ── */}
+        <ProductFeatureHighlights />
 
         {/* ── Related Products ── */}
         {relatedProducts.length > 0 && (
@@ -655,43 +655,93 @@ function ProductAccordions() {
 
 
 /* ─────────────────────────────────────────────
-   TRUST BADGES
+   MATERIALS & PRECISION SHOWCASE
 ───────────────────────────────────────────── */
-function TrustBadges() {
-  const badges = [
-    { icon: <Award className="w-5 h-5" />, title: 'High Precision Printing', sub: 'Layer accuracy down to 0.1mm' },
-    { icon: <Sparkles className="w-5 h-5" />, title: 'Premium Materials', sub: 'PLA · PETG · ABS · TPU' },
-    { icon: <ShieldCheck className="w-5 h-5" />, title: 'Safe & Secure Packaging', sub: '100% breakage insurance' },
-    { icon: <Zap className="w-5 h-5" />, title: 'Fast Dispatch', sub: 'Ships within 24 hours' },
-    { icon: <PackageCheck className="w-5 h-5" />, title: 'Quality Checked', sub: 'Every item inspected before shipping' },
-  ];
-
+function ProductFeatureHighlights() {
   return (
     <div className="mt-20 pt-12 border-t border-surface-border/50">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="h-px w-8 bg-primary-500" />
-        <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Why Us</span>
-      </div>
-      <h2 className="text-2xl font-black text-fg mb-8">Why Choose MahashriLabs</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {badges.map((b, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.08 }}
-            className="flex flex-col items-center text-center gap-3 p-5 rounded-sm border border-surface-border bg-surface-card/80 hover:border-primary-500/40 hover:shadow-md transition-all duration-300"
-          >
-            <div className="w-11 h-11 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-500 flex-shrink-0">
-              {b.icon}
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        
+        {/* Card 1 — Materials */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden shadow-sm hover:border-primary-500/30 transition-all duration-300"
+        >
+          {/* Image Container */}
+          <div className="w-full relative aspect-[4/3] sm:aspect-[16/10] bg-black/60 overflow-hidden border-b border-surface-border flex items-center justify-center">
+            <Image
+              src="/pics/materials_showcase.jpg"
+              alt="Premium Printing Materials"
+              fill
+              className="object-contain w-full h-full"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+
+          {/* Text Content */}
+          <div className="p-6 flex flex-col justify-between flex-1 gap-4">
             <div>
-              <p className="text-fg font-black text-xs uppercase tracking-wide leading-snug">{b.title}</p>
-              <p className="text-fg-muted text-[11px] font-medium mt-1 leading-snug">{b.sub}</p>
+              <h3 className="text-xl sm:text-2xl font-black text-fg mb-2 tracking-tight">
+                Premium Printing Materials
+              </h3>
+              <p className="text-fg-muted text-sm sm:text-base leading-relaxed">
+                “We use high-quality 3D printing filaments from trusted brands to deliver strong, durable and visually refined products.”
+              </p>
             </div>
-          </motion.div>
-        ))}
+
+            {/* Supporting Line */}
+            <div className="pt-3 border-t border-surface-border/60 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-sm bg-primary-500 flex-shrink-0" />
+              <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide">
+                Quality Materials • Vibrant Finishes • Reliable Results
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Card 2 — Precision */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-col rounded-sm border border-surface-border bg-surface-card/80 overflow-hidden shadow-sm hover:border-primary-500/30 transition-all duration-300"
+        >
+          {/* Image Container */}
+          <div className="w-full relative aspect-[4/3] sm:aspect-[16/10] bg-black/60 overflow-hidden border-b border-surface-border flex items-center justify-center">
+            <Image
+              src="/pics/precision_printing.jpg"
+              alt="High-Precision 3D Printing"
+              fill
+              className="object-contain w-full h-full"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+
+          {/* Text Content */}
+          <div className="p-6 flex flex-col justify-between flex-1 gap-4">
+            <div>
+              <h3 className="text-xl sm:text-2xl font-black text-fg mb-2 tracking-tight">
+                High-Precision 3D Printing
+              </h3>
+              <p className="text-fg-muted text-sm sm:text-base leading-relaxed">
+                “Every product is printed with precision to achieve clean details, accurate dimensions and a smooth professional finish.”
+              </p>
+            </div>
+
+            {/* Supporting Line */}
+            <div className="pt-3 border-t border-surface-border/60 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-sm bg-primary-500 flex-shrink-0" />
+              <p className="text-xs sm:text-sm font-bold text-primary-500 tracking-wide">
+                Sharp Details • Accurate Dimensions • Consistent Quality
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </div>
   );

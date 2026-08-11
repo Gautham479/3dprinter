@@ -555,8 +555,6 @@ export default function ProductPage() {
           </div>
         )}
 
-        {/* ── How It's Made ── */}
-        <HowItsMade />
 
         {/* ── FAQs ── */}
         <ProductFAQ />
@@ -747,56 +745,7 @@ function ProductFeatureHighlights() {
   );
 }
 
-/* ─────────────────────────────────────────────
-   HOW IT'S MADE
-───────────────────────────────────────────── */
-function HowItsMade() {
-  const steps = [
-    { icon: <FileCode className="w-6 h-6" />, step: '01', title: 'Design', desc: 'Your idea is translated into a precise 3D model using CAD or STL files.' },
-    { icon: <Printer className="w-6 h-6" />, step: '02', title: '3D Printing', desc: 'Printed layer-by-layer on professional FDM machines with premium filaments.' },
-    { icon: <Sparkles className="w-6 h-6" />, step: '03', title: 'Finishing & QC', desc: 'Sanded, cleaned, and quality-checked to ensure a flawless final product.' },
-    { icon: <PackageCheck className="w-6 h-6" />, step: '04', title: 'Packaging & Delivery', desc: 'Securely packed with breakage protection and delivered across India.' },
-  ];
 
-  return (
-    <div className="mt-20 pt-12 border-t border-surface-border/50">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="h-px w-8 bg-primary-500" />
-        <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary-500">Process</span>
-      </div>
-      <h2 className="text-2xl font-black text-fg mb-10">How It's Made</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
-        {steps.map((s, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="relative flex flex-col gap-4 p-6 border border-surface-border bg-surface-card/60 hover:bg-surface-card transition-colors duration-300"
-          >
-            {/* Step connector line */}
-            {i < steps.length - 1 && (
-              <div className="hidden lg:block absolute top-9 right-0 translate-x-1/2 z-10">
-                <ArrowRight className="w-4 h-4 text-primary-500/50" />
-              </div>
-            )}
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-sm bg-primary-500/10 border border-primary-500/20 flex items-center justify-center text-primary-500 flex-shrink-0">
-                {s.icon}
-              </div>
-              <span className="text-4xl font-black text-surface-border leading-none select-none">{s.step}</span>
-            </div>
-            <div>
-              <p className="text-fg font-black text-sm mb-1.5">{s.title}</p>
-              <p className="text-fg-muted text-xs leading-relaxed">{s.desc}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 /* ─────────────────────────────────────────────
    PRODUCT FAQs

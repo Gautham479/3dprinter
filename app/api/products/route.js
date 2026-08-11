@@ -84,10 +84,17 @@ export async function GET(request) {
     if (featuredOnly) whereClause.isFeatured = true;
 
     if (categoryFilter) {
-      whereClause.OR = [
-        { tags: { has: categoryFilter } },
-        { AND: [{ tags: { isEmpty: true } }, { type: { equals: categoryFilter, mode: 'insensitive' } }] },
-      ];
+      if (categoryFilter.toLowerCase().includes('idol') || categoryFilter.toLowerCase().includes('action')) {
+        whereClause.OR = [
+          { tags: { hasSome: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Collectibles'] } },
+          { type: { in: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Collectibles'], mode: 'insensitive' } },
+        ];
+      } else {
+        whereClause.OR = [
+          { tags: { has: categoryFilter } },
+          { AND: [{ tags: { isEmpty: true } }, { type: { equals: categoryFilter, mode: 'insensitive' } }] },
+        ];
+      }
     }
 
     const products = await prisma.product.findMany({

@@ -195,8 +195,11 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     let tagMatches = false;
     if (activeType === 'All') {
       tagMatches = true;
-    } else if (activeType === 'Action Figures') {
-      tagMatches = rawTags.some(t => t.toLowerCase().includes('action figure') || t.toLowerCase() === 'action figures') || productType.toLowerCase().includes('action');
+    } else if (activeType === 'Idols & Action Figures' || activeType === 'Action Figures & Idols' || activeType === 'Action Figures') {
+      tagMatches = rawTags.some(t => {
+        const lower = t.toLowerCase();
+        return lower.includes('action figure') || lower.includes('idol');
+      }) || productType.toLowerCase().includes('action') || productType.toLowerCase().includes('idol');
     } else if (activeType === 'Collectibles' || activeType === 'Idols') {
       tagMatches = rawTags.some(t => {
         const lower = t.toLowerCase();

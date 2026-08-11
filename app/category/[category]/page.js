@@ -11,11 +11,17 @@ const normalizeCategoryName = (rawName) => {
   if (!rawName) return 'Products';
   const decoded = decodeURIComponent(rawName).trim();
   const lower = decoded.toLowerCase().replace(/-/g, ' ');
-  if (lower === 'idols' || lower === 'idol' || lower.includes('collectible') || lower.includes('collectibles')) {
-    return 'Collectibles';
+  if (lower.includes('idols & action figures') || lower.includes('idols and action figures') || lower.includes('action figures & idols')) {
+    return 'Idols & Action Figures';
+  }
+  if (lower === 'idols' || lower === 'idol') {
+    return 'Idols & Action Figures';
   }
   if (lower === 'action figures' || lower === 'action figure' || lower === 'action-figures') {
     return 'Action Figures';
+  }
+  if (lower.includes('collectible') || lower.includes('collectibles')) {
+    return 'Collectibles';
   }
   if (lower.includes('kit card') || lower.includes('kit-card') || lower.includes('playable')) {
     return 'Playables';
@@ -33,7 +39,7 @@ const getCategoryTagline = (type) => {
   if (!type) return null;
   const t = type.toLowerCase();
   if (t.includes('collectible')) return "Curated 3D printed display models, detailed statues, and artistic collectibles.";
-  if (t.includes('action')) return "Collectible action figures, articulated models, and anime-inspired creations.";
+  if (t.includes('action') || t.includes('idol')) return "Collectible action figures, articulated models, idols, and anime-inspired creations.";
   if (t.includes('playable') || t.includes('kit card')) return "Interactive Kit Cards and build-it-yourself models designed for creative assembly.";
   if (t.includes('home decor')) return "Where style meets everyday function.";
   if (t.includes('organizer')) return "Functional desk organizers, key holders, and everyday home accessories.";
@@ -46,6 +52,7 @@ function CategoryHero({ category }) {
   const categoryImageMap = {
     'collectibles': '/pics/collectibles.png',
     'idols': '/pics/collectibles.png',
+    'idols & action figures': '/photos/action 1.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
     'organizers': '/photos/daily acc .jpeg',

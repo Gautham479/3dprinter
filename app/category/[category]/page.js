@@ -6,19 +6,23 @@ import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import ProductsGrid from '@/components/ProductsGrid';
 import { motion } from 'framer-motion';
+import { redirect } from 'next/navigation';
 
 const normalizeCategoryName = (rawName) => {
   if (!rawName) return 'Products';
   const decoded = decodeURIComponent(rawName).trim();
   const lower = decoded.toLowerCase().replace(/-/g, ' ');
-  if (lower.includes('idols & action figures') || lower.includes('idols and action figures') || lower.includes('action figures & idols')) {
+  if (
+    lower.includes('idol') ||
+    lower.includes('action figure') ||
+    lower.includes('action-figure') ||
+    lower.includes('action figures') ||
+    lower.includes('idols & action figures') ||
+    lower.includes('idols and action figures') ||
+    lower.includes('action figures & idols') ||
+    lower.includes('action figures and idols')
+  ) {
     return 'Idols & Action Figures';
-  }
-  if (lower === 'idols' || lower === 'idol') {
-    return 'Idols & Action Figures';
-  }
-  if (lower === 'action figures' || lower === 'action figure' || lower === 'action-figures') {
-    return 'Action Figures';
   }
   if (lower.includes('collectible') || lower.includes('collectibles')) {
     return 'Collectibles';
@@ -51,7 +55,7 @@ function CategoryHero({ category }) {
   
   const categoryImageMap = {
     'collectibles': '/pics/collectibles.png',
-    'idols': '/pics/collectibles.png',
+    'idols': '/photos/action 1.jpeg',
     'idols & action figures': '/photos/action 1.jpeg',
     'action figures': '/photos/action 1.jpeg',
     'daily accessories': '/photos/daily acc .jpeg',
@@ -68,9 +72,8 @@ function CategoryHero({ category }) {
 
   const getObjectPosition = (category) => {
     const cat = category.toLowerCase();
-    if (cat.includes('idol')) return 'center 20%';
+    if (cat.includes('idol') || cat.includes('action')) return 'center 20%';
     if (cat.includes('playable')) return 'center';
-    if (cat.includes('action figure')) return 'top';
     return 'center';
   };
 
@@ -152,6 +155,16 @@ function CategoryLoadingFallback() {
 
 export default function CategoryPage({ params }) {
   const resolvedParams = use(params);
+  const rawCategoryParam = resolvedParams?.category ? decodeURIComponent(resolvedParams.category).trim() : '';
+  const lowerParam = rawCategoryParam.toLowerCase().replace(/-/g, ' ');
+
+  // Redirect Action Figures or Idols to the exact same combined destination URL
+  if (
+    rawCategoryParam !== 'Idols & Action Figures' &&
+    (lowerParam.includes('action figure') || lowerParam === 'idols' || lowerParam === 'idol')
+  ) {
+    redirect(`/category/${encodeURIComponent('Idols & Action Figures')}`);
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-surface-bg items-center relative">

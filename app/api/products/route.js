@@ -86,8 +86,8 @@ export async function GET(request) {
     if (categoryFilter) {
       if (categoryFilter.toLowerCase().includes('idol') || categoryFilter.toLowerCase().includes('action')) {
         whereClause.OR = [
-          { tags: { hasSome: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Collectibles'] } },
-          { type: { in: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Collectibles'], mode: 'insensitive' } },
+          { tags: { hasSome: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Action Figure', 'Idol'] } },
+          { type: { in: ['Idols & Action Figures', 'Action Figures', 'Idols', 'Action Figure', 'Idol'], mode: 'insensitive' } },
         ];
       } else {
         whereClause.OR = [

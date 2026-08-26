@@ -22,12 +22,12 @@ const nextConfig = {
       },
       {
         source: '/products/idols',
-        destination: '/category/Collectibles',
+        destination: '/category/Idols%20%26%20Action%20Figures',
         permanent: true,
       },
       {
         source: '/products/action-figures',
-        destination: '/category/Action%20Figures',
+        destination: '/category/Idols%20%26%20Action%20Figures',
         permanent: true,
       },
       {

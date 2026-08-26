@@ -31,15 +31,15 @@ export default function Categories() {
       title: "Action Figures", 
       desc: "Collectible action figures, articulated models, and anime-inspired creations.", 
       image: "/photos/action 1.jpeg", 
-      link: `/category/${encodeURIComponent('Action Figures')}`, 
+      link: `/category/${encodeURIComponent('Idols & Action Figures')}`, 
       position: "object-top" 
     },
     { 
-      title: "Collectibles", 
-      desc: "Curated 3D printed display models, detailed statues, and artistic collectibles.", 
-      image: "/pics/collectibles.png", 
-      link: `/category/${encodeURIComponent('Collectibles')}`, 
-      position: "object-center" 
+      title: "Idols", 
+      desc: "Detailed spiritual idols, sacred sculptures, and divine 3D printed creations.", 
+      image: "/photos/idols.jpeg", 
+      link: `/category/${encodeURIComponent('Idols & Action Figures')}`, 
+      position: "object-top" 
     },
     { 
       title: "Organizers", 

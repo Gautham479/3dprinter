@@ -195,16 +195,21 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
     let tagMatches = false;
     if (activeType === 'All') {
       tagMatches = true;
-    } else if (activeType === 'Idols & Action Figures' || activeType === 'Action Figures & Idols' || activeType === 'Action Figures') {
+    } else if (
+      activeType === 'Idols & Action Figures' ||
+      activeType === 'Action Figures & Idols' ||
+      activeType === 'Action Figures' ||
+      activeType === 'Idols'
+    ) {
       tagMatches = rawTags.some(t => {
         const lower = t.toLowerCase();
-        return lower.includes('action figure') || lower.includes('idol');
+        return lower.includes('action figure') || lower.includes('action') || lower.includes('idol');
       }) || productType.toLowerCase().includes('action') || productType.toLowerCase().includes('idol');
-    } else if (activeType === 'Collectibles' || activeType === 'Idols') {
+    } else if (activeType === 'Collectibles') {
       tagMatches = rawTags.some(t => {
         const lower = t.toLowerCase();
-        return lower.includes('collectible') || lower.includes('idol');
-      }) || productType.toLowerCase().includes('collectible') || productType.toLowerCase().includes('idol');
+        return lower.includes('collectible');
+      }) || productType.toLowerCase().includes('collectible');
     } else if (activeType === 'Playables') {
       tagMatches = rawTags.some(t => {
         const lower = t.toLowerCase();

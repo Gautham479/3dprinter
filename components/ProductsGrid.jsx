@@ -7,6 +7,7 @@ import { ShoppingCart, Layers } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCT_TYPES } from '@/lib/catalog';
+import ProductPriceDisplay from '@/components/ProductPriceDisplay';
 
 const getCategoryTagline = (type) => {
   if (!type || type === 'All') return null;
@@ -90,9 +91,9 @@ function ProductCard({ product, handleAddToCart, updateProductColorOption, produ
 
           {/* Content */}
           <div className="p-5 flex flex-col flex-grow">
-            <div className="flex justify-between items-start mb-4 gap-2 flex-grow">
-              <h3 className="text-fg font-bold text-base group-hover:text-primary-500 transition-colors break-words flex-1">{product.name}</h3>
-              <span className="text-primary-500 font-black text-sm whitespace-nowrap flex-shrink-0">₹{product.price}</span>
+            <div className="mb-3">
+              <h3 className="text-fg font-bold text-base group-hover:text-primary-500 transition-colors break-words mb-2">{product.name}</h3>
+              <ProductPriceDisplay product={product} size="md" />
             </div>
 
             <div className="flex items-center gap-2 mb-4 flex-wrap">

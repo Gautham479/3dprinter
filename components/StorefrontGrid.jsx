@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import ProductPriceDisplay from '@/components/ProductPriceDisplay';
 
 function Reveal({ children, delay = 0, direction = 'up', className = '' }) {
   const ref = useRef(null);
@@ -44,14 +45,14 @@ export default function StorefrontGrid() {
   }, []);
 
   const featured = products.filter(p => p.isFeatured).map(p => ({
-    name: p.name,
+    ...p,
     img: p.image || `https://placehold.co/500x500/1A1A1A/C2A56D?text=${encodeURIComponent(p.name)}`,
     linkUrl: `/products/${p.slug}`,
   }));
   const base = featured.length > 0
     ? featured
     : products.slice(0, 10).map(p => ({
-      name: p.name,
+      ...p,
       img: p.image || `https://placehold.co/500x500/1A1A1A/C2A56D?text=${encodeURIComponent(p.name)}`,
       linkUrl: `/products/${p.slug}`,
     }));
@@ -129,12 +130,15 @@ export default function StorefrontGrid() {
                   </div>
                 </div>
 
-                {/* Name bar */}
-                <div className="px-4 py-4 border-t border-surface-border flex items-center justify-between">
-                  <span className="text-sm font-bold text-fg leading-snug group-hover:text-primary-500 transition-colors">
-                    {item.name}
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-fg-muted flex-shrink-0 group-hover:text-primary-500 transition-colors ml-2" />
+                {/* Name & Pricing bar */}
+                <div className="px-4 py-3 border-t border-surface-border">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-bold text-fg leading-snug group-hover:text-primary-500 transition-colors">
+                      {item.name}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-fg-muted flex-shrink-0 group-hover:text-primary-500 transition-colors ml-2" />
+                  </div>
+                  <ProductPriceDisplay product={item} size="sm" />
                 </div>
 
                 {/* Bottom gold line */}

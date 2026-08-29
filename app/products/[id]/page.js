@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
+import ProductPriceDisplay from '@/components/ProductPriceDisplay';
 
 
 const getProductImages = (product) => {
@@ -365,12 +366,8 @@ export default function ProductPage() {
 
             {/* ── 1. PRICE ── */}
             <div className="mb-4 pb-4 border-b border-surface-border">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-1.5 h-4 rounded-sm" style={{ background: '#C2A56D' }} />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: '#C2A56D' }}>Price</span>
-              </div>
-              <p className="text-5xl font-black text-fg mb-2">₹{product.price}</p>
-              <div className="flex items-center gap-2 text-fg-subtle">
+              <ProductPriceDisplay product={product} size="lg" className="mb-3" />
+              <div className="flex items-center gap-2 text-fg-subtle mt-2">
                 <Truck className="w-4 h-4 text-blue-500 flex-shrink-0" />
                 <p className="text-xs sm:text-sm font-semibold">Shipping charges additional at checkout</p>
               </div>
@@ -546,7 +543,7 @@ export default function ProductPage() {
                     </div>
                     <div className="p-3 border-t border-surface-border/50">
                       <h3 className="text-fg font-bold text-xs mb-1 group-hover:text-primary-500 transition-colors line-clamp-2 leading-snug">{p.name}</h3>
-                      <p className="text-primary-500 font-black text-sm">₹{p.price}</p>
+                      <ProductPriceDisplay product={p} size="sm" showBadge={false} className="mt-1" />
                     </div>
                   </Link>
                 </motion.div>

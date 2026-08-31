@@ -32,11 +32,32 @@ export async function PATCH(request, { params }) {
   }
 
   const updates = { ...body };
+
+  if (typeof updates.discount_percentage !== 'undefined' && typeof updates.discountPercentage === 'undefined') {
+    updates.discountPercentage = updates.discount_percentage;
+    delete updates.discount_percentage;
+  }
+  if (typeof updates.is_discount_enabled !== 'undefined' && typeof updates.isDiscountEnabled === 'undefined') {
+    updates.isDiscountEnabled = updates.is_discount_enabled;
+    delete updates.is_discount_enabled;
+  }
+
   if (typeof updates.price !== 'undefined') {
     updates.price = Number(updates.price);
     if (Number.isNaN(updates.price) || updates.price < 0) {
       return NextResponse.json({ error: 'Invalid price' }, { status: 400 });
     }
+  }
+
+  if (typeof updates.discountPercentage !== 'undefined') {
+    updates.discountPercentage = Number(updates.discountPercentage);
+    if (Number.isNaN(updates.discountPercentage) || updates.discountPercentage < 0 || updates.discountPercentage > 100) {
+      return NextResponse.json({ error: 'Discount percentage must be between 0 and 100' }, { status: 400 });
+    }
+  }
+
+  if (typeof updates.isDiscountEnabled !== 'undefined') {
+    updates.isDiscountEnabled = Boolean(updates.isDiscountEnabled);
   }
 
   try {
@@ -45,7 +66,11 @@ export async function PATCH(request, { params }) {
       data: updates,
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json({
+      ...updated,
+      discount_percentage: updated.discountPercentage,
+      is_discount_enabled: updated.isDiscountEnabled,
+    });
   } catch (error) {
     const details = error instanceof Error ? error.message : 'Unknown update error';
     return NextResponse.json({ error: `Update failed. ${details}` }, { status: 500 });

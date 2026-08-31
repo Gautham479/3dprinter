@@ -102,9 +102,22 @@ export async function GET(request) {
       orderBy: { createdAt: 'asc' },
     });
 
-    return NextResponse.json(products);
+    const mapped = products.map((p) => ({
+      ...p,
+      discount_percentage: p.discountPercentage ?? 0,
+      is_discount_enabled: p.isDiscountEnabled ?? true,
+    }));
+
+    return NextResponse.json(mapped);
   } catch (error) {
     console.warn('Database error in /api/products, serving fallback products:', error?.message);
-    return NextResponse.json(FALLBACK_PRODUCTS);
+    const mappedFallbacks = FALLBACK_PRODUCTS.map((p) => ({
+      ...p,
+      discountPercentage: p.discountPercentage ?? 0,
+      isDiscountEnabled: p.isDiscountEnabled ?? true,
+      discount_percentage: p.discountPercentage ?? 0,
+      is_discount_enabled: p.isDiscountEnabled ?? true,
+    }));
+    return NextResponse.json(mappedFallbacks);
   }
 }

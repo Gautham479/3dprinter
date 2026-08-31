@@ -12,7 +12,11 @@ export async function GET(_, { params }) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    return NextResponse.json(product);
+    return NextResponse.json({
+      ...product,
+      discount_percentage: product.discountPercentage ?? 0,
+      is_discount_enabled: product.isDiscountEnabled ?? true,
+    });
   } catch (error) {
     const details = error instanceof Error ? error.message : 'Unknown database error';
     return NextResponse.json({ error: `Failed to load product. ${details}` }, { status: 500 });

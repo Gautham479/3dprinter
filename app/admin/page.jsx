@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { MATERIAL_TYPES, PRODUCT_TYPES } from '@/lib/catalog';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download, Palette } from 'lucide-react';
+import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download, Palette, Tag } from 'lucide-react';
+import ProductPriceDisplay, { getSellingPrice } from '@/components/ProductPriceDisplay';
 
 const EMPTY_FORM = {
   name: '',
@@ -12,6 +13,8 @@ const EMPTY_FORM = {
   note: '',
   material: 'PLA',
   price: '',
+  discountPercentage: '0',
+  isDiscountEnabled: true,
   image: '',
   imageColor: 'bg-primary-50',
   type: PRODUCT_TYPES[0],
@@ -368,6 +371,8 @@ export default function AdminDashboardPage() {
     payload.set('fullDescription', form.fullDescription);
     payload.set('material', form.material);
     payload.set('price', String(Number(form.price)));
+    payload.set('discountPercentage', String(Math.max(0, Math.min(100, Number(form.discountPercentage || 0)))));
+    payload.set('isDiscountEnabled', String(form.isDiscountEnabled !== false));
     payload.set('type', form.tags[0] || form.type);
     payload.set('imageColor', form.imageColor);
     payload.set('dimensions', form.dimensions);
@@ -699,7 +704,37 @@ export default function AdminDashboardPage() {
                   <select className={inputClass} value={form.material} onChange={(e) => updateField('material', e.target.value)}>
                     {MATERIAL_TYPES.map((material) => <option key={material} value={material}>{material}</option>)}
                   </select>
-                  <input className={inputClass} type="number" placeholder="Price" value={form.price} onChange={(e) => updateField('price', e.target.value)} required />
+                  <div>
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">MRP (₹) <span className="text-red-400">*</span></label>
+                    <input className={inputClass} type="number" min="0" placeholder="MRP e.g. 665" value={form.price} onChange={(e) => updateField('price', e.target.value)} required />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Discount (%)</label>
+                    <input className={inputClass} type="number" min="0" max="100" placeholder="Discount % e.g. 40" value={form.discountPercentage} onChange={(e) => updateField('discountPercentage', e.target.value)} />
+                  </div>
+                  
+                  {/* Live Pricing Preview */}
+                  <div className="md:col-span-2 p-4 rounded-sm border border-primary-500/30 bg-primary-500/5 space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <span className="text-xs font-black uppercase text-primary-500 tracking-wider flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5" /> Live Pricing Preview
+                      </span>
+                      <span className="text-xs text-fg-muted font-bold">
+                        Calculated Selling Price: <strong className="text-primary-500 text-sm font-black">₹{getSellingPrice({ price: form.price, discountPercentage: form.discountPercentage, isDiscountEnabled: form.isDiscountEnabled })}</strong>
+                      </span>
+                    </div>
+                    <div className="p-3 bg-surface-card rounded-sm border border-surface-border">
+                      <ProductPriceDisplay
+                        product={{
+                          price: Number(form.price) || 0,
+                          discountPercentage: Number(form.discountPercentage) || 0,
+                          isDiscountEnabled: form.isDiscountEnabled,
+                        }}
+                        size="md"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-xs text-fg-muted font-bold mb-1.5">Primary Product Image</label>
                     <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} className={inputClass} />
@@ -712,7 +747,7 @@ export default function AdminDashboardPage() {
                   <input className={inputClass} placeholder="Dimensions" value={form.dimensions} onChange={(e) => updateField('dimensions', e.target.value)} />
                   <input className={inputClass} placeholder="Weight" value={form.weight} onChange={(e) => updateField('weight', e.target.value)} />
                   <input className={inputClass} placeholder="Note (Optional)" value={form.note} onChange={(e) => updateField('note', e.target.value)} />
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4 md:col-span-2">
                     <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
                       <input type="checkbox" checked={form.inStock} onChange={(e) => updateField('inStock', e.target.checked)} className="w-4 h-4 accent-primary-500" />
                       In stock
@@ -720,6 +755,10 @@ export default function AdminDashboardPage() {
                     <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
                       <input type="checkbox" checked={form.isFeatured} onChange={(e) => updateField('isFeatured', e.target.checked)} className="w-4 h-4 accent-primary-500" />
                       Include on Homepage
+                    </label>
+                    <label className="flex items-center gap-2 text-sm text-fg font-bold cursor-pointer">
+                      <input type="checkbox" checked={form.isDiscountEnabled} onChange={(e) => updateField('isDiscountEnabled', e.target.checked)} className="w-4 h-4 accent-primary-500" />
+                      Enable Discount Display
                     </label>
                   </div>
                   <div className="md:col-span-2">
@@ -892,7 +931,7 @@ export default function AdminDashboardPage() {
                                       </button>
                                     );
                                   })}
-                                  <span className="text-xs"> | {product.material} | ₹</span>
+                                  <span className="text-xs"> | {product.material} | MRP: ₹</span>
                                   <input
                                     key={`price-${product.id}-${product.price}`}
                                     type="number"
@@ -908,8 +947,32 @@ export default function AdminDashboardPage() {
                                         fetchProducts();
                                       }
                                     }}
-                                    className="w-20 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all"
+                                    className="w-16 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all text-fg font-semibold"
                                   />
+                                  <span className="text-xs">| Disc (%):</span>
+                                  <input
+                                    key={`disc-${product.id}-${product.discountPercentage}`}
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    defaultValue={product.discountPercentage ?? product.discount_percentage ?? 0}
+                                    onBlur={async (e) => {
+                                      const val = Number(e.target.value);
+                                      if (!isNaN(val) && val >= 0 && val <= 100 && val !== (product.discountPercentage ?? product.discount_percentage ?? 0)) {
+                                        await fetch(`/api/admin/products/${product.id}`, {
+                                          method: 'PATCH',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ discountPercentage: val }),
+                                        });
+                                        fetchProducts();
+                                      }
+                                    }}
+                                    className="w-14 bg-transparent border-b border-transparent hover:border-surface-border focus:border-primary-500 focus:outline-none focus:bg-surface-muted/30 px-1 py-0.5 -ml-1 rounded-sm transition-all text-fg font-semibold"
+                                  />
+                                </div>
+                                {/* Live Price Component Preview */}
+                                <div className="mt-1 bg-surface-card/70 p-2 rounded-sm border border-surface-border/40 w-fit">
+                                  <ProductPriceDisplay product={product} size="sm" />
                                 </div>
                                 <div className="flex items-center gap-1.5 mt-1 text-xs">
                                   <span className="font-bold text-fg-subtle">Dimensions:</span>
@@ -984,6 +1047,25 @@ export default function AdminDashboardPage() {
                                 <Upload className="w-3 h-3" />
                                 {uploadingProductId === product.id ? 'Uploading...' : 'Add Images'}
                               </button>
+                                <button
+                                 onClick={async () => {
+                                   const nextState = !(product.isDiscountEnabled ?? product.is_discount_enabled ?? true);
+                                   await fetch(`/api/admin/products/${product.id}`, {
+                                     method: 'PATCH',
+                                     headers: { 'Content-Type': 'application/json' },
+                                     body: JSON.stringify({ isDiscountEnabled: nextState }),
+                                   });
+                                   fetchProducts();
+                                 }}
+                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-black transition-colors ${
+                                   (product.isDiscountEnabled ?? product.is_discount_enabled ?? true)
+                                     ? 'bg-purple-500/15 border border-purple-500/30 text-purple-400 hover:bg-purple-500/25'
+                                     : 'bg-surface-muted border border-surface-border text-fg-muted hover:text-fg'
+                                 }`}
+                               >
+                                 <Tag className="w-3 h-3" />
+                                 {(product.isDiscountEnabled ?? product.is_discount_enabled ?? true) ? 'Discount On' : 'Discount Off'}
+                               </button>
                                 <button
                                   onClick={() => toggleFeature(product)}
                                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-black transition-colors ${product.isFeatured

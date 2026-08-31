@@ -7,7 +7,7 @@ import { ShoppingCart, Layers } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCT_TYPES } from '@/lib/catalog';
-import ProductPriceDisplay from '@/components/ProductPriceDisplay';
+import ProductPriceDisplay, { getSellingPrice } from '@/components/ProductPriceDisplay';
 
 const getCategoryTagline = (type) => {
   if (!type || type === 'All') return null;
@@ -275,7 +275,7 @@ export default function ProductsGrid({ featuredOnly = false, hideFilters = false
         color: productOption.colorMode === 'Multicolor' ? 'Multicolor' : productOption.color,
         strength: 20
       },
-      price: product.price
+      price: getSellingPrice(product)
     });
     openCart();
   };

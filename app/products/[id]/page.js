@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
-import ProductPriceDisplay from '@/components/ProductPriceDisplay';
+import ProductPriceDisplay, { getSellingPrice } from '@/components/ProductPriceDisplay';
 
 
 const getProductImages = (product) => {
@@ -118,7 +118,7 @@ export default function ProductPage() {
           color: singleColor,
           strength: 20
         },
-        price: product.price
+        price: getSellingPrice(product)
       });
       setAddedToCart(true);
       openCart();

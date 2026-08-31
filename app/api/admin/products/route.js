@@ -29,7 +29,13 @@ export async function GET() {
       orderBy: { createdAt: 'asc' },
     });
 
-    return NextResponse.json(products);
+    const mapped = products.map((p) => ({
+      ...p,
+      discount_percentage: p.discountPercentage ?? 0,
+      is_discount_enabled: p.isDiscountEnabled ?? true,
+    }));
+
+    return NextResponse.json(mapped);
   } catch (error) {
     const details = error instanceof Error ? error.message : 'Unknown database error';
     return NextResponse.json(
@@ -115,6 +121,15 @@ export async function POST(request) {
       ? [finalPrimaryImage, ...uploadedImagePaths.filter((url) => url !== finalPrimaryImage)]
       : uploadedImagePaths;
 
+    const discountRaw = formData.get('discountPercentage') ?? formData.get('discount_percentage') ?? '0';
+    const discountPercentage = Number(discountRaw);
+    if (Number.isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+      return NextResponse.json({ error: 'Discount percentage must be between 0 and 100' }, { status: 400 });
+    }
+
+    const isDiscountEnabledRaw = formData.get('isDiscountEnabled') ?? formData.get('is_discount_enabled') ?? 'true';
+    const isDiscountEnabled = String(isDiscountEnabledRaw) === 'true';
+
     const created = await prisma.product.create({
       data: {
         slug,
@@ -123,6 +138,8 @@ export async function POST(request) {
         note: body.note || null,
         material: body.material,
         price,
+        discountPercentage,
+        isDiscountEnabled,
         image: finalPrimaryImage,
         images: finalImages,
         imageColor: body.imageColor || 'bg-primary-50',
@@ -135,7 +152,11 @@ export async function POST(request) {
       },
     });
 
-    return NextResponse.json(created, { status: 201 });
+    return NextResponse.json({
+      ...created,
+      discount_percentage: created.discountPercentage,
+      is_discount_enabled: created.isDiscountEnabled,
+    }, { status: 201 });
   } catch (error) {
     console.error("Database write error in POST /api/admin/products:", error);
     const details = error instanceof Error ? error.message : 'Unknown write error';

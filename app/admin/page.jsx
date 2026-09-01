@@ -5,7 +5,7 @@ import { MATERIAL_TYPES, PRODUCT_TYPES } from '@/lib/catalog';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, ShoppingBag, LogOut, ArrowLeft, Plus, Search, Trash2, CheckCircle, XCircle, Upload, BarChart3, Zap, Download, Palette, Tag } from 'lucide-react';
-import ProductPriceDisplay, { getSellingPrice } from '@/components/ProductPriceDisplay';
+import ProductPriceDisplay, { getSellingPrice, calculateMRP } from '@/components/ProductPriceDisplay';
 
 const EMPTY_FORM = {
   name: '',
@@ -705,12 +705,12 @@ export default function AdminDashboardPage() {
                     {MATERIAL_TYPES.map((material) => <option key={material} value={material}>{material}</option>)}
                   </select>
                   <div>
-                    <label className="block text-xs text-fg-muted font-bold mb-1.5">MRP (₹) <span className="text-red-400">*</span></label>
-                    <input className={inputClass} type="number" min="0" placeholder="MRP e.g. 665" value={form.price} onChange={(e) => updateField('price', e.target.value)} required />
+                    <label className="block text-xs text-fg-muted font-bold mb-1.5">Selling Price (₹) <span className="text-red-400">*</span></label>
+                    <input className={inputClass} type="number" min="0" placeholder="Selling Price e.g. 499" value={form.price} onChange={(e) => updateField('price', e.target.value)} required />
                   </div>
                   <div>
                     <label className="block text-xs text-fg-muted font-bold mb-1.5">Discount (%)</label>
-                    <input className={inputClass} type="number" min="0" max="100" placeholder="Discount % e.g. 40" value={form.discountPercentage} onChange={(e) => updateField('discountPercentage', e.target.value)} />
+                    <input className={inputClass} type="number" min="0" max="100" placeholder="Discount % e.g. 18" value={form.discountPercentage} onChange={(e) => updateField('discountPercentage', e.target.value)} />
                   </div>
                   
                   {/* Live Pricing Preview */}
@@ -720,7 +720,12 @@ export default function AdminDashboardPage() {
                         <Tag className="w-3.5 h-3.5" /> Live Pricing Preview
                       </span>
                       <span className="text-xs text-fg-muted font-bold">
-                        Calculated Selling Price: <strong className="text-primary-500 text-sm font-black">₹{getSellingPrice({ price: form.price, discountPercentage: form.discountPercentage, isDiscountEnabled: form.isDiscountEnabled })}</strong>
+                        Selling Price: <strong className="text-primary-500 text-sm font-black">₹{form.price || 0}</strong>
+                        {Number(form.discountPercentage) > 0 && (
+                          <span className="ml-2 text-fg-subtle">
+                            (Calculated Original MRP: ₹{calculateMRP(form.price, form.discountPercentage)})
+                          </span>
+                        )}
                       </span>
                     </div>
                     <div className="p-3 bg-surface-card rounded-sm border border-surface-border">
@@ -931,7 +936,7 @@ export default function AdminDashboardPage() {
                                       </button>
                                     );
                                   })}
-                                  <span className="text-xs"> | {product.material} | MRP: ₹</span>
+                                  <span className="text-xs"> | {product.material} | Selling Price: ₹</span>
                                   <input
                                     key={`price-${product.id}-${product.price}`}
                                     type="number"
